@@ -274,16 +274,18 @@ let checklist = {};
 
 function itemId(dayIdx, itemIdx){ return "d" + dayIdx + "-i" + itemIdx; }
 
+const STORAGE_KEY = 'visdes-industry-study-checklist';
+
 async function loadState(){
   try{
-    const res = await window.storage.get('visdes-industry-study-checklist', false);
-    if(res && res.value){ checklist = JSON.parse(res.value); }
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if(raw){ checklist = JSON.parse(raw); }
   }catch(e){ checklist = {}; }
 }
 
 async function saveState(){
   try{
-    await window.storage.set('visdes-industry-study-checklist', JSON.stringify(checklist), false);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(checklist));
   }catch(e){ console.error('저장 실패', e); }
 }
 
