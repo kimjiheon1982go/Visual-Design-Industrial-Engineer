@@ -3,473 +3,408 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>시각디자인 산업기사 필기 스터디 캘린더</title>
+<title>시각디자인산업기사 필기 D-21 캘린더</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;500;700;900&family=IBM+Plex+Sans+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-  @font-face {
-    font-family: 'PretendardFallback';
-    src: local('Apple SD Gothic Neo'), local('Malgun Gothic');
-  }
   :root{
-    --ink:#161a2c;
-    --ink-soft:#2b3050;
-    --paper:#f7f4ec;
-    --paper-dim:#eae5d6;
-    --gold:#c39a3a;
-    --gold-soft:#e7d8ab;
-    --s1:#5b7c99;   /* Subject 1 - 조사분석 : 청회색 */
-    --s1-bg:#e6edf2;
-    --s2:#6e8f5c;   /* Subject 2 - 기획구상 : 세이지 */
-    --s2-bg:#e9f0e3;
-    --s3:#b4694f;   /* Subject 3 - 제작 : 테라코타 */
-    --s3-bg:#f3e6e0;
-    --mock:#a3792f; /* 모의고사 : 앰버 */
-    --mock-bg:#f2e7d0;
-    --past:#5c4a72; /* 기출문제 : 플럼 */
-    --past-bg:#eae4f0;
-    --review:#3d4256; /* 복습 : 딥네이비 */
-    --review-bg:#e2e3ea;
-    --exam:#a5312f; /* 시험일 */
-    --exam-bg:#f4dcd9;
+    --paper: #F6F2E9;
+    --paper-dim: #EFE9DA;
+    --ink: #211D18;
+    --ink-soft: #55503F;
+    --line: #DCD3BC;
+    --gold: #B08D46;
+    --gold-soft: #E7D9AE;
+    --s1: #2F5233;   /* 조사·분석 - 포레스트 그린 */
+    --s1-bg: #E8EEE6;
+    --s2: #8A4B32;   /* 기획·구상 - 테라코타 */
+    --s2-bg: #F3E7DE;
+    --s3: #3C4A6B;   /* 제작 - 인디고 네이비 */
+    --s3-bg: #E7E9F0;
+    --review: #7A3B3B; /* 총복습·모의고사 - 와인레드 */
+    --review-bg: #F1E3E1;
+    --done: #A9A18A;
   }
   *{box-sizing:border-box;}
   body{
     margin:0;
-    background:var(--ink);
-    font-family:'Noto Serif KR','Nanum Myeongjo',serif, 'PretendardFallback';
-    color:var(--ink);
-    padding:32px 18px 64px;
+    background: var(--paper);
+    color: var(--ink);
+    font-family:'IBM Plex Sans KR', sans-serif;
+    padding: 40px 24px 80px;
   }
-  .sheet{
-    max-width:980px;
-    margin:0 auto;
-    background:var(--paper);
-    border:1px solid #00000015;
-    box-shadow:0 30px 60px -20px rgba(0,0,0,.55);
-  }
-  .masthead{
-    padding:36px 40px 24px;
-    border-bottom:2px solid var(--ink);
-    display:flex;
-    justify-content:space-between;
-    align-items:flex-end;
-    gap:20px;
-    flex-wrap:wrap;
-  }
-  .masthead .eyebrow{
-    font-family:'Courier New',monospace;
-    letter-spacing:.22em;
-    font-size:12px;
-    color:var(--gold);
-    text-transform:uppercase;
-    margin-bottom:10px;
-    font-weight:700;
-  }
-  .masthead h1{
-    margin:0;
-    font-size:40px;
-    font-weight:900;
-    letter-spacing:-0.02em;
-    line-height:1.22;
-  }
-  .masthead .sub{
-    font-family:'Courier New',monospace;
-    font-size:12.5px;
-    color:var(--ink-soft);
-    margin-top:6px;
-  }
-  .dday{
-    text-align:right;
-    font-family:'Courier New',monospace;
-  }
-  .dday .num{
-    font-size:44px;
-    font-weight:700;
-    color:var(--exam);
-    line-height:1;
-  }
-  .dday .label{
-    font-size:11px;
-    letter-spacing:.12em;
-    color:var(--ink-soft);
-  }
+  .wrap{ max-width: 1180px; margin: 0 auto; }
 
-  .progress-wrap{
-    padding:18px 40px;
-    border-bottom:1px solid var(--paper-dim);
-    background:var(--paper-dim);
-    display:flex;
-    align-items:center;
-    gap:16px;
+  /* Header */
+  header{
+    display:flex; flex-wrap:wrap; gap:28px;
+    justify-content:space-between; align-items:flex-end;
+    border-bottom: 2px solid var(--ink);
+    padding-bottom: 22px;
+    margin-bottom: 30px;
+  }
+  .title-block .eyebrow{
+    font-size: 12.5px; letter-spacing: 0.22em; color: var(--gold);
+    text-transform: uppercase; font-weight:600; margin-bottom:8px;
+  }
+  h1{
+    font-family:'Noto Serif KR', serif;
+    font-weight:900; font-size: clamp(26px, 3.4vw, 40px);
+    margin:0; line-height:1.25;
+  }
+  .subtitle{ margin-top:8px; color: var(--ink-soft); font-size:14.5px; }
+
+  .dday-box{
+    background: var(--ink); color: var(--paper);
+    border-radius: 4px; padding: 16px 26px;
+    text-align:center; min-width:150px;
+  }
+  .dday-box .num{
+    font-family:'Noto Serif KR', serif; font-weight:900;
+    font-size: 40px; color: var(--gold-soft); line-height:1;
+  }
+  .dday-box .lab{ font-size:12px; letter-spacing:0.15em; margin-top:6px; opacity:.85;}
+
+  /* Progress */
+  .progress-panel{
+    display:flex; align-items:center; gap:18px;
+    margin-bottom: 34px; flex-wrap:wrap;
   }
   .progress-track{
-    flex:1;
-    height:10px;
-    background:#ffffff;
-    border:1px solid var(--ink);
-    position:relative;
-    overflow:hidden;
+    flex:1; min-width:220px; height:10px; background: var(--paper-dim);
+    border:1px solid var(--line); border-radius:6px; overflow:hidden;
   }
   .progress-fill{
-    height:100%;
-    width:0%;
-    background:linear-gradient(90deg,var(--gold-soft),var(--gold));
-    transition:width .4s ease;
+    height:100%; background: linear-gradient(90deg, var(--s1), var(--gold));
+    width:0%; transition: width .4s ease;
   }
-  .progress-text{
-    font-family:'Courier New',monospace;
-    font-size:13px;
-    white-space:nowrap;
-    min-width:96px;
-    text-align:right;
-  }
+  .progress-text{ font-size:13.5px; color: var(--ink-soft); white-space:nowrap; font-weight:600;}
+  .legend{ display:flex; gap:14px; flex-wrap:wrap; font-size:12.5px; color: var(--ink-soft);}
+  .legend span{ display:inline-flex; align-items:center; gap:6px; }
+  .dot{ width:9px; height:9px; border-radius:50%; display:inline-block; }
 
-  .legend{
-    display:flex;
-    flex-wrap:wrap;
-    gap:10px 18px;
-    padding:16px 40px;
-    border-bottom:1px solid var(--paper-dim);
-    font-size:12px;
+  /* Week label rows */
+  .week-label{
+    font-family:'Noto Serif KR', serif; font-weight:700; font-size:15px;
+    color: var(--ink); margin: 30px 0 12px; display:flex; align-items:center; gap:10px;
   }
-  .legend span{
-    display:inline-flex;
-    align-items:center;
-    gap:6px;
-  }
-  .legend i{
-    width:10px;height:10px;display:inline-block;border:1px solid rgba(0,0,0,.3);
-  }
+  .week-label::after{ content:""; flex:1; height:1px; background: var(--line); }
 
-  .cal{
-    padding:24px 40px 40px;
-  }
-  .weekday-row{
+  .grid{
     display:grid;
-    grid-template-columns:repeat(7,1fr);
-    gap:6px;
-    margin-bottom:6px;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 10px;
   }
-  .weekday-row div{
-    text-align:center;
-    font-family:'Courier New',monospace;
-    font-size:11px;
-    letter-spacing:.1em;
-    color:var(--ink-soft);
-    padding-bottom:4px;
-  }
-  .week{
-    display:grid;
-    grid-template-columns:repeat(7,1fr);
-    gap:6px;
-    margin-bottom:6px;
-  }
-  .day{
-    position:relative;
-    min-height:118px;
-    background:#fff;
-    border:1px solid #d8d2c0;
-    padding:8px 8px 10px;
-    display:flex;
-    flex-direction:column;
-    cursor:pointer;
-    transition:transform .12s ease, box-shadow .12s ease;
-  }
-  .day:hover{
-    transform:translateY(-2px);
-    box-shadow:0 6px 14px -6px rgba(0,0,0,.35);
-  }
-  .day.empty{
-    background:transparent;
-    border:none;
-    cursor:default;
-  }
-  .day.empty:hover{transform:none;box-shadow:none;}
-  .day .datenum{
-    font-family:'Courier New',monospace;
-    font-size:12px;
-    font-weight:700;
-    color:var(--ink);
-    display:flex;
-    justify-content:space-between;
-    align-items:baseline;
-    padding-right:22px;
-  }
-  .day .daynum{
-    font-size:9.5px;
-    font-weight:700;
-    color:var(--gold);
-    letter-spacing:.04em;
-  }
-  .day .tag{
-    display:inline-block;
-    margin-top:4px;
-    font-size:9.5px;
-    letter-spacing:.05em;
-    padding:1px 5px;
-    align-self:flex-start;
-  }
-  .day .title{
-    font-size:12px;
-    font-weight:700;
-    margin-top:6px;
-    line-height:1.35;
-  }
-  .day .detail{
-    font-size:10.5px;
-    color:var(--ink-soft);
-    margin-top:3px;
-    line-height:1.4;
-    flex:1;
-  }
-  .check{
-    position:absolute;
-    top:8px;
-    right:8px;
-    width:18px;
-    height:18px;
-    border:1.5px solid var(--ink);
-    background:#fff;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-  }
-  .check.on{
-    background:var(--ink);
-  }
-  .check.on::after{
-    content:"✓";
-    color:var(--paper);
-    font-size:12px;
-    font-weight:700;
-  }
-  .day.done{
-    opacity:.55;
-  }
-  .day.done .title{
-    text-decoration:line-through;
+  @media (max-width: 860px){
+    .grid{ grid-template-columns: repeat(2, 1fr); }
   }
 
-  .day.s1{border-top:4px solid var(--s1);}
-  .day.s1 .tag{background:var(--s1-bg);color:var(--s1);}
-  .day.s2{border-top:4px solid var(--s2);}
-  .day.s2 .tag{background:var(--s2-bg);color:var(--s2);}
-  .day.s3{border-top:4px solid var(--s3);}
-  .day.s3 .tag{background:var(--s3-bg);color:var(--s3);}
-  .day.mock{border-top:4px solid var(--mock);}
-  .day.mock .tag{background:var(--mock-bg);color:var(--mock);}
-  .day.past{border-top:4px solid var(--past);}
-  .day.past .tag{background:var(--past-bg);color:var(--past);}
-  .day.review{border-top:4px solid var(--review);}
-  .day.review .tag{background:var(--review-bg);color:var(--review);}
-  .day.exam{border-top:4px solid var(--exam);background:var(--exam-bg);}
-  .day.exam .tag{background:#fff;color:var(--exam);}
-  .day.exam .title{color:var(--exam);}
+  .day-card{
+    background:#fff; border:1px solid var(--line); border-radius:6px;
+    padding:14px 14px 16px; display:flex; flex-direction:column;
+    min-height: 190px; position:relative; transition: box-shadow .2s ease;
+  }
+  .day-card.today{ outline: 2px solid var(--gold); outline-offset:2px; }
+  .day-card.exam{
+    background: linear-gradient(160deg, var(--ink) 0%, #33291f 100%);
+    color: var(--paper); border-color: var(--ink);
+  }
+  .day-card.exam .date-num, .day-card.exam .weekday{ color: var(--gold-soft); }
 
-  .footer-note{
-    padding:0 40px 32px;
-    font-size:11.5px;
-    color:var(--ink-soft);
-    font-family:'Courier New',monospace;
-    line-height:1.6;
-    border-top:1px solid var(--paper-dim);
-    padding-top:16px;
+  .day-card .date-row{ display:flex; justify-content:space-between; align-items:baseline; margin-bottom:6px; }
+  .date-num{ font-family:'Noto Serif KR', serif; font-weight:700; font-size:19px; }
+  .weekday{ font-size:11.5px; color: var(--ink-soft); font-weight:600; }
+
+  .subject-tag{
+    display:inline-block; font-size:10.5px; font-weight:700; letter-spacing:.03em;
+    padding: 2px 8px; border-radius: 20px; margin-bottom:9px; align-self:flex-start;
+  }
+  .tag-s1{ background: var(--s1-bg); color: var(--s1); }
+  .tag-s2{ background: var(--s2-bg); color: var(--s2); }
+  .tag-s3{ background: var(--s3-bg); color: var(--s3); }
+  .tag-review{ background: var(--review-bg); color: var(--review); }
+  .tag-exam{ background: var(--gold); color: var(--ink); }
+
+  ul.items{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:6px; flex:1; }
+  .item{ display:flex; align-items:flex-start; gap:7px; font-size:12.6px; line-height:1.4; cursor:pointer; }
+  .item input{
+    margin-top:2px; width:14px; height:14px; accent-color: var(--s1);
+    flex-shrink:0; cursor:pointer;
+  }
+  .day-card.exam .item input{ accent-color: var(--gold); }
+  .item span.txt{ transition: color .15s ease, opacity .15s ease; }
+  .item.checked span.txt{ color: var(--done); text-decoration: line-through; opacity: .75; }
+
+  .day-progress{
+    margin-top:10px; height:4px; background: var(--paper-dim); border-radius:3px; overflow:hidden;
+  }
+  .day-card.exam .day-progress{ background: rgba(255,255,255,0.15); }
+  .day-progress-fill{ height:100%; background: var(--gold); width:0%; transition:width .3s ease; }
+
+  footer{
+    margin-top: 50px; padding-top:18px; border-top:1px solid var(--line);
+    font-size:12px; color: var(--ink-soft); text-align:center;
   }
   .reset-btn{
-    font-family:'Courier New',monospace;
-    font-size:11px;
-    background:none;
-    border:1px solid var(--ink-soft);
-    color:var(--ink-soft);
-    padding:4px 10px;
-    cursor:pointer;
+    background:none; border:1px solid var(--line); color: var(--ink-soft);
+    font-size:11.5px; padding:6px 14px; border-radius:20px; cursor:pointer;
+    margin-top:10px; font-family:'IBM Plex Sans KR', sans-serif;
   }
-  .reset-btn:hover{background:var(--ink);color:var(--paper);border-color:var(--ink);}
-
-  @media(max-width:640px){
-    .masthead{padding:24px 18px 18px;}
-    .masthead h1{font-size:22px;}
-    .progress-wrap,.legend,.footer-note{padding-left:18px;padding-right:18px;}
-    .cal{padding:18px 12px 28px;}
-    .day{min-height:96px;padding:6px;}
-    .day .title{font-size:10.5px;}
-    .day .detail{display:none;}
-  }
+  .reset-btn:hover{ border-color: var(--review); color: var(--review); }
 </style>
 </head>
 <body>
-<div class="sheet">
+<div class="wrap">
 
-  <div class="masthead">
-    <div>
-      <div class="eyebrow">National Technical Qualification · Visual Design</div>
-      <h1>시각디자인산업기사 필기<br>29일 완주 스터디 캘린더</h1>
-      <div class="sub">STUDY PERIOD 2026.07.26(일) — 2026.08.23(일) · 항목을 클릭하면 완료 체크됩니다</div>
+  <header>
+    <div class="title-block">
+      <div class="eyebrow">2025 개정 교재 목차 기반 · 자체 편성</div>
+      <h1>시각디자인산업기사 필기<br>21일 완성 캘린더</h1>
+      <div class="subtitle">2026. 08. 03(월) — 2026. 08. 23(일) 시험일 · 매일 체크하며 진도를 기록하세요</div>
     </div>
-    <div class="dday">
-      <div class="num" id="ddayNum">D-29</div>
-      <div class="label">필기시험일 08.23(일)</div>
+    <div class="dday-box">
+      <div class="num" id="ddayNum">D-21</div>
+      <div class="lab">시험일 8월 23일(일)</div>
     </div>
-  </div>
+  </header>
 
-  <div class="progress-wrap">
+  <div class="progress-panel">
     <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
-    <div class="progress-text" id="progressText">0 / 29 완료</div>
-    <button class="reset-btn" id="resetBtn">초기화</button>
+    <div class="progress-text" id="progressText">0 / 0 완료 (0%)</div>
   </div>
-
   <div class="legend">
-    <span><i style="background:var(--s1)"></i>1과목 · 조사·분석</span>
-    <span><i style="background:var(--s2)"></i>2과목 · 기획구상</span>
-    <span><i style="background:var(--s3)"></i>3과목 · 제작</span>
-    <span><i style="background:var(--review)"></i>복습·정리</span>
-    <span><i style="background:var(--mock)"></i>모의고사</span>
-    <span><i style="background:var(--past)"></i>기출문제</span>
-    <span><i style="background:var(--exam)"></i>시험일</span>
+    <span><i class="dot" style="background:var(--s1)"></i>과목1 · 조사·분석</span>
+    <span><i class="dot" style="background:var(--s2)"></i>과목2 · 기획·구상</span>
+    <span><i class="dot" style="background:var(--s3)"></i>과목3 · 제작</span>
+    <span><i class="dot" style="background:var(--review)"></i>모의고사·기출·복습</span>
+    <span><i class="dot" style="background:var(--gold)"></i>D-DAY</span>
   </div>
 
-  <div class="cal">
-    <div class="weekday-row">
-      <div>일</div><div>월</div><div>화</div><div>수</div><div>목</div><div>금</div><div>토</div>
-    </div>
-    <div id="calGrid"></div>
-  </div>
+  <div id="calendarRoot"></div>
 
-  <div class="footer-note">
-    ※ 목차 기준: [이론편] 1과목 시각디자인 조사·분석 / 2과목 시각디자인 기획 구상 / 3과목 시각디자인 제작, [문제편] 모의고사 12회 + 2011~2022 기출 12개년, [해설편] 정답 및 해설.<br>
-    ※ 08.12~08.17 모의고사, 08.18~08.21 기출문제 회차는 하루 2~3개년(또는 2회분)씩 배정했습니다. 진도가 밀리면 08.22 최종점검일을 보충일로 활용하세요.
-  </div>
+  <footer>
+    작성 기준: 첨부해주신 2025 시각디자인산업기사 필기 교재 목차<br>
+    체크 상태는 자동 저장되며, 다시 열어도 유지됩니다.
+    <br>
+    <button class="reset-btn" id="resetBtn">전체 체크 초기화</button>
+  </footer>
 
 </div>
 
 <script>
-const plan = [
-  {date:'2026-07-26', tag:'1과목 Part01', cls:'s1', title:'CH1~2', detail:'디자인의 개요 / 시각 커뮤니케이션의 이해'},
-  {date:'2026-07-27', tag:'1과목 Part01', cls:'s1', title:'CH3~4', detail:'시각디자인 관리 / 시장 환경 조사 및 분석'},
-  {date:'2026-07-28', tag:'1과목 Part01', cls:'s1', title:'CH5~6', detail:'디자인 트렌드 조사분석 / 사용자 조사분석'},
-  {date:'2026-07-29', tag:'1과목 Part02', cls:'s1', title:'디자인 자료화', detail:'결과보고서 정리·DB관리·지식재산권·저작권관리'},
-  {date:'2026-07-30', tag:'1과목 Part03', cls:'s1', title:'자료 관리 + 연습문제', detail:'디자인 자료 조사·선정 / 제1과목 연습문제'},
-  {date:'2026-07-31', tag:'복습', cls:'review', title:'1과목 총정리', detail:'오답노트 정리, 헷갈린 개념 재확인'},
-  {date:'2026-08-01', tag:'2과목 Part01', cls:'s2', title:'개발 기초', detail:'디자인 요소 수집 / 디자인사 / 아트웍 / 베리에이션'},
-  {date:'2026-08-02', tag:'2과목 Part02', cls:'s2', title:'개발 응용', detail:'디자인 요소 응용 / 아트웍 응용화'},
-  {date:'2026-08-03', tag:'2과목 Part03', cls:'s2', title:'프로젝트 기획', detail:'프로젝트 준비·계획·계약문서 준비'},
-  {date:'2026-08-04', tag:'복습', cls:'review', title:'2과목 총정리', detail:'제2과목 연습문제 풀이 및 오답노트'},
-  {date:'2026-08-05', tag:'3과목 Part01', cls:'s3', title:'아이데이션', detail:'아이디어 구상·전개 / 아이디어 스케치 구상·전개'},
-  {date:'2026-08-06', tag:'3과목 Part02', cls:'s3', title:'아이데이션 적용', detail:'아이디어 적용 / 비주얼 방향 전개 및 적용'},
-  {date:'2026-08-07', tag:'3과목 Part03', cls:'s3', title:'편집 작업실행', detail:'레이아웃 구현 / 타이포그래피 적용 / 색상 선택'},
-  {date:'2026-08-08', tag:'3과목 Part04 + 연습', cls:'s3', title:'인쇄 감리', detail:'레이아웃 수정·인쇄상태 점검·후가공 점검 / 제3과목 연습문제'},
-  {date:'2026-08-09', tag:'복습', cls:'review', title:'1과목 재복습', detail:'전체 재점검 및 요약노트 작성'},
-  {date:'2026-08-10', tag:'복습', cls:'review', title:'2과목 재복습', detail:'전체 재점검 및 요약노트 작성'},
-  {date:'2026-08-11', tag:'복습', cls:'review', title:'3과목 재복습', detail:'전체 재점검 및 요약노트 작성'},
-  {date:'2026-08-12', tag:'모의고사', cls:'mock', title:'1~2회', detail:'실전처럼 시간 재고 풀이 후 채점·오답분석'},
-  {date:'2026-08-13', tag:'모의고사', cls:'mock', title:'3~4회', detail:'실전처럼 시간 재고 풀이 후 채점·오답분석'},
-  {date:'2026-08-14', tag:'모의고사', cls:'mock', title:'5~6회', detail:'실전처럼 시간 재고 풀이 후 채점·오답분석'},
-  {date:'2026-08-15', tag:'모의고사(광복절)', cls:'mock', title:'7~8회', detail:'실전처럼 시간 재고 풀이 후 채점·오답분석'},
-  {date:'2026-08-16', tag:'모의고사', cls:'mock', title:'9~10회', detail:'실전처럼 시간 재고 풀이 후 채점·오답분석'},
-  {date:'2026-08-17', tag:'모의고사', cls:'mock', title:'11~12회', detail:'모의고사 12회 전체 완료, 취약유형 정리'},
-  {date:'2026-08-18', tag:'기출문제', cls:'past', title:"'11~'14년", detail:'2011·2012·2013·2014년 기출 A형/B형 풀이'},
-  {date:'2026-08-19', tag:'기출문제', cls:'past', title:"'15~'18년", detail:'2015·2016·2017·2018년 기출 풀이'},
-  {date:'2026-08-20', tag:'기출문제', cls:'past', title:"'19~'22년", detail:'2019·2020(1,2회)·2021·2022년 기출 풀이'},
-  {date:'2026-08-21', tag:'복습', cls:'review', title:'기출 오답노트', detail:'12개년 기출 오답 전체 정리 및 재풀이'},
-  {date:'2026-08-22', tag:'최종점검', cls:'review', title:'핵심 암기노트', detail:'전 과목 핵심 요약, 자주 틀리는 유형 최종 점검'},
-  {date:'2026-08-23', tag:'D-DAY', cls:'exam', title:'필기시험', detail:'컨디션 관리 · 신분증/수험표 확인 · 시험장 사전 답사 권장'},
+const DAYS = [
+  { date:"08.03", wd:"월", tag:"s1", tagLabel:"과목1 · Part1", items:[
+    "CH1 디자인의 개요","CH2 시각 커뮤니케이션의 이해","CH3 시각디자인 관리"
+  ]},
+  { date:"08.04", wd:"화", tag:"s1", tagLabel:"과목1 · Part1", items:[
+    "CH4 시장 환경 조사 및 분석","CH5 디자인 트렌드 조사 및 분석","CH6 사용자 조사 및 분석"
+  ]},
+  { date:"08.05", wd:"수", tag:"s1", tagLabel:"과목1 · Part2", items:[
+    "CH1 프로젝트 결과보고서 정리","CH2 데이터베이스 관리","CH3 지식재산권 확보","CH4 디자인 저작권 관리"
+  ]},
+  { date:"08.06", wd:"목", tag:"s1", tagLabel:"과목1 · Part3 + 연습문제", items:[
+    "CH1 디자인 자료 조사","CH2 디자인 자료 선정","제1과목 연습문제 풀이"
+  ]},
+  { date:"08.07", wd:"금", tag:"s2", tagLabel:"과목2 · Part1", items:[
+    "CH1 디자인 요소 수집","CH2 디자인사","CH3 아트웍","CH4 베리에이션"
+  ]},
+  { date:"08.08", wd:"토", tag:"s2", tagLabel:"과목2 · Part2~3", items:[
+    "CH1 디자인 요소 응용","CH2 아트웍 응용화","CH1 프로젝트 준비"
+  ]},
+  { date:"08.09", wd:"일", tag:"s2", tagLabel:"과목2 · Part3 + 연습문제", items:[
+    "CH2 프로젝트 계획","CH3 프로젝트 계약문서 준비","제2과목 연습문제 풀이"
+  ]},
+  { date:"08.10", wd:"월", tag:"s3", tagLabel:"과목3 · Part1", items:[
+    "CH1 아이디어 구상 및 전개","CH2 아이디어 스케치 구상 및 전개"
+  ]},
+  { date:"08.11", wd:"화", tag:"s3", tagLabel:"과목3 · Part2", items:[
+    "CH1 아이디어 적용","CH2 비주얼 방향 전개 및 적용"
+  ]},
+  { date:"08.12", wd:"수", tag:"s3", tagLabel:"과목3 · Part3", items:[
+    "CH1 편집디자인 레이아웃 구현","CH2 타이포그래피 적용","CH3 색상 선택"
+  ]},
+  { date:"08.13", wd:"목", tag:"s3", tagLabel:"과목3 · Part4 + 연습문제", items:[
+    "CH1 완성 레이아웃 수정","CH2 인쇄상태 점검","CH3 후가공 상태 점검","제3과목 연습문제 풀이"
+  ]},
+  { date:"08.14", wd:"금", tag:"review", tagLabel:"이론 총복습", items:[
+    "전 과목 핵심 개념 재정리","오답노트 작성 시작","취약 챕터 표시"
+  ]},
+  { date:"08.15", wd:"토", tag:"review", tagLabel:"모의고사 1~3회", items:[
+    "1회 모의고사 풀이 및 채점","2회 모의고사 풀이 및 채점","3회 모의고사 풀이 및 채점"
+  ]},
+  { date:"08.16", wd:"일", tag:"review", tagLabel:"모의고사 4~6회", items:[
+    "4회 모의고사 풀이 및 채점","5회 모의고사 풀이 및 채점","6회 모의고사 풀이 및 채점"
+  ]},
+  { date:"08.17", wd:"월", tag:"review", tagLabel:"모의고사 7~9회", items:[
+    "7회 모의고사 풀이 및 채점","8회 모의고사 풀이 및 채점","9회 모의고사 풀이 및 채점"
+  ]},
+  { date:"08.18", wd:"화", tag:"review", tagLabel:"모의고사 10~12회", items:[
+    "10회 모의고사 풀이 및 채점","11회 모의고사 풀이 및 채점","12회 모의고사 풀이 및 채점"
+  ]},
+  { date:"08.19", wd:"수", tag:"review", tagLabel:"기출문제 2011~2016", items:[
+    "2011년 2회 기출 풀이","2012년 2회 기출 풀이","2013년 2회 기출 풀이",
+    "2014년 2회 기출 풀이","2015년 2회 기출 풀이","2016년 2회 기출 풀이"
+  ]},
+  { date:"08.20", wd:"목", tag:"review", tagLabel:"기출문제 2017~2022", items:[
+    "2017년 2회 기출 풀이","2018년 2회 기출 풀이","2019년 2회 기출 풀이",
+    "2020년 1·2회 기출 풀이","2021년 2회 기출 풀이","2022년 2회 기출 풀이"
+  ]},
+  { date:"08.21", wd:"금", tag:"review", tagLabel:"오답노트 총정리", items:[
+    "모의고사·기출 오답 전체 재검토","취약 파트 재학습(교재 재확인)","암기 카드/요약본 업데이트"
+  ]},
+  { date:"08.22", wd:"토", tag:"review", tagLabel:"최종 총정리", items:[
+    "전 과목 요약노트 훑기","핵심 키워드·법령·연도 암기","준비물 점검(신분증, 수험표, 필기구)"
+  ]},
+  { date:"08.23", wd:"일", tag:"exam", tagLabel:"D-DAY 시험일", items:[
+    "최종 컨디션 관리 (충분한 수면)","입실시간 확인 및 시험장 도착","가벼운 요약노트만 최종 확인"
+  ]},
 ];
 
-const STORAGE_KEY = 'visual-design-industrial-plan-2026-checks';
+const TAG_LABELS = { s1:"tag-s1", s2:"tag-s2", s3:"tag-s3", review:"tag-review", exam:"tag-exam" };
+const WEEK_TITLES = ["1주차 (08.03 ~ 08.09)","2주차 (08.10 ~ 08.16)","3주차 (08.17 ~ 08.23)"];
 
-function fmtDate(iso){
-  const d = new Date(iso + 'T00:00:00');
-  return d.getDate();
+const todayStr = (() => {
+  const d = new Date();
+  const mm = String(d.getMonth()+1).padStart(2,'0');
+  const dd = String(d.getDate()).padStart(2,'0');
+  return mm + "." + dd;
+})();
+
+let checklist = {};
+
+function itemId(dayIdx, itemIdx){ return "d" + dayIdx + "-i" + itemIdx; }
+
+async function loadState(){
+  try{
+    const res = await window.storage.get('visdes-industry-study-checklist', false);
+    if(res && res.value){ checklist = JSON.parse(res.value); }
+  }catch(e){ checklist = {}; }
 }
 
-function buildCalendar(checks){
-  const grid = document.getElementById('calGrid');
-  grid.innerHTML = '';
-  // group into weeks of 7 starting from index 0 (2026-07-26 is Sunday)
-  for(let w=0; w<5; w++){
-    const weekEl = document.createElement('div');
-    weekEl.className = 'week';
-    for(let d=0; d<7; d++){
-      const idx = w*7 + d;
-      if(idx >= plan.length){
-        const empty = document.createElement('div');
-        empty.className = 'day empty';
-        weekEl.appendChild(empty);
-        continue;
-      }
-      const item = plan[idx];
-      const done = !!checks[idx];
-      const dayEl = document.createElement('div');
-      dayEl.className = 'day ' + item.cls + (done ? ' done' : '');
-      dayEl.dataset.idx = idx;
-      dayEl.innerHTML = `
-        <div class="datenum"><span>${fmtDate(item.date)}</span><span class="daynum">DAY ${idx+1}</span></div>
-        <span class="tag">${item.tag}</span>
-        <div class="title">${item.title}</div>
-        <div class="detail">${item.detail}</div>
-        <div class="check ${done ? 'on' : ''}"></div>
-      `;
-      dayEl.addEventListener('click', () => toggleCheck(idx));
-      weekEl.appendChild(dayEl);
+async function saveState(){
+  try{
+    await window.storage.set('visdes-industry-study-checklist', JSON.stringify(checklist), false);
+  }catch(e){ console.error('저장 실패', e); }
+}
+
+function render(){
+  const root = document.getElementById('calendarRoot');
+  root.innerHTML = '';
+  let weekIdx = -1;
+
+  DAYS.forEach((day, dIdx) => {
+    const w = Math.floor(dIdx / 7);
+    if(w !== weekIdx){
+      weekIdx = w;
+      const label = document.createElement('div');
+      label.className = 'week-label';
+      label.textContent = WEEK_TITLES[w] || ("" + (w+1) + "주차");
+      root.appendChild(label);
+      const grid = document.createElement('div');
+      grid.className = 'grid';
+      grid.id = 'grid-' + w;
+      root.appendChild(grid);
     }
-    grid.appendChild(weekEl);
-  }
+    const grid = document.getElementById('grid-' + weekIdx);
+
+    const card = document.createElement('div');
+    card.className = 'day-card' + (day.tag === 'exam' ? ' exam' : '') + (day.date === todayStr ? ' today' : '');
+
+    const dateRow = document.createElement('div');
+    dateRow.className = 'date-row';
+    dateRow.innerHTML = '<span class="date-num">' + day.date + '</span><span class="weekday">' + day.wd + '</span>';
+    card.appendChild(dateRow);
+
+    const tag = document.createElement('span');
+    tag.className = 'subject-tag ' + TAG_LABELS[day.tag];
+    tag.textContent = day.tagLabel;
+    card.appendChild(tag);
+
+    const ul = document.createElement('ul');
+    ul.className = 'items';
+
+    day.items.forEach((text, iIdx) => {
+      const id = itemId(dIdx, iIdx);
+      const li = document.createElement('li');
+      li.className = 'item' + (checklist[id] ? ' checked' : '');
+      li.innerHTML = '<input type="checkbox" ' + (checklist[id] ? 'checked' : '') + ' data-id="' + id + '"><span class="txt">' + text + '</span>';
+      li.addEventListener('click', (e) => {
+        if(e.target.tagName !== 'INPUT'){
+          const cb = li.querySelector('input');
+          cb.checked = !cb.checked;
+        }
+        toggleItem(id, li);
+      });
+      ul.appendChild(li);
+    });
+
+    card.appendChild(ul);
+
+    const dayProg = document.createElement('div');
+    dayProg.className = 'day-progress';
+    const dayFill = document.createElement('div');
+    dayFill.className = 'day-progress-fill';
+    dayProg.appendChild(dayFill);
+    card.appendChild(dayProg);
+
+    grid.appendChild(card);
+    updateDayProgress(day, dIdx, dayFill);
+  });
+
+  updateOverallProgress();
 }
 
-function updateProgress(checks){
-  const total = plan.length;
-  const done = Object.values(checks).filter(Boolean).length;
-  const pct = Math.round((done/total)*100);
+function updateDayProgress(day, dIdx, fillEl){
+  const total = day.items.length;
+  let done = 0;
+  day.items.forEach((_, iIdx) => { if(checklist[itemId(dIdx, iIdx)]) done++; });
+  fillEl.style.width = (total ? (done/total*100) : 0) + '%';
+}
+
+function toggleItem(id, liEl){
+  checklist[id] = !checklist[id];
+  liEl.classList.toggle('checked', checklist[id]);
+  saveState();
+  updateOverallProgress();
+  render(); // re-render to refresh day progress bars accurately
+}
+
+function updateOverallProgress(){
+  let total = 0, done = 0;
+  DAYS.forEach((day, dIdx) => {
+    day.items.forEach((_, iIdx) => {
+      total++;
+      if(checklist[itemId(dIdx, iIdx)]) done++;
+    });
+  });
+  const pct = total ? Math.round(done/total*100) : 0;
   document.getElementById('progressFill').style.width = pct + '%';
-  document.getElementById('progressText').textContent = `${done} / ${total} 완료`;
+  document.getElementById('progressText').textContent = done + ' / ' + total + ' 완료 (' + pct + '%)';
 }
 
 function updateDday(){
-  const today = new Date('2026-07-26T00:00:00');
-  const exam = new Date('2026-08-23T00:00:00');
-  const diff = Math.round((exam - today) / (1000*60*60*24));
-  document.getElementById('ddayNum').textContent = diff > 0 ? `D-${diff}` : (diff === 0 ? 'D-DAY' : `D+${-diff}`);
+  const examDate = new Date(2026, 7, 23); // month is 0-indexed: 7 = August
+  const today = new Date();
+  today.setHours(0,0,0,0);
+  examDate.setHours(0,0,0,0);
+  const diff = Math.round((examDate - today) / (1000*60*60*24));
+  const el = document.getElementById('ddayNum');
+  el.textContent = diff > 0 ? ('D-' + diff) : (diff === 0 ? 'D-DAY' : 'D+' + Math.abs(diff));
 }
 
-let currentChecks = {};
-
-async function loadChecks(){
-  try{
-    const result = await window.storage.get(STORAGE_KEY, false);
-    if(result && result.value){
-      currentChecks = JSON.parse(result.value);
-    }
-  }catch(e){
-    currentChecks = {};
+document.getElementById('resetBtn').addEventListener('click', async () => {
+  if(confirm('모든 체크 표시를 초기화할까요?')){
+    checklist = {};
+    await saveState();
+    render();
   }
-  buildCalendar(currentChecks);
-  updateProgress(currentChecks);
-}
-
-async function saveChecks(){
-  try{
-    await window.storage.set(STORAGE_KEY, JSON.stringify(currentChecks), false);
-  }catch(e){
-    console.error('저장 실패', e);
-  }
-}
-
-function toggleCheck(idx){
-  currentChecks[idx] = !currentChecks[idx];
-  buildCalendar(currentChecks);
-  updateProgress(currentChecks);
-  saveChecks();
-}
-
-document.getElementById('resetBtn').addEventListener('click', () => {
-  currentChecks = {};
-  buildCalendar(currentChecks);
-  updateProgress(currentChecks);
-  saveChecks();
 });
 
-updateDday();
-loadChecks();
+(async function init(){
+  updateDday();
+  await loadState();
+  render();
+})();
 </script>
-
 </body>
 </html>
