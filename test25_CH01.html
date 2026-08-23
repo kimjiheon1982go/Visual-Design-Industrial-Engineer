@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CH01 디자인의 개요 — CBT 모의시험</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@700;900&family=Noto+Sans+KR:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+
+:root{
+  --paper:#F1EEE7; --paper-line:#DAD5C9; --ink:#191817; --ink-soft:#5B584F;
+  --cyan:#00A9CE; --magenta:#D6247A; --yellow:#F2B705; --card:#FBFAF7;
+  --ok:#2E7D4F; --bad:#C23B3B;
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{background:var(--paper);color:var(--ink);font-family:'Noto Sans KR',sans-serif;}
+
+.topbar{background:var(--ink);color:#fff;padding:12px 20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;position:sticky;top:0;z-index:10;}
+.topbar .title{font-family:'Noto Serif KR',serif;font-weight:900;font-size:15px;}
+.topbar .title span{color:var(--yellow);}
+.topbar .meta{display:flex;gap:16px;align-items:center;font-family:'IBM Plex Mono',monospace;font-size:13px;}
+.timer{background:#2B2A28;padding:5px 10px;border:1px solid #444;min-width:64px;text-align:center;}
+.timer.warn{color:var(--yellow);}
+.timer.danger{color:#ff6b6b;}
+
+.wrap{max-width:980px;margin:0 auto;padding:22px 18px 70px;display:grid;grid-template-columns:200px 1fr;gap:20px;align-items:start;}
+@media(max-width:760px){.wrap{grid-template-columns:1fr;}}
+
+.palette{background:var(--card);border:1px solid var(--paper-line);padding:14px;position:sticky;top:70px;}
+.palette .cap{font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:var(--ink-soft);letter-spacing:.08em;margin-bottom:10px;text-transform:uppercase;}
+.grid25{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;}
+.pbtn{aspect-ratio:1;border:1px solid var(--ink);background:var(--card);font-family:'IBM Plex Mono',monospace;font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+.pbtn.answered{background:var(--ink);color:#fff;}
+.legend2{margin-top:12px;font-size:11px;color:var(--ink-soft);display:flex;flex-direction:column;gap:4px;}
+.legend2 span{display:flex;align-items:center;gap:6px;}
+.sw{width:10px;height:10px;border:1px solid var(--ink);display:inline-block;}
+.sw.f{background:var(--ink);}
+.submitBtn{width:100%;margin-top:14px;padding:11px;background:var(--magenta);color:#fff;border:none;font-family:'IBM Plex Mono',monospace;font-size:12.5px;letter-spacing:.05em;cursor:pointer;}
+.submitBtn:hover{opacity:.9;}
+
+.qlist{display:flex;flex-direction:column;gap:16px;}
+.qcard{background:var(--card);border:1px solid var(--paper-line);padding:22px 24px;scroll-margin-top:80px;}
+.qhead{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
+.qnum{font-family:'IBM Plex Mono',monospace;font-size:12px;border:1px solid var(--ink);padding:3px 9px;}
+.qtext{font-family:'Noto Serif KR',serif;font-weight:700;font-size:16.5px;line-height:1.6;margin-bottom:18px;}
+.opt{display:flex;align-items:flex-start;gap:12px;padding:11px 14px;border:1px solid var(--paper-line);margin-bottom:9px;cursor:pointer;background:#fff;}
+.opt:hover{border-color:var(--ink);}
+.opt.sel{border-color:var(--magenta);background:rgba(214,36,122,.06);}
+.opt .oid{font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:13px;border:1.5px solid var(--ink);width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.opt.sel .oid{background:var(--magenta);border-color:var(--magenta);color:#fff;}
+.opt .otxt{font-size:14.5px;padding-top:1px;}
+
+.bottomSubmit{margin-top:6px;padding:16px;background:var(--card);border:1.5px solid var(--ink);text-align:center;}
+.bottomSubmit .navbtn{font-family:'IBM Plex Mono',monospace;font-size:13px;border:1px solid var(--ink);background:var(--ink);color:#fff;padding:11px 24px;cursor:pointer;}
+.bottomSubmit .navbtn:hover{opacity:.9;}
+.bottomSubmit .hint{font-size:12px;color:var(--ink-soft);margin-bottom:10px;}
+
+/* results */
+.result-header{background:var(--card);border:1px solid var(--ink);padding:26px 28px;margin-bottom:18px;text-align:center;}
+.result-header .score{font-family:'Noto Serif KR',serif;font-weight:900;font-size:44px;}
+.result-header .score span{font-size:20px;color:var(--ink-soft);}
+.result-header .verdict{font-family:'IBM Plex Mono',monospace;font-size:13px;letter-spacing:.08em;margin-top:6px;text-transform:uppercase;}
+.verdict.pass{color:var(--ok);}
+.verdict.fail{color:var(--bad);}
+.result-header .cutline{font-size:12px;color:var(--ink-soft);margin-top:4px;}
+
+.rev{border:1px solid var(--paper-line);background:var(--card);margin-bottom:12px;padding:18px 20px;}
+.rev.correct{border-left:4px solid var(--ok);}
+.rev.wrong{border-left:4px solid var(--bad);}
+.rev .rnum{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--ink-soft);margin-bottom:6px;display:flex;align-items:center;gap:8px;}
+.badge{font-family:'IBM Plex Mono',monospace;font-size:10px;padding:2px 7px;color:#fff;}
+.badge.ok{background:var(--ok);}
+.badge.bad{background:var(--bad);}
+.rev .rq{font-family:'Noto Serif KR',serif;font-weight:700;font-size:15px;margin-bottom:10px;}
+.rev .ra{font-size:13.5px;margin:4px 0;}
+.rev .ra b{font-family:'IBM Plex Mono',monospace;font-size:11px;margin-right:6px;}
+.rev .ra.user-wrong{color:var(--bad);}
+.rev .ra.correct-ans{color:var(--ok);}
+.rev .expl{margin-top:10px;padding-top:10px;border-top:1px dashed var(--paper-line);font-size:13px;color:var(--ink-soft);}
+.rev .expl b{color:var(--ink);}
+
+.retryBtn{display:block;margin:24px auto 0;font-family:'IBM Plex Mono',monospace;font-size:13px;border:1px solid var(--ink);background:var(--ink);color:#fff;padding:11px 22px;cursor:pointer;}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="title">시각디자인산업기사 <span>CBT 모의시험</span> · CH01 디자인의 개요</div>
+  <div class="meta">
+    <span id="progressLabel">0 / 25 답변</span>
+    <div class="timer" id="timer">30:00</div>
+  </div>
+</div>
+
+<div id="examView" class="wrap">
+  <div class="palette">
+    <div class="cap">문제 번호</div>
+    <div class="grid25" id="paletteGrid"></div>
+    <div class="legend2">
+      <span><span class="sw f"></span>답변 완료</span>
+      <span><span class="sw"></span>미답변</span>
+    </div>
+    <button class="submitBtn" id="submitBtn">제출하고 채점하기</button>
+  </div>
+
+  <div>
+    <div class="qlist" id="qlist"></div>
+    <div class="bottomSubmit">
+      <div class="hint">모든 문항에 답했는지 확인 후 제출하세요.</div>
+      <button class="navbtn" id="submitBtn2">제출하고 채점하기</button>
+    </div>
+  </div>
+</div>
+
+<div id="resultView" class="wrap" style="display:none;grid-template-columns:1fr;max-width:760px;">
+  <div>
+    <div class="result-header">
+      <div class="score" id="scoreBig">0<span>&nbsp;/&nbsp;25</span></div>
+      <div class="verdict" id="verdictText"></div>
+      <div class="cutline">합격 기준 60점(15/25) 가정 기준</div>
+    </div>
+    <div id="reviewList"></div>
+    <button class="retryBtn" id="retryBtn">다시 풀기</button>
+  </div>
+</div>
+
+<script>
+const QUESTIONS = [
+{"prompt":"디자인(design)이라는 말의 어원과 거리가 먼 것은?","options":[["a","라틴어 designare"],["b","이탈리아어 disegno"],["c","프랑스어 dessein"],["d","그리스어 techne"]],"answer":"d","explanation":"디자인의 어원은 라틴어 designare, 이탈리아어 disegno, 프랑스어 dessein이며, 모두 '계획하다·설계하다'라는 의미를 가집니다. 그리스어 techne(기술)는 어원으로 제시되지 않았습니다."},
+{"prompt":"디자인의 정의로 가장 적절한 것은?","options":[["a","미적 아름다움만을 추구하는 예술 행위"],["b","인간생활의 목적에 맞는 실용적·미적 조형을 계획하고 문제를 해결해 실현하는 창의적 과정"],["c","대량생산을 위한 표준화된 제작 공정"],["d","순수한 개인의 자기만족을 위한 조형활동"]],"answer":"b","explanation":"디자인은 실용성과 미적 조형을 계획하고, 문제를 인식·해결하는 기획을 실현하는 창의적 과정으로 정의됩니다."},
+{"prompt":"디자인의 궁극적인 목적은 무엇인가?","options":[["a","인간의 행복"],["b","기업의 이윤 극대화"],["c","예술적 명성"],["d","기술의 진보"]],"answer":"a","explanation":"디자인의 목적은 '인간이 어떻게 하면 행복할 수 있을까?'에 있습니다."},
+{"prompt":"디자인을 넓은 의미로 이해할 때 포함되지 않는 것은?","options":[["a","수요의 창조"],["b","산업경제의 활성화"],["c","국가정책에의 기여"],["d","개인의 취미 활동"]],"answer":"d","explanation":"넓은 의미의 디자인은 쾌적한 생활환경 창조, 수요 창조, 산업경제 활성화, 생활문화 창조, 국가정책 등을 포괄하며 개인 취미 활동은 해당하지 않습니다."},
+{"prompt":"디자인 활동 중 '아이디어를 구체화시켜 형태의 구성과 조화를 통해 실체화하는 것'에 해당하는 활동은?","options":[["a","기획적 활동"],["b","기능적 활동"],["c","평가 활동"],["d","분석 활동"]],"answer":"b","explanation":"기능적 활동은 아이디어를 구체화하여 형태로 실체화하는 과정이며, 기획적 활동은 아이디어와 계획을 세우는 정신적 과정입니다."},
+{"prompt":"20세기 디자인 철학에 가장 큰 영향을 미쳤으며 디자이너의 사회적 책임감을 강조한 이론가는?","options":[["a","르 코르뷔지에"],["b","빅터 파파넥(Victor Papanek)"],["c","윌리엄 모리스"],["d","발터 그로피우스"]],"answer":"b","explanation":"빅터 파파넥은 디자이너의 사회적 책임감을 강조하고, 디자인을 경제적·심리적·기술적·윤리적 요구까지 포괄하는 복합기능으로 설명했습니다."},
+{"prompt":"빅터 파파넥이 제시한 복합기능 6요소에 해당하지 않는 것은?","options":[["a","방법(method)"],["b","용도(use)"],["c","내구성(durability)"],["d","텔레시스(telesis)"]],"answer":"c","explanation":"복합기능 6요소는 방법, 용도, 필요성, 텔레시스, 연상, 미학이며 내구성은 포함되지 않습니다."},
+{"prompt":"파파넥의 복합기능 요소 중 '재료 또는 도구를 타당성 있게 사용해야 한다'는 의미를 가진 것은?","options":[["a","방법(method)"],["b","필요성(need)"],["c","연상(association)"],["d","미학(aesthetics)"]],"answer":"a","explanation":"방법(method)은 재료·도구를 타당성 있게 사용해야 함을 의미합니다."},
+{"prompt":"파파넥의 복합기능 요소 중 '인간이 지닌 보편적 가치로서 마음속 충동과 욕망에 관계된다'는 요소는?","options":[["a","용도(use)"],["b","연상(association)"],["c","텔레시스(telesis)"],["d","방법(method)"]],"answer":"b","explanation":"연상(association)은 인간이 지닌 보편적 가치로서 마음속 깊은 충동과 욕망에 관계되는 요소입니다."},
+{"prompt":"파파넥의 복합기능 요소 중 '특수한 목적을 달성하기 위한 자연과 사회의 변천 작용에 대한 계획적이고 의도적인 실용화'를 의미하는 것은?","options":[["a","텔레시스(telesis)"],["b","미학(aesthetics)"],["c","필요성(need)"],["d","방법(method)"]],"answer":"a","explanation":"텔레시스(목적)는 특수 목적 달성을 위한 계획적·의도적 실용화를 의미합니다."},
+{"prompt":"기능적 활동에서의 디자인 과정을 순서대로 바르게 나열한 것은?","options":[["a","조형 → 욕구 → 기술 → 재료"],["b","욕구 → 조형 → 재료 → 기술"],["c","재료 → 기술 → 욕구 → 조형"],["d","욕구 → 재료 → 조형 → 기술"]],"answer":"b","explanation":"기능적 활동은 욕구(1단계) → 조형(2단계) → 재료(3단계) → 기술(4단계) 순으로 진행됩니다."},
+{"prompt":"기획적 활동에서의 디자인 과정을 순서대로 바르게 나열한 것은?","options":[["a","문제인식 → 자료수집 → 자료분석 → 평가"],["b","자료수집 → 문제인식 → 평가 → 자료분석"],["c","평가 → 문제인식 → 자료수집 → 자료분석"],["d","문제인식 → 평가 → 자료수집 → 자료분석"]],"answer":"a","explanation":"기획적 활동은 문제인식 → 자료수집 → 자료분석 → 평가 순으로 진행됩니다."},
+{"prompt":"굿디자인(Good Design)을 구성하는 4대 조건이 아닌 것은?","options":[["a","합목적성"],["b","심미성"],["c","경제성"],["d","보편성"]],"answer":"d","explanation":"굿디자인의 4대 조건은 합목적성, 심미성, 경제성, 독창성이며, 여기에 질서성이 더해집니다. 보편성은 해당하지 않습니다."},
+{"prompt":"'목적에 얼마나 부합하는가'를 의미하며, 조형에서는 실용성 또는 효용성이라고도 불리는 디자인 조건은?","options":[["a","심미성"],["b","합목적성"],["c","독창성"],["d","경제성"]],"answer":"b","explanation":"합목적성은 목적에 부합하는 정도를 의미하며, 실용성·효용성이라고도 합니다."},
+{"prompt":"디자인 조건 중 스타일, 유행, 민족성, 시대성, 개성에 따라 다르게 나타나며 주관적·비합리적 성격이 강한 것은?","options":[["a","심미성"],["b","합목적성"],["c","경제성"],["d","질서성"]],"answer":"a","explanation":"심미성은 미의식으로서 스타일·유행·민족성·시대성·개성 등에 따라 다르게 나타나며 주관적·비합리적 성격을 가집니다."},
+{"prompt":"'최소의 비용과 노력으로 최대의 이익을 발생시킨다'는 원칙과 관련된 디자인 조건은?","options":[["a","독창성"],["b","경제성"],["c","질서성"],["d","합목적성"]],"answer":"b","explanation":"경제성은 최소 비용·노력으로 최대 이익을 얻는 원칙이며, 대량생산 시대 이후 중요성이 커졌습니다."},
+{"prompt":"디자인에 최종적으로 생명을 불어넣는 조건으로, 반대말이 '모방'인 것은?","options":[["a","독창성"],["b","경제성"],["c","합목적성"],["d","질서성"]],"answer":"a","explanation":"독창성은 모방의 반대 개념으로, 디자인에 생명을 불어넣는 가장 중요한 조건 중 하나입니다."},
+{"prompt":"합리성(합목적성+경제성)과 비합리성(심미성+독창성)을 균형 있게 조화시키는 디자인 조건은?","options":[["a","질서성"],["b","문화성"],["c","지역성"],["d","친자연성"]],"answer":"a","explanation":"질서성은 합리적(객관적) 조건과 비합리적(주관적) 조건을 조화롭게 유지시켜주는 통일체 역할을 합니다."},
+{"prompt":"현대 굿디자인의 조건으로 추가된 항목이 아닌 것은?","options":[["a","지역성"],["b","친자연성"],["c","문화성"],["d","국제성"]],"answer":"d","explanation":"현대에는 지역성, 친자연성(친환경성), 문화성이 굿디자인 조건에 포함되며, 국제성은 해당하지 않습니다."},
+{"prompt":"인간과 자연이 조화롭게 공존하는 지속 가능한 디자인을 의미하는 것은?","options":[["a","지역성"],["b","친자연성"],["c","문화성"],["d","경제성"]],"answer":"b","explanation":"친자연성(친환경성)은 인간과 자연이 함께할 수 있는 조화로운 지속 가능한 디자인을 의미합니다."},
+{"prompt":"비실용적인 시각예술로서 주관적·자율적·자기만족적 특징을 가지며 회화·조각·건축을 포함하는 것은?","options":[["a","응용미술"],["b","순수미술"],["c","산업디자인"],["d","제품디자인"]],"answer":"b","explanation":"순수미술은 회화, 조각, 건축을 포함하며 비실용적 시각예술로 주관적·자율적·자기만족적 특징을 가집니다."},
+{"prompt":"사회의 요구 범위 안에서 개인의 자유가 허용되며, 검증과 대중만족이 중요한 조건인 것은?","options":[["a","순수미술"],["b","응용미술"],["c","공예"],["d","조각"]],"answer":"b","explanation":"응용미술은 현대 디자인 같은 응용예술로, 사회적 요구 범위 안에서 개인의 자유가 허용되며 대중만족이 중요합니다."},
+{"prompt":"커뮤니케이션(정보전달)을 목적으로 하며 2차·3차·4차 디자인으로 분류되는 디자인 분야는?","options":[["a","제품디자인"],["b","환경디자인"],["c","시각디자인"],["d","공예디자인"]],"answer":"c","explanation":"시각디자인은 정보전달을 목적으로 하는 디자인으로, 2차(평면)·3차(입체)·4차(공간) 디자인으로 분류됩니다."},
+{"prompt":"제품(도구)을 디자인하는 분야로, 공업디자인과 관련이 깊고 인간 삶의 질 향상을 목적으로 하는 것은?","options":[["a","시각디자인"],["b","제품디자인"],["c","환경디자인"],["d","패션디자인"]],"answer":"b","explanation":"제품디자인은 제품(도구)을 디자인하는 분야로, 대량생산 시대의 공업디자인과 관련되며 삶의 질 향상을 목적으로 합니다."},
+{"prompt":"시각디자인의 3차원(입체) 영역에 해당하지 않는 것은?","options":[["a","패키지 디자인"],["b","CI"],["c","POP"],["d","타이포그래피"]],"answer":"d","explanation":"패키지 디자인, CI, POP은 시각디자인의 3차원(입체) 영역이며, 타이포그래피는 2차원(평면) 영역에 해당합니다."}
+];
+
+let answers = new Array(QUESTIONS.length).fill(null);
+let submitted = false;
+let timeLeft = 30*60;
+let timerId = null;
+
+function buildPalette(){
+  const grid = document.getElementById('paletteGrid');
+  grid.innerHTML = QUESTIONS.map((_,i)=>`<button class="pbtn" data-i="${i}">${i+1}</button>`).join('');
+  grid.querySelectorAll('.pbtn').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      document.getElementById('q-'+btn.dataset.i).scrollIntoView({behavior:'smooth', block:'start'});
+    });
+  });
+}
+
+function renderAll(){
+  const list = document.getElementById('qlist');
+  list.innerHTML = QUESTIONS.map((q,i)=>{
+    const optsHtml = q.options.map(([id,txt])=>{
+      const sel = answers[i]===id;
+      return `<div class="opt ${sel?'sel':''}" data-qi="${i}" data-id="${id}">
+        <div class="oid">${id.toUpperCase()}</div>
+        <div class="otxt">${txt}</div>
+      </div>`;
+    }).join('');
+    return `<div class="qcard" id="q-${i}">
+      <div class="qhead"><span class="qnum">Q${i+1}</span></div>
+      <div class="qtext">${q.prompt}</div>
+      ${optsHtml}
+    </div>`;
+  }).join('');
+
+  list.querySelectorAll('.opt').forEach(el=>{
+    el.addEventListener('click', ()=>{
+      const qi = parseInt(el.dataset.qi);
+      answers[qi] = el.dataset.id;
+      list.querySelectorAll(`.opt[data-qi="${qi}"]`).forEach(o=>o.classList.toggle('sel', o===el));
+      updatePalette();
+    });
+  });
+  updatePalette();
+}
+
+function updatePalette(){
+  document.querySelectorAll('.pbtn').forEach((btn,i)=>{
+    btn.classList.toggle('answered', !!answers[i]);
+  });
+  const answeredN = answers.filter(a=>a).length;
+  document.getElementById('progressLabel').textContent = answeredN+' / '+QUESTIONS.length+' 답변';
+}
+
+function startTimer(){
+  const el = document.getElementById('timer');
+  timerId = setInterval(()=>{
+    timeLeft--;
+    if(timeLeft<=0){ clearInterval(timerId); timeLeft=0; submitExam(); }
+    const m = Math.floor(timeLeft/60), s = timeLeft%60;
+    el.textContent = String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
+    el.classList.toggle('warn', timeLeft<=300 && timeLeft>60);
+    el.classList.toggle('danger', timeLeft<=60);
+  },1000);
+}
+
+function submitExam(){
+  if(submitted) return;
+  const unanswered = answers.filter(a=>!a).length;
+  if(unanswered>0 && timeLeft>0){
+    if(!confirm(unanswered+'문항이 미답변 상태입니다. 그래도 제출하시겠습니까?')) return;
+  }
+  submitted = true;
+  clearInterval(timerId);
+
+  let score=0;
+  QUESTIONS.forEach((q,i)=>{ if(answers[i]===q.answer) score++; });
+
+  document.getElementById('examView').style.display='none';
+  const rv = document.getElementById('resultView');
+  rv.style.display='grid';
+
+  document.getElementById('scoreBig').innerHTML = score+'<span>&nbsp;/&nbsp;'+QUESTIONS.length+'</span>';
+  const pct = Math.round(score/QUESTIONS.length*100);
+  const pass = pct>=60;
+  const verdictEl = document.getElementById('verdictText');
+  verdictEl.textContent = pass ? 'PASS · 정답률 '+pct+'%' : 'RETRY · 정답률 '+pct+'%';
+  verdictEl.className = 'verdict '+(pass?'pass':'fail');
+
+  const listEl = document.getElementById('reviewList');
+  listEl.innerHTML = QUESTIONS.map((q,i)=>{
+    const userAns = answers[i];
+    const isCorrect = userAns === q.answer;
+    const userTxt = userAns ? q.options.find(o=>o[0]===userAns)[1] : '(미답변)';
+    const correctTxt = q.options.find(o=>o[0]===q.answer)[1];
+    return `<div class="rev ${isCorrect?'correct':'wrong'}">
+      <div class="rnum">Q${i+1} <span class="badge ${isCorrect?'ok':'bad'}">${isCorrect?'정답':'오답'}</span></div>
+      <div class="rq">${q.prompt}</div>
+      ${isCorrect ? `<div class="ra correct-ans"><b>내 답안</b>${userTxt}</div>`
+        : `<div class="ra user-wrong"><b>내 답안</b>${userTxt}</div><div class="ra correct-ans"><b>정답</b>${correctTxt}</div>`}
+      <div class="expl"><b>해설</b> ${q.explanation}</div>
+    </div>`;
+  }).join('');
+
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+document.getElementById('submitBtn').addEventListener('click', submitExam);
+document.getElementById('submitBtn2').addEventListener('click', submitExam);
+document.getElementById('retryBtn').addEventListener('click', ()=>{
+  answers = new Array(QUESTIONS.length).fill(null); submitted=false; timeLeft=30*60;
+  document.getElementById('resultView').style.display='none';
+  document.getElementById('examView').style.display='grid';
+  buildPalette(); renderAll();
+  startTimer();
+  window.scrollTo({top:0, behavior:'smooth'});
+});
+
+buildPalette();
+renderAll();
+startTimer();
+</script>
+</body>
+</html>
