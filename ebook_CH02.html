@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CH02 시각커뮤니케이션의 이해 — 핵심 요약노트</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;700;900&family=Noto+Sans+KR:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+
+:root{
+  --paper:#F1EEE7;
+  --paper-line:#DAD5C9;
+  --ink:#191817;
+  --ink-soft:#5B584F;
+  --cyan:#00A9CE;
+  --magenta:#D6247A;
+  --yellow:#F2B705;
+  --key:#191817;
+  --card:#FBFAF7;
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{background:var(--paper);color:var(--ink);font-family:'Noto Sans KR',sans-serif;line-height:1.65;padding-bottom:70px;}
+
+.cover{max-width:760px;margin:0 auto;padding:56px 22px 30px;position:relative;}
+.crop{position:absolute;width:14px;height:14px;}
+.crop::before,.crop::after{content:'';position:absolute;background:var(--ink);}
+.crop::before{width:14px;height:1px;top:7px;} .crop::after{width:1px;height:14px;left:7px;}
+.crop.tl{top:8px;left:8px;} .crop.tr{top:8px;right:8px;}
+.eyebrow{font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.14em;color:var(--ink-soft);text-transform:uppercase;display:flex;gap:9px;align-items:center;margin-bottom:14px;}
+.eyebrow .dot{width:6px;height:6px;background:var(--magenta);border-radius:50%;display:inline-block;}
+h1.title{font-family:'Noto Serif KR',serif;font-weight:900;font-size:clamp(24px,5vw,38px);margin:0 0 8px;letter-spacing:-.01em;}
+h1.title em{font-style:normal;color:var(--magenta);}
+.subtitle{color:var(--ink-soft);font-size:14px;}
+
+.toc{max-width:760px;margin:0 auto 30px;padding:0 22px;}
+.toc-box{border:1px solid var(--ink);background:var(--card);padding:16px 20px;}
+.toc-cap{font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.1em;color:var(--ink-soft);text-transform:uppercase;margin-bottom:8px;}
+.toc-box a{display:block;font-size:13.5px;color:var(--ink);text-decoration:none;padding:3px 0;border-bottom:1px dotted var(--paper-line);}
+.toc-box a:hover{color:var(--magenta);}
+.toc-box a:last-child{border-bottom:none;}
+.toc-box a span{font-family:'IBM Plex Mono',monospace;color:var(--ink-soft);margin-right:8px;font-size:11.5px;}
+
+main{max-width:760px;margin:0 auto;padding:0 22px;}
+
+.section-head{display:flex;align-items:baseline;gap:12px;margin:44px 0 18px;padding-bottom:10px;border-bottom:2px solid var(--ink);}
+.section-num{font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--magenta);font-weight:600;}
+.section-head h2{font-family:'Noto Serif KR',serif;font-weight:900;font-size:22px;margin:0;}
+
+.sub{margin:26px 0;}
+.sub h3{font-family:'Noto Serif KR',serif;font-weight:700;font-size:16.5px;margin:0 0 10px;display:flex;align-items:center;gap:8px;}
+.sub h3 .chip{font-family:'IBM Plex Mono',monospace;font-size:10.5px;background:var(--cyan);color:#fff;padding:2px 7px;flex-shrink:0;}
+.sub p{margin:0 0 10px;font-size:14.5px;}
+.sub ul{margin:0 0 10px;padding-left:20px;}
+.sub li{font-size:14.5px;margin-bottom:6px;}
+.term{background:rgba(214,36,122,.12);padding:0 3px;font-weight:700;}
+
+.point{border:1px solid var(--ink);background:var(--card);margin:16px 0;position:relative;padding:16px 18px 16px 20px;}
+.point::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--magenta);}
+.point .p-cap{font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.08em;color:var(--magenta);text-transform:uppercase;margin-bottom:8px;}
+.point ul{margin:0;padding-left:18px;}
+.point li{font-size:14px;margin-bottom:5px;}
+.point li b{color:var(--ink);}
+.point p{font-size:14px;margin:0;}
+
+.flow{display:flex;align-items:center;flex-wrap:wrap;gap:8px;margin:14px 0;font-family:'IBM Plex Mono',monospace;font-size:12.5px;}
+.flow .node{border:1px solid var(--ink);background:var(--card);padding:8px 14px;}
+.flow .arrow{color:var(--magenta);font-weight:700;}
+
+table.classify{width:100%;border-collapse:collapse;margin:14px 0;font-size:13.5px;}
+table.classify th{background:var(--key);color:#fff;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.05em;padding:8px 10px;text-align:left;}
+table.classify td{border:1px solid var(--paper-line);padding:9px 10px;vertical-align:top;background:var(--card);}
+table.classify tr td:first-child{font-weight:700;font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--magenta);white-space:nowrap;}
+
+.tip{border:1px dashed var(--ink-soft);background:transparent;padding:10px 14px;margin:14px 0;font-size:13px;color:var(--ink-soft);}
+.tip b{color:var(--ink);}
+
+.divider{height:1px;background:repeating-linear-gradient(90deg,var(--ink-soft) 0 6px,transparent 6px 10px);margin:40px 0;opacity:.5;}
+
+footer{max-width:760px;margin:50px auto 0;padding:0 22px;font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--ink-soft);}
+
+@media(max-width:520px){
+  table.classify{font-size:12px;}
+  .flow{font-size:11px;}
+}
+</style>
+</head>
+<body>
+
+<div class="cover">
+  <div class="crop tl"></div><div class="crop tr"></div>
+  <div class="eyebrow"><span class="dot"></span>시각디자인산업기사 · 이론 요약노트</div>
+  <h1 class="title">CH02 <em>시각커뮤니케이션의 이해</em></h1>
+  <div class="subtitle">제1강 시각 커뮤니케이션의 이해 — 핵심 개념만 압축 정리</div>
+</div>
+
+<div class="toc">
+  <div class="toc-box">
+    <div class="toc-cap">Contents</div>
+    <a href="#s1"><span>01</span>커뮤니케이션의 정의와 기능</a>
+    <a href="#s2"><span>02</span>커뮤니케이션 방법</a>
+    <a href="#s3"><span>03</span>시각 커뮤니케이션의 개념, 정의</a>
+  </div>
+</div>
+
+<main>
+
+  <section id="s1">
+    <div class="section-head"><span class="section-num">01</span><h2>커뮤니케이션의 정의와 기능</h2></div>
+
+    <div class="sub">
+      <h3><span class="chip">정의</span>커뮤니케이션이란</h3>
+      <ul>
+        <li>언어 또는 몸짓·화상(畵像) 등의 <b>물질적 기호를 매개수단</b>으로 하는 정신적·심리적 전달 교류</li>
+        <li>두 개 이상의 개체가 기호를 매개로 <b>정보·감정·지식을 공유</b>하는 과정</li>
+      </ul>
+    </div>
+
+    <div class="sub">
+      <h3><span class="chip">범위</span>현대 커뮤니케이션의 확장</h3>
+      <ul>
+        <li>인쇄·멀티미디어를 통한 포괄적인 <span class="term">광고 및 선전 활동(PR)</span>을 포함</li>
+        <li>생물과 생물, 인간과 자연·동물·환경 간의 심리적 내용까지 포괄</li>
+        <li><span class="term">채널(매체)</span>: 송신자와 수신자를 연결해주는 매개체. 광고에서는 메시지를 소비자에게 전달하는 수단을 의미</li>
+      </ul>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <section id="s2">
+    <div class="section-head"><span class="section-num">02</span><h2>커뮤니케이션 방법</h2></div>
+
+    <div class="sub">
+      <h3><span class="chip">이론</span>섀넌과 위버의 정보이론</h3>
+      <ul>
+        <li>커뮤니케이션 과정 = 정보를 <b>송신하는 쪽 → 수신하는 쪽</b>으로의 흐름</li>
+        <li>이 연구는 통신공학 분야의 <span class="term">섀넌(C.E. Shannon)</span>과 <span class="term">위버(N. Weaver)</span>가 최초로 수행</li>
+        <li>1940년대 후반 저서 「커뮤니케이션의 수학적 이론」을 통해 커뮤니케이션을 <b>정보이론 용어</b>로 제창</li>
+      </ul>
+      <div class="point">
+        <div class="p-cap">Point · 커뮤니케이션 모델</div>
+        <svg viewBox="0 0 720 210" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;max-width:640px;display:block;margin:4px auto 10px;">
+          <style>
+            .cbox{fill:#FBFAF7;stroke:#191817;stroke-width:1.5;}
+            .clabel{font-family:'Noto Sans KR',sans-serif;font-weight:700;font-size:17px;fill:#191817;text-anchor:middle;}
+            .csub{font-family:'Noto Sans KR',sans-serif;font-size:13px;fill:#5B584F;text-anchor:middle;}
+            .carrow{stroke:#D6247A;stroke-width:2;fill:none;marker-end:url(#arrow);}
+          </style>
+          <defs>
+            <marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+              <path d="M0,0 L8,4 L0,8 Z" fill="#D6247A"/>
+            </marker>
+          </defs>
+
+          <!-- row of 5 boxes -->
+          <rect class="cbox" x="10"  y="30" width="118" height="52"/>
+          <rect class="cbox" x="153" y="30" width="118" height="52"/>
+          <rect class="cbox" x="296" y="30" width="118" height="52"/>
+          <rect class="cbox" x="439" y="30" width="118" height="52"/>
+          <rect class="cbox" x="582" y="30" width="118" height="52"/>
+
+          <text class="clabel" x="69"  y="62">정보원</text>
+          <text class="clabel" x="212" y="62">송신기</text>
+          <text class="clabel" x="355" y="62">채널</text>
+          <text class="clabel" x="498" y="62">수신기</text>
+          <text class="clabel" x="641" y="62">목적지</text>
+
+          <!-- arrows between boxes -->
+          <line class="carrow" x1="130" y1="56" x2="151" y2="56"/>
+          <line class="carrow" x1="273" y1="56" x2="294" y2="56"/>
+          <line class="carrow" x1="416" y1="56" x2="437" y2="56"/>
+          <line class="carrow" x1="559" y1="56" x2="580" y2="56"/>
+
+          <!-- labels under arrows -->
+          <text class="csub" x="141" y="108">메시지</text>
+          <text class="csub" x="284" y="108">시그널</text>
+          <text class="csub" x="570" y="108">메시지</text>
+
+          <!-- noise source box + upward arrow into 채널 -->
+          <line class="carrow" x1="355" y1="188" x2="355" y2="84"/>
+          <rect class="cbox" x="296" y="158" width="118" height="42"/>
+          <text class="clabel" x="355" y="184" style="font-size:15px;">잡음원</text>
+        </svg>
+        <p>정보원에서 나온 <b>메시지</b>는 송신기에서 <b>시그널</b>로 바뀌어 채널을 통해 전달되고, 수신기를 거쳐 다시 <b>메시지</b>로 목적지에 도달한다. 이 과정에서 채널에는 전달을 방해하는 <b>잡음원(noise source)</b>이 개입할 수 있다.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <section id="s3">
+    <div class="section-head"><span class="section-num">03</span><h2>시각 커뮤니케이션의 개념, 정의</h2></div>
+
+    <div class="sub">
+      <h3><span class="chip">정의</span>시각 커뮤니케이션이란</h3>
+      <ul>
+        <li>“<b>어떻게 정보를 잘 전달하고 소통할 것인가?</b>”의 문제를 다루는 디자인</li>
+        <li>목적: 소통을 통해 인간의 삶을 보다 풍요롭게 만드는 것</li>
+        <li>인간의 삶에 필요한 다양한 정보가 시각적 매체를 통해 원활하고 효율적으로 소통되는 환경을 조성해야 함</li>
+      </ul>
+    </div>
+
+    <div class="sub">
+      <h3><span class="chip">기능</span>시각 커뮤니케이션의 기능</h3>
+      <p>지시적 기능, 설득적 기능, 기록적·표현적 기능, 마케팅 기능, 매스커뮤니케이션 기능 등 다양한 기능을 가진다.</p>
+      <div class="point">
+        <div class="p-cap">Point · 기능별 예시</div>
+        <ul>
+          <li><b>① 지시적 기능</b> — 신호, 문자, 활자, 통계, 도표, 지도 등</li>
+          <li><b>② 설득적 기능</b> — 포스터, 신문광고, 디스플레이 등</li>
+          <li><b>③ 상징적 기능</b> — 심벌, 마크, 로고, 패턴, 일러스트레이션 등</li>
+          <li><b>④ 기록적 기능과 표현적 기능</b> — 사진, 영화, TV 등</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="sub">
+      <h3><span class="chip">용어</span>선전(Propaganda)</h3>
+      <div class="point">
+        <div class="p-cap">Point · 정의</div>
+        <p>많은 사람의 <b>행동·태도·의지결정</b> 등을 일정한 방향으로 유도·조작하고자 하는 <b>의도적이면서 조직적인 시도</b></p>
+      </div>
+    </div>
+
+    <div class="sub">
+      <h3><span class="chip">용어</span>매스커뮤니케이션(Mass Communication)</h3>
+      <div class="point">
+        <div class="p-cap">Point · 정의 및 연구 범위</div>
+        <ul>
+          <li>매스미디어를 통한 소통. <b>선전광고 목적</b>의 매스미디어로는 텔레비전, 라디오, 신문, 잡지 등이 중요한 역할을 함</li>
+          <li>연구 범위: 매스미디어 조직의 구조, 커뮤니케이션의 기술적·심리적 과정, 청중의 특징과 측정 등</li>
+        </ul>
+      </div>
+      <div class="tip"><b>암기 TIP</b> · 시각 커뮤니케이션 4대 기능은 <b>지시 → 설득 → 상징 → 기록·표현</b>으로 순서를 붙여 외우면 헷갈리지 않습니다.</div>
+    </div>
+  </section>
+
+</main>
+
+<footer>시각디자인산업기사 · CH02 시각커뮤니케이션의 이해 요약노트 · 원본 PDF 기준 핵심 정리</footer>
+
+</body>
+</html>
