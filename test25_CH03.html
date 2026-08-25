@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CH03 시각디자인 관리 — CBT 모의시험</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@700;900&family=Noto+Sans+KR:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+
+:root{
+  --paper:#F1EEE7; --paper-line:#DAD5C9; --ink:#191817; --ink-soft:#5B584F;
+  --cyan:#00A9CE; --magenta:#D6247A; --yellow:#F2B705; --card:#FBFAF7;
+  --ok:#2E7D4F; --bad:#C23B3B;
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{background:var(--paper);color:var(--ink);font-family:'Noto Sans KR',sans-serif;}
+
+.topbar{background:var(--ink);color:#fff;padding:12px 20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;position:sticky;top:0;z-index:10;}
+.topbar .title{font-family:'Noto Serif KR',serif;font-weight:900;font-size:15px;}
+.topbar .title span{color:var(--yellow);}
+.topbar .meta{display:flex;gap:16px;align-items:center;font-family:'IBM Plex Mono',monospace;font-size:13px;}
+.timer{background:#2B2A28;padding:5px 10px;border:1px solid #444;min-width:64px;text-align:center;}
+.timer.warn{color:var(--yellow);}
+.timer.danger{color:#ff6b6b;}
+
+.wrap{max-width:720px;margin:0 auto;padding:22px 18px 70px;}
+
+.qlist{display:flex;flex-direction:column;gap:16px;}
+.qcard{background:var(--card);border:1px solid var(--paper-line);padding:22px 24px;scroll-margin-top:80px;}
+.qhead{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
+.qnum{font-family:'IBM Plex Mono',monospace;font-size:12px;border:1px solid var(--ink);padding:3px 9px;}
+.qtext{font-family:'Noto Serif KR',serif;font-weight:700;font-size:16.5px;line-height:1.6;margin-bottom:18px;}
+.opt{display:flex;align-items:flex-start;gap:12px;padding:11px 14px;border:1px solid var(--paper-line);margin-bottom:9px;cursor:pointer;background:#fff;}
+.opt:hover{border-color:var(--ink);}
+.opt.sel{border-color:var(--magenta);background:rgba(214,36,122,.06);}
+.opt .oid{font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:13px;border:1.5px solid var(--ink);width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.opt.sel .oid{background:var(--magenta);border-color:var(--magenta);color:#fff;}
+.opt .otxt{font-size:14.5px;padding-top:1px;}
+
+.bottomSubmit{margin-top:6px;padding:16px;background:var(--card);border:1.5px solid var(--ink);text-align:center;}
+.bottomSubmit .navbtn{font-family:'IBM Plex Mono',monospace;font-size:13px;border:1px solid var(--ink);background:var(--ink);color:#fff;padding:11px 24px;cursor:pointer;}
+.bottomSubmit .navbtn:hover{opacity:.9;}
+.bottomSubmit .hint{font-size:12px;color:var(--ink-soft);margin-bottom:10px;}
+
+.result-header{background:var(--card);border:1px solid var(--ink);padding:26px 28px;margin-bottom:18px;text-align:center;}
+.result-header .score{font-family:'Noto Serif KR',serif;font-weight:900;font-size:44px;}
+.result-header .score span{font-size:20px;color:var(--ink-soft);}
+.result-header .verdict{font-family:'IBM Plex Mono',monospace;font-size:13px;letter-spacing:.08em;margin-top:6px;text-transform:uppercase;}
+.verdict.pass{color:var(--ok);}
+.verdict.fail{color:var(--bad);}
+.result-header .cutline{font-size:12px;color:var(--ink-soft);margin-top:4px;}
+
+.rev{border:1px solid var(--paper-line);background:var(--card);margin-bottom:12px;padding:18px 20px;}
+.rev.correct{border-left:4px solid var(--ok);}
+.rev.wrong{border-left:4px solid var(--bad);}
+.rev .rnum{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--ink-soft);margin-bottom:6px;display:flex;align-items:center;gap:8px;}
+.badge{font-family:'IBM Plex Mono',monospace;font-size:10px;padding:2px 7px;color:#fff;}
+.badge.ok{background:var(--ok);}
+.badge.bad{background:var(--bad);}
+.rev .rq{font-family:'Noto Serif KR',serif;font-weight:700;font-size:15px;margin-bottom:10px;}
+.rev .ra{font-size:13.5px;margin:4px 0;}
+.rev .ra b{font-family:'IBM Plex Mono',monospace;font-size:11px;margin-right:6px;}
+.rev .ra.user-wrong{color:var(--bad);}
+.rev .ra.correct-ans{color:var(--ok);}
+.rev .expl{margin-top:10px;padding-top:10px;border-top:1px dashed var(--paper-line);font-size:13px;color:var(--ink-soft);}
+.rev .expl b{color:var(--ink);}
+
+.retryBtn{display:block;margin:24px auto 0;font-family:'IBM Plex Mono',monospace;font-size:13px;border:1px solid var(--ink);background:var(--ink);color:#fff;padding:11px 22px;cursor:pointer;}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="title">시각디자인산업기사 <span>CBT 모의시험</span> · CH03 시각디자인 관리</div>
+  <div class="meta">
+    <span id="progressLabel">0 / 25 답변</span>
+    <div class="timer" id="timer">25:00</div>
+  </div>
+</div>
+
+<div id="examView" class="wrap">
+  <div class="qlist" id="qlist"></div>
+  <div class="bottomSubmit">
+    <div class="hint">모든 문항에 답했는지 확인 후 제출하세요.</div>
+    <button class="navbtn" id="submitBtn2">제출하고 채점하기</button>
+  </div>
+</div>
+
+<div id="resultView" class="wrap" style="display:none;max-width:760px;">
+  <div>
+    <div class="result-header">
+      <div class="score" id="scoreBig">0<span>&nbsp;/&nbsp;25</span></div>
+      <div class="verdict" id="verdictText"></div>
+      <div class="cutline">합격 기준 60점(15/25) 가정 기준</div>
+    </div>
+    <div id="reviewList"></div>
+    <button class="retryBtn" id="retryBtn">다시 풀기</button>
+  </div>
+</div>
+
+<script>
+const QUESTIONS = [
+{"prompt":"계획과 기획 중, '미래의 목표'에 해당하는 것은?","options":[["a","계획"],["b","기획"],["c","전략"],["d","정책"]],"answer":"a","explanation":"계획은 미래의 목표이며, 그 목표를 위해 사전에 준비하는 행위 또는 아이디어를 내는 행위를 기획이라 합니다."},
+{"prompt":"'어떤 일을 꾸며 계획함'이라는 사전적 정의를 가지며, 계획을 위한 사전준비 차원의 '행위'에 해당하는 것은?","options":[["a","계획"],["b","기획"],["c","정책"],["d","경영"]],"answer":"b","explanation":"기획은 '어떤 일을 꾸며 계획함'이라는 뜻으로, 계획을 위한 사전준비 차원의 행위입니다. 계획은 기획에 따라 나타나는 결과입니다."},
+{"prompt":"기획과 계획의 관계로 옳은 것은?","options":[["a","기획은 결과, 계획은 행위"],["b","기획은 행위, 계획은 결과"],["c","기획과 계획은 동일한 개념"],["d","기획은 정책의 하위 개념"]],"answer":"b","explanation":"기획은 계획을 위한 사전준비 차원의 '행위'이고, 계획은 기획에 따라 나타나는 '결과'입니다."},
+{"prompt":"'전략(strategy)'의 어원이 유래된 고대 그리스어는?","options":[["a","스트라테고스(strategos)"],["b","폴리스(polis)"],["c","텔레시스(telesis)"],["d","디세뇨(disegno)"]],"answer":"a","explanation":"전략은 지휘능력·전략가·장군을 의미하는 고대 그리스어 '스트라테고스(strategos)'로부터 유래되었습니다."},
+{"prompt":"'스트라테고스(strategos)'의 어원 구성으로 옳은 것은?","options":[["a","stratos(군대) + ago(끌다)"],["b","polis(도시) + tics(학문)"],["c","design(설계) + are(하다)"],["d","mono(하나) + logos(말)"]],"answer":"a","explanation":"스트라테고스는 '군대'를 뜻하는 stratos와 '끈다'는 뜻의 ago가 결합된 단어입니다."},
+{"prompt":"전략이 다른 기획행위보다 절박하고 신중해야 하는 이유로 본문에서 제시한 예시는?","options":[["a","경영 실패로 인한 손실"],["b","전쟁에서 잘못된 기획으로 목숨을 잃을 수 있음"],["c","정책 실패로 인한 여론 악화"],["d","디자인 실패로 인한 매출 감소"]],"answer":"b","explanation":"전쟁에서는 한 번의 잘못된 기획으로 많은 사람들이 목숨까지 잃을 수 있기 때문에 전략은 절박하고 신중해야 합니다."},
+{"prompt":"전략의 기본적인 특성으로 옳은 것은?","options":[["a","과정 중심적이며 절차를 중시"],["b","수단과 방법을 가리지 않고 목적을 이루는 결과·성과 중심적 특성"],["c","개인의 취향을 우선하는 특성"],["d","법률적 근거만을 따르는 특성"]],"answer":"b","explanation":"전략은 수단과 방법을 가리지 않고 목적을 이루기 위한 것으로 결과와 성과 중심적 특성을 가집니다."},
+{"prompt":"디자인 전략의 정의로 가장 옳은 것은?","options":[["a","단기적인 제품 판매 촉진 활동"],["b","기업의 디자인 활동이 지향해야 할 목표를 설정해주는 종합적이며 장기적인 디자인 기획"],["c","개별 디자이너의 포트폴리오 관리 방법"],["d","정부의 디자인 규제 절차"]],"answer":"b","explanation":"디자인 전략은 한 기업의 디자인 활동이 지향해야 할 목표를 설정해주는 종합적이며 장기적인 디자인 기획입니다."},
+{"prompt":"디자인 활동 3요소 중 '목표설정, 전략수립, 예산편성, 의사결정' 등에 해당하는 것은?","options":[["a","계획(planning)"],["b","조직(organizing)"],["c","통제(controlling)"],["d","평가(evaluating)"]],"answer":"a","explanation":"계획(planning)은 목표설정, 전략수립, 예산편성, 의사결정 등을 포함합니다."},
+{"prompt":"디자인 활동 3요소 중 '구조설계, 역할과 책임 부여, 소통채널 설정' 등에 해당하는 것은?","options":[["a","계획(planning)"],["b","조직(organizing)"],["c","통제(controlling)"],["d","전략(strategy)"]],"answer":"b","explanation":"조직(organizing)은 구조설계, 역할과 책임 부여, 소통채널 설정 등을 포함합니다."},
+{"prompt":"디자인 활동 3요소 중 '성과측정, 예산모니터링, 문제해결' 등에 해당하는 것은?","options":[["a","계획(planning)"],["b","조직(organizing)"],["c","통제(controlling)"],["d","기획(planning process)"]],"answer":"c","explanation":"통제(controlling)는 성과측정, 예산모니터링, 문제해결 등을 포함합니다."},
+{"prompt":"디자인 관리 측면의 프로세스에서 '아이디어 수집' 바로 다음 단계는?","options":[["a","시장조사"],["b","아이디어 확정"],["c","시안 제작"],["d","프레젠테이션"]],"answer":"b","explanation":"프로세스는 계획→시장조사→아이디어 수집→아이디어 확정→시안 제작→프레젠테이션→생산/품질관리→종합평가 순입니다."},
+{"prompt":"디자인 관리 측면의 프로세스에서 가장 마지막 단계는?","options":[["a","프레젠테이션"],["b","생산/품질관리"],["c","종합평가"],["d","시안 제작"]],"answer":"c","explanation":"디자인 관리 프로세스의 마지막 단계는 종합평가입니다."},
+{"prompt":"디자인 전략 구성요소 중 '브랜드 가치 향상, 제품과 서비스의 혁신, 시각디자인의 일관성'에 해당하는 것은?","options":[["a","기업디자인 목표(corporate design objective)"],["b","기업 디자인 범주(corporate design scope)"],["c","디자인 운영 정책(design operating policy)"],["d","디자인 관리 프로세스"]],"answer":"a","explanation":"기업디자인 목표는 기업이 디자인을 통해 달성하고자 하는 목표로 브랜드 가치 향상, 제품과 서비스의 혁신, 시각디자인의 일관성 등이 있습니다."},
+{"prompt":"디자인 전략 구성요소 중 '제품디자인, 패키지, 로고, 아이덴티티' 등 디자인을 적용할 대상을 의미하는 것은?","options":[["a","기업디자인 목표"],["b","기업 디자인 범주(corporate design scope)"],["c","디자인 운영 정책"],["d","디자인 관리 프로세스"]],"answer":"b","explanation":"기업 디자인 범주는 기업이 디자인을 적용할 대상으로 제품디자인, 패키지, 로고, 아이덴티티 등이 있습니다."},
+{"prompt":"디자인 전략 구성요소 중 '디자인 프로세스, 조직구성, 디자인 가이드라인'을 정하는 것은?","options":[["a","기업디자인 목표"],["b","기업 디자인 범주"],["c","디자인 운영 정책(design operating policy)"],["d","디자인 정책(design policy)"]],"answer":"c","explanation":"디자인 운영 정책은 기업이 어떻게 디자인을 통해 전략적으로 운영할지를 정하는 것으로 디자인 프로세스, 조직구성, 디자인 가이드라인 등이 있습니다."},
+{"prompt":"정책(policy)의 어원 중 그리스어로 '도시국가'를 뜻하는 것은?","options":[["a","polis(폴리스)"],["b","Pur(퍼)"],["c","Politia"],["d","Policie"]],"answer":"a","explanation":"정책의 어원은 도시국가를 뜻하는 그리스어 'polis(폴리스)'입니다."},
+{"prompt":"정책의 어원 중 중세 영어 'Policie'가 의미하는 것은?","options":[["a","군대의 지휘 체계"],["b","공공문제에 대한 처리, 정부의 운용"],["c","도시의 상업 활동"],["d","개인의 재산 관리"]],"answer":"b","explanation":"중세 영어로는 공공문제에 대한 처리(the conduct affairs), 정부의 운용(the administration of government)의 의미로 'Policie'라고 표기했습니다."},
+{"prompt":"정책의 범위를 큰 것에서 작은 것 순으로 바르게 나열한 것은?","options":[["a","계획(Plan) > 사업(program) > 단위사업(project) > 세부활동(action)"],["b","세부활동(action) > 단위사업(project) > 사업(program) > 계획(Plan)"],["c","사업(program) > 계획(Plan) > 세부활동(action) > 단위사업(project)"],["d","단위사업(project) > 계획(Plan) > 사업(program) > 세부활동(action)"]],"answer":"a","explanation":"정책의 범위는 계획(Plan) > 사업(program) > 단위사업(project) > 세부활동(action) 순으로 포함 관계를 가집니다."},
+{"prompt":"디자인 정책을 '디자인을 위한 제반 진흥활동이 실질적으로 이루어지도록 하는 육성 및 지원체계'로 정의한 학자는?","options":[["a","금진우(고신대)"],["b","정경원(카이스트)"],["c","존 헤스켓(홍콩 폴리테크닉대)"],["d","빅터 파파넥"]],"answer":"b","explanation":"카이스트 정경원 교수는 디자인 정책을 디자인을 위한 제반 진흥활동이 실질적으로 이루어지도록 하는 육성 및 지원체계로 정의했습니다."},
+{"prompt":"디자인 정책을 '디자인이라는 특정주제에 대한 정부 의도에 관한 일련의 원칙, 목적, 절차'로 정의한 학자는?","options":[["a","금진우(고신대)"],["b","정경원(카이스트)"],["c","존 헤스켓(홍콩 폴리테크닉대)"],["d","섀넌과 위버"]],"answer":"c","explanation":"홍콩 폴리테크닉대 존 헤스켓은 디자인 정책을 디자인이라는 특정주제에 대한 정부 의도에 관한 일련의 원칙, 목적, 절차로 정의했습니다."},
+{"prompt":"기업이 치열한 경쟁 속에서 살아남는 방법 중 가장 중요한 것으로 본문에서 언급된 것은?","options":[["a","가격 인하"],["b","타 회사와의 차별화"],["c","생산량 증대"],["d","광고비 절감"]],"answer":"b","explanation":"기업이 경쟁 속에서 살아남는 가장 중요한 방법은 타 회사와의 차별화이며, 디자인이 차별화에 가장 효과적인 수단입니다."},
+{"prompt":"디자인 경영(design management)의 의미로 가장 옳은 것은?","options":[["a","단순한 제품 외형 디자인 작업"],["b","최고 경영자의 디자인에 대한 사상, 또는 기업 경영의 전략적 수단"],["c","디자이너 개인의 창작 활동"],["d","정부의 디자인 규제 정책"]],"answer":"b","explanation":"디자인 경영은 디자인(design)과 경영(management)의 복합어로, 디자인에 관한 최고 경영자의 사상이나 기업 경영의 전략적 수단을 의미합니다."},
+{"prompt":"경영(management)이라는 단어의 어원 구성으로 옳은 것은?","options":[["a","man + age + ment"],["b","man + ager + ent"],["c","manu + gement"],["d","meta + gement"]],"answer":"a","explanation":"경영이란 man+age+ment 세 단어가 결합된 말로, 나이를 먹어가면서 이해하고 습득하게 되는 조직운영에 관한 지혜를 의미합니다."},
+{"prompt":"디자인 경영이 기초를 두는 경영기술 요소로 언급되지 않은 것은?","options":[["a","시뮬레이션(simulation)"],["b","유용성(usability)"],["c","감성(emotion)"],["d","수익성(profitability)"]],"answer":"d","explanation":"디자인 경영은 시뮬레이션, 시각화, 유용성, 기능성, 창의성, 감성 등의 경영기술과 디자인프로세스에 기초를 두며, 수익성은 별도로 언급되지 않았습니다."}
+];
+
+let answers = new Array(QUESTIONS.length).fill(null);
+let submitted = false;
+let timeLeft = 25*60;
+let timerId = null;
+
+function renderAll(){
+  const list = document.getElementById('qlist');
+  list.innerHTML = QUESTIONS.map((q,i)=>{
+    const optsHtml = q.options.map(([id,txt])=>{
+      const sel = answers[i]===id;
+      return `<div class="opt ${sel?'sel':''}" data-qi="${i}" data-id="${id}">
+        <div class="oid">${id.toUpperCase()}</div>
+        <div class="otxt">${txt}</div>
+      </div>`;
+    }).join('');
+    return `<div class="qcard" id="q-${i}">
+      <div class="qhead"><span class="qnum">Q${i+1}</span></div>
+      <div class="qtext">${q.prompt}</div>
+      ${optsHtml}
+    </div>`;
+  }).join('');
+
+  list.querySelectorAll('.opt').forEach(el=>{
+    el.addEventListener('click', ()=>{
+      const qi = parseInt(el.dataset.qi);
+      answers[qi] = el.dataset.id;
+      list.querySelectorAll(`.opt[data-qi="${qi}"]`).forEach(o=>o.classList.toggle('sel', o===el));
+      updateProgress();
+    });
+  });
+  updateProgress();
+}
+
+function updateProgress(){
+  const answeredN = answers.filter(a=>a).length;
+  document.getElementById('progressLabel').textContent = answeredN+' / '+QUESTIONS.length+' 답변';
+}
+
+function startTimer(){
+  const el = document.getElementById('timer');
+  timerId = setInterval(()=>{
+    timeLeft--;
+    if(timeLeft<=0){ clearInterval(timerId); timeLeft=0; submitExam(); }
+    const m = Math.floor(timeLeft/60), s = timeLeft%60;
+    el.textContent = String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
+    el.classList.toggle('warn', timeLeft<=300 && timeLeft>60);
+    el.classList.toggle('danger', timeLeft<=60);
+  },1000);
+}
+
+function submitExam(){
+  if(submitted) return;
+  const unanswered = answers.filter(a=>!a).length;
+  if(unanswered>0 && timeLeft>0){
+    if(!confirm(unanswered+'문항이 미답변 상태입니다. 그래도 제출하시겠습니까?')) return;
+  }
+  submitted = true;
+  clearInterval(timerId);
+
+  let score=0;
+  QUESTIONS.forEach((q,i)=>{ if(answers[i]===q.answer) score++; });
+
+  document.getElementById('examView').style.display='none';
+  const rv = document.getElementById('resultView');
+  rv.style.display='block';
+
+  document.getElementById('scoreBig').innerHTML = score+'<span>&nbsp;/&nbsp;'+QUESTIONS.length+'</span>';
+  const pct = Math.round(score/QUESTIONS.length*100);
+  const pass = pct>=60;
+  const verdictEl = document.getElementById('verdictText');
+  verdictEl.textContent = pass ? 'PASS · 정답률 '+pct+'%' : 'RETRY · 정답률 '+pct+'%';
+  verdictEl.className = 'verdict '+(pass?'pass':'fail');
+
+  const listEl = document.getElementById('reviewList');
+  listEl.innerHTML = QUESTIONS.map((q,i)=>{
+    const userAns = answers[i];
+    const isCorrect = userAns === q.answer;
+    const userTxt = userAns ? q.options.find(o=>o[0]===userAns)[1] : '(미답변)';
+    const correctTxt = q.options.find(o=>o[0]===q.answer)[1];
+    return `<div class="rev ${isCorrect?'correct':'wrong'}">
+      <div class="rnum">Q${i+1} <span class="badge ${isCorrect?'ok':'bad'}">${isCorrect?'정답':'오답'}</span></div>
+      <div class="rq">${q.prompt}</div>
+      ${isCorrect ? `<div class="ra correct-ans"><b>내 답안</b>${userTxt}</div>`
+        : `<div class="ra user-wrong"><b>내 답안</b>${userTxt}</div><div class="ra correct-ans"><b>정답</b>${correctTxt}</div>`}
+      <div class="expl"><b>해설</b> ${q.explanation}</div>
+    </div>`;
+  }).join('');
+
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+document.getElementById('submitBtn2').addEventListener('click', submitExam);
+document.getElementById('retryBtn').addEventListener('click', ()=>{
+  answers = new Array(QUESTIONS.length).fill(null); submitted=false; timeLeft=25*60;
+  document.getElementById('resultView').style.display='none';
+  document.getElementById('examView').style.display='block';
+  renderAll();
+  startTimer();
+  window.scrollTo({top:0, behavior:'smooth'});
+});
+
+renderAll();
+startTimer();
+</script>
+</body>
+</html>
