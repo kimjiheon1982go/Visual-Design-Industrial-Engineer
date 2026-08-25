@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CH02 시각커뮤니케이션의 이해 — CBT 모의시험</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@700;900&family=Noto+Sans+KR:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+
+:root{
+  --paper:#F1EEE7; --paper-line:#DAD5C9; --ink:#191817; --ink-soft:#5B584F;
+  --cyan:#00A9CE; --magenta:#D6247A; --yellow:#F2B705; --card:#FBFAF7;
+  --ok:#2E7D4F; --bad:#C23B3B;
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{background:var(--paper);color:var(--ink);font-family:'Noto Sans KR',sans-serif;}
+
+.topbar{background:var(--ink);color:#fff;padding:12px 20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;position:sticky;top:0;z-index:10;}
+.topbar .title{font-family:'Noto Serif KR',serif;font-weight:900;font-size:15px;}
+.topbar .title span{color:var(--yellow);}
+.topbar .meta{display:flex;gap:16px;align-items:center;font-family:'IBM Plex Mono',monospace;font-size:13px;}
+.timer{background:#2B2A28;padding:5px 10px;border:1px solid #444;min-width:64px;text-align:center;}
+.timer.warn{color:var(--yellow);}
+.timer.danger{color:#ff6b6b;}
+
+.wrap{max-width:720px;margin:0 auto;padding:22px 18px 70px;}
+
+.submitBtn{width:100%;padding:12px;background:var(--magenta);color:#fff;border:none;font-family:'IBM Plex Mono',monospace;font-size:12.5px;letter-spacing:.05em;cursor:pointer;}
+.submitBtn:hover{opacity:.9;}
+
+.qlist{display:flex;flex-direction:column;gap:16px;}
+.qcard{background:var(--card);border:1px solid var(--paper-line);padding:22px 24px;scroll-margin-top:80px;}
+.qhead{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
+.qnum{font-family:'IBM Plex Mono',monospace;font-size:12px;border:1px solid var(--ink);padding:3px 9px;}
+.qtext{font-family:'Noto Serif KR',serif;font-weight:700;font-size:16.5px;line-height:1.6;margin-bottom:18px;}
+.opt{display:flex;align-items:flex-start;gap:12px;padding:11px 14px;border:1px solid var(--paper-line);margin-bottom:9px;cursor:pointer;background:#fff;}
+.opt:hover{border-color:var(--ink);}
+.opt.sel{border-color:var(--magenta);background:rgba(214,36,122,.06);}
+.opt .oid{font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:13px;border:1.5px solid var(--ink);width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.opt.sel .oid{background:var(--magenta);border-color:var(--magenta);color:#fff;}
+.opt .otxt{font-size:14.5px;padding-top:1px;}
+
+.bottomSubmit{margin-top:6px;padding:16px;background:var(--card);border:1.5px solid var(--ink);text-align:center;}
+.bottomSubmit .navbtn{font-family:'IBM Plex Mono',monospace;font-size:13px;border:1px solid var(--ink);background:var(--ink);color:#fff;padding:11px 24px;cursor:pointer;}
+.bottomSubmit .navbtn:hover{opacity:.9;}
+.bottomSubmit .hint{font-size:12px;color:var(--ink-soft);margin-bottom:10px;}
+
+.result-header{background:var(--card);border:1px solid var(--ink);padding:26px 28px;margin-bottom:18px;text-align:center;}
+.result-header .score{font-family:'Noto Serif KR',serif;font-weight:900;font-size:44px;}
+.result-header .score span{font-size:20px;color:var(--ink-soft);}
+.result-header .verdict{font-family:'IBM Plex Mono',monospace;font-size:13px;letter-spacing:.08em;margin-top:6px;text-transform:uppercase;}
+.verdict.pass{color:var(--ok);}
+.verdict.fail{color:var(--bad);}
+.result-header .cutline{font-size:12px;color:var(--ink-soft);margin-top:4px;}
+
+.rev{border:1px solid var(--paper-line);background:var(--card);margin-bottom:12px;padding:18px 20px;}
+.rev.correct{border-left:4px solid var(--ok);}
+.rev.wrong{border-left:4px solid var(--bad);}
+.rev .rnum{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--ink-soft);margin-bottom:6px;display:flex;align-items:center;gap:8px;}
+.badge{font-family:'IBM Plex Mono',monospace;font-size:10px;padding:2px 7px;color:#fff;}
+.badge.ok{background:var(--ok);}
+.badge.bad{background:var(--bad);}
+.rev .rq{font-family:'Noto Serif KR',serif;font-weight:700;font-size:15px;margin-bottom:10px;}
+.rev .ra{font-size:13.5px;margin:4px 0;}
+.rev .ra b{font-family:'IBM Plex Mono',monospace;font-size:11px;margin-right:6px;}
+.rev .ra.user-wrong{color:var(--bad);}
+.rev .ra.correct-ans{color:var(--ok);}
+.rev .expl{margin-top:10px;padding-top:10px;border-top:1px dashed var(--paper-line);font-size:13px;color:var(--ink-soft);}
+.rev .expl b{color:var(--ink);}
+
+.retryBtn{display:block;margin:24px auto 0;font-family:'IBM Plex Mono',monospace;font-size:13px;border:1px solid var(--ink);background:var(--ink);color:#fff;padding:11px 22px;cursor:pointer;}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="title">시각디자인산업기사 <span>CBT 모의시험</span> · CH02 시각커뮤니케이션의 이해</div>
+  <div class="meta">
+    <span id="progressLabel">0 / 25 답변</span>
+    <div class="timer" id="timer">25:00</div>
+  </div>
+</div>
+
+<div id="examView" class="wrap">
+  <div class="qlist" id="qlist"></div>
+  <div class="bottomSubmit">
+    <div class="hint">모든 문항에 답했는지 확인 후 제출하세요.</div>
+    <button class="navbtn" id="submitBtn2">제출하고 채점하기</button>
+  </div>
+</div>
+
+<div id="resultView" class="wrap" style="display:none;max-width:760px;">
+  <div>
+    <div class="result-header">
+      <div class="score" id="scoreBig">0<span>&nbsp;/&nbsp;25</span></div>
+      <div class="verdict" id="verdictText"></div>
+      <div class="cutline">합격 기준 60점(15/25) 가정 기준</div>
+    </div>
+    <div id="reviewList"></div>
+    <button class="retryBtn" id="retryBtn">다시 풀기</button>
+  </div>
+</div>
+
+<script>
+const QUESTIONS = [
+{"prompt":"커뮤니케이션의 매개수단으로 옳은 것은?","options":[["a","언어, 몸짓, 화상 등의 물질적 기호"],["b","오직 문자 언어"],["c","숫자 데이터"],["d","법적 계약서"]],"answer":"a","explanation":"커뮤니케이션은 언어 또는 몸짓이나 화상(畵像) 등의 물질적 기호를 매개수단으로 하는 정신적·심리적 전달 교류입니다."},
+{"prompt":"커뮤니케이션은 두 개 이상의 개체가 무엇을 매개로 정보를 공유하는 과정인가?","options":[["a","화폐"],["b","기호"],["c","계약"],["d","제도"]],"answer":"b","explanation":"커뮤니케이션은 두 개 이상의 개체가 기호를 매개로 하여 정보, 감정, 지식 등을 공유하는 과정입니다."},
+{"prompt":"커뮤니케이션 정의에서 두 개 이상의 개체가 공유하는 대상이 아닌 것은?","options":[["a","정보"],["b","감정"],["c","지식"],["d","소유권"]],"answer":"d","explanation":"커뮤니케이션은 정보, 감정, 지식 등을 공유하는 과정이며, 소유권은 해당하지 않습니다."},
+{"prompt":"현대의 커뮤니케이션이 포괄하는 것으로 옳은 것은?","options":[["a","인쇄 또는 멀티미디어를 통한 포괄적인 광고 및 선전 활동(PR)"],["b","법률 계약 체결 절차"],["c","제품 제조 공정"],["d","회계 감사 절차"]],"answer":"a","explanation":"현대의 커뮤니케이션은 인쇄 또는 멀티미디어를 통한 포괄적인 광고 및 각종 선전 활동(PR)을 의미합니다."},
+{"prompt":"현대 커뮤니케이션이 포괄하는 관계로 언급되지 않은 것은?","options":[["a","생물과 생물"],["b","인간과 자연"],["c","인간과 동물"],["d","인간과 기계"]],"answer":"d","explanation":"현대의 커뮤니케이션은 생물과 생물, 인간과 자연, 동물, 환경 간의 심리적 내용까지 포괄한다고 설명되며, 인간과 기계는 언급되지 않았습니다."},
+{"prompt":"송신자와 수신자를 연결해주는 매개체로, 광고에서는 메시지를 소비자에게 전달하는 수단을 의미하는 것은?","options":[["a","정보원"],["b","채널(매체)"],["c","잡음원"],["d","목적지"]],"answer":"b","explanation":"채널(매체)은 송신자와 수신자를 연결해주는 매개체이며, 광고 메시지를 소비자에게 전달해주는 수단을 의미합니다."},
+{"prompt":"커뮤니케이션 과정을 정의할 때 그 흐름의 방향은?","options":[["a","수신하는 쪽에서 송신하는 쪽으로"],["b","송신하는 쪽에서 수신하는 쪽으로"],["c","채널에서 잡음원으로"],["d","목적지에서 정보원으로"]],"answer":"b","explanation":"커뮤니케이션 과정은 정보를 송신하는 쪽으로부터 수신하는 쪽으로의 흐름을 말합니다."},
+{"prompt":"커뮤니케이션 흐름에 대한 연구를 최초로 수행한 학문 분야는?","options":[["a","통신공학"],["b","기호학"],["c","미학"],["d","경제학"]],"answer":"a","explanation":"커뮤니케이션 흐름에 대한 연구는 통신공학 분야의 섀넌과 위버에 의하여 최초로 이루어졌습니다."},
+{"prompt":"섀넌(C.E. Shannon)과 위버(N. Weaver)가 1940년대 후반 발표한 저서의 제목은?","options":[["a","커뮤니케이션의 수학적 이론"],["b","시각 커뮤니케이션 개론"],["c","정보 사회학"],["d","매스미디어의 이해"]],"answer":"a","explanation":"섀넌과 위버는 1940년대 후반 「커뮤니케이션의 수학적 이론」이라는 저서를 통해 커뮤니케이션을 설명했습니다."},
+{"prompt":"섀넌과 위버가 커뮤니케이션을 설명하기 위해 사용한 학문적 용어 체계는?","options":[["a","기호학 용어"],["b","정보이론 용어"],["c","미학 용어"],["d","행동경제학 용어"]],"answer":"b","explanation":"섀넌과 위버는 커뮤니케이션을 정보이론 용어로 제창하고 도표로 설명하였습니다."},
+{"prompt":"섀넌과 위버의 커뮤니케이션 모델에서 정보원 바로 다음 단계는?","options":[["a","채널"],["b","송신기"],["c","수신기"],["d","목적지"]],"answer":"b","explanation":"모델은 정보원 → 송신기 → 채널 → 수신기 → 목적지 순으로 구성됩니다."},
+{"prompt":"섀넌과 위버의 커뮤니케이션 모델에서 채널 바로 다음 단계는?","options":[["a","정보원"],["b","송신기"],["c","수신기"],["d","잡음원"]],"answer":"c","explanation":"모델은 정보원 → 송신기 → 채널 → 수신기 → 목적지 순이므로, 채널 다음은 수신기입니다."},
+{"prompt":"커뮤니케이션 모델에서 '정보원 → 송신기' 구간에 표시되는 라벨은?","options":[["a","메시지"],["b","시그널"],["c","잡음원"],["d","채널"]],"answer":"a","explanation":"정보원에서 송신기로 가는 구간에는 '메시지'가 표시됩니다."},
+{"prompt":"커뮤니케이션 모델에서 '송신기 → 채널' 구간에 표시되는 라벨은?","options":[["a","메시지"],["b","시그널"],["c","잡음원"],["d","목적지"]],"answer":"b","explanation":"송신기에서 채널로 가는 구간에는 메시지가 '시그널'로 변환되어 표시됩니다."},
+{"prompt":"커뮤니케이션 모델에서 잡음원(noise source)이 개입하는 지점은?","options":[["a","정보원"],["b","송신기"],["c","채널"],["d","목적지"]],"answer":"c","explanation":"잡음원은 채널 아래에서 위쪽 화살표로 채널에 개입하여 메시지 전달을 방해하는 요소로 표현됩니다."},
+{"prompt":"커뮤니케이션 모델에서 '수신기 → 목적지' 구간에 표시되는 라벨은?","options":[["a","시그널"],["b","메시지"],["c","잡음원"],["d","채널"]],"answer":"b","explanation":"수신기에서 목적지로 가는 구간에는 시그널이 다시 '메시지'로 표시됩니다."},
+{"prompt":"시각 커뮤니케이션이 다루는 핵심 문제는?","options":[["a","어떻게 정보를 잘 전달하고 소통할 것인가"],["b","어떻게 제품을 대량생산할 것인가"],["c","어떻게 건축물을 시공할 것인가"],["d","어떻게 법률을 제정할 것인가"]],"answer":"a","explanation":"시각 커뮤니케이션은 '어떻게 정보를 잘 전달하고 소통할 것인가?'의 문제를 다루는 디자인입니다."},
+{"prompt":"시각 커뮤니케이션의 궁극적인 목적은?","options":[["a","소통을 통해 인간의 삶을 더 풍요롭게 만드는 것"],["b","기업의 매출 극대화"],["c","예술가의 명성 획득"],["d","정보의 완전한 통제"]],"answer":"a","explanation":"시각 커뮤니케이션은 소통을 통해 인간의 삶을 보다 더 풍요롭게 만드는 데 목적이 있습니다."},
+{"prompt":"시각 커뮤니케이션의 기능 중 신호, 문자, 활자, 통계, 도표, 지도 등이 해당하는 기능은?","options":[["a","지시적 기능"],["b","설득적 기능"],["c","상징적 기능"],["d","기록적 기능"]],"answer":"a","explanation":"지시적 기능은 신호, 문자, 활자, 통계, 도표, 지도 등을 통해 나타나는 시각 커뮤니케이션의 기능입니다."},
+{"prompt":"시각 커뮤니케이션의 기능 중 포스터, 신문광고, 디스플레이 등이 해당하는 기능은?","options":[["a","지시적 기능"],["b","설득적 기능"],["c","상징적 기능"],["d","기록적 기능"]],"answer":"b","explanation":"설득적 기능은 포스터, 신문광고, 디스플레이 등을 통해 나타나는 시각 커뮤니케이션의 기능입니다."},
+{"prompt":"시각 커뮤니케이션의 기능 중 심벌, 마크, 로고, 패턴, 일러스트레이션 등이 해당하는 기능은?","options":[["a","지시적 기능"],["b","설득적 기능"],["c","상징적 기능"],["d","기록적 기능"]],"answer":"c","explanation":"상징적 기능은 심벌, 마크, 로고, 패턴, 일러스트레이션 등을 통해 나타나는 시각 커뮤니케이션의 기능입니다."},
+{"prompt":"시각 커뮤니케이션의 기능 중 사진, 영화, TV 등이 해당하는 기능은?","options":[["a","기록적 기능과 표현적 기능"],["b","설득적 기능"],["c","지시적 기능"],["d","마케팅 기능"]],"answer":"a","explanation":"기록적 기능과 표현적 기능은 사진, 영화, TV 등을 통해 나타나는 시각 커뮤니케이션의 기능입니다."},
+{"prompt":"'많은 사람의 행동, 태도, 의지결정 등을 일정한 방향으로 유도·조작하고자 하는 의도적이면서 조직적인 시도'를 의미하는 용어는?","options":[["a","매스커뮤니케이션"],["b","선전(propaganda)"],["c","마케팅"],["d","브랜딩"]],"answer":"b","explanation":"선전(propaganda)은 많은 사람의 행동·태도·의지결정 등을 일정한 방향으로 유도·조작하고자 하는 의도적이면서 조직적인 시도입니다."},
+{"prompt":"매스커뮤니케이션에서 선전광고를 목적으로 중요한 역할을 하는 매스미디어에 해당하지 않는 것은?","options":[["a","텔레비전"],["b","라디오"],["c","신문"],["d","우편엽서"]],"answer":"d","explanation":"매스커뮤니케이션에서 중요한 역할을 하는 매스미디어로는 텔레비전, 라디오, 신문, 잡지 등이 언급되며, 우편엽서는 해당하지 않습니다."},
+{"prompt":"매스커뮤니케이션 연구가 포함하는 범위가 아닌 것은?","options":[["a","매스미디어 조직의 구조"],["b","커뮤니케이션의 기술적·심리적 과정"],["c","청중의 특징과 측정"],["d","개인의 유전자 정보 분석"]],"answer":"d","explanation":"매스커뮤니케이션의 연구는 매스미디어 조직의 구조, 커뮤니케이션의 기술적·심리적 과정, 청중의 특징과 측정 등을 포함하며, 개인의 유전자 정보 분석은 해당하지 않습니다."}
+];
+
+let answers = new Array(QUESTIONS.length).fill(null);
+let submitted = false;
+let timeLeft = 25*60;
+let timerId = null;
+
+
+function renderAll(){
+  const list = document.getElementById('qlist');
+  list.innerHTML = QUESTIONS.map((q,i)=>{
+    const optsHtml = q.options.map(([id,txt])=>{
+      const sel = answers[i]===id;
+      return `<div class="opt ${sel?'sel':''}" data-qi="${i}" data-id="${id}">
+        <div class="oid">${id.toUpperCase()}</div>
+        <div class="otxt">${txt}</div>
+      </div>`;
+    }).join('');
+    return `<div class="qcard" id="q-${i}">
+      <div class="qhead"><span class="qnum">Q${i+1}</span></div>
+      <div class="qtext">${q.prompt}</div>
+      ${optsHtml}
+    </div>`;
+  }).join('');
+
+  list.querySelectorAll('.opt').forEach(el=>{
+    el.addEventListener('click', ()=>{
+      const qi = parseInt(el.dataset.qi);
+      answers[qi] = el.dataset.id;
+      list.querySelectorAll(`.opt[data-qi="${qi}"]`).forEach(o=>o.classList.toggle('sel', o===el));
+      updateProgress();
+    });
+  });
+  updateProgress();
+}
+
+function updateProgress(){
+  const answeredN = answers.filter(a=>a).length;
+  document.getElementById('progressLabel').textContent = answeredN+' / '+QUESTIONS.length+' 답변';
+}
+
+function startTimer(){
+  const el = document.getElementById('timer');
+  timerId = setInterval(()=>{
+    timeLeft--;
+    if(timeLeft<=0){ clearInterval(timerId); timeLeft=0; submitExam(); }
+    const m = Math.floor(timeLeft/60), s = timeLeft%60;
+    el.textContent = String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
+    el.classList.toggle('warn', timeLeft<=300 && timeLeft>60);
+    el.classList.toggle('danger', timeLeft<=60);
+  },1000);
+}
+
+function submitExam(){
+  if(submitted) return;
+  const unanswered = answers.filter(a=>!a).length;
+  if(unanswered>0 && timeLeft>0){
+    if(!confirm(unanswered+'문항이 미답변 상태입니다. 그래도 제출하시겠습니까?')) return;
+  }
+  submitted = true;
+  clearInterval(timerId);
+
+  let score=0;
+  QUESTIONS.forEach((q,i)=>{ if(answers[i]===q.answer) score++; });
+
+  document.getElementById('examView').style.display='none';
+  const rv = document.getElementById('resultView');
+  rv.style.display='block';
+
+  document.getElementById('scoreBig').innerHTML = score+'<span>&nbsp;/&nbsp;'+QUESTIONS.length+'</span>';
+  const pct = Math.round(score/QUESTIONS.length*100);
+  const pass = pct>=60;
+  const verdictEl = document.getElementById('verdictText');
+  verdictEl.textContent = pass ? 'PASS · 정답률 '+pct+'%' : 'RETRY · 정답률 '+pct+'%';
+  verdictEl.className = 'verdict '+(pass?'pass':'fail');
+
+  const listEl = document.getElementById('reviewList');
+  listEl.innerHTML = QUESTIONS.map((q,i)=>{
+    const userAns = answers[i];
+    const isCorrect = userAns === q.answer;
+    const userTxt = userAns ? q.options.find(o=>o[0]===userAns)[1] : '(미답변)';
+    const correctTxt = q.options.find(o=>o[0]===q.answer)[1];
+    return `<div class="rev ${isCorrect?'correct':'wrong'}">
+      <div class="rnum">Q${i+1} <span class="badge ${isCorrect?'ok':'bad'}">${isCorrect?'정답':'오답'}</span></div>
+      <div class="rq">${q.prompt}</div>
+      ${isCorrect ? `<div class="ra correct-ans"><b>내 답안</b>${userTxt}</div>`
+        : `<div class="ra user-wrong"><b>내 답안</b>${userTxt}</div><div class="ra correct-ans"><b>정답</b>${correctTxt}</div>`}
+      <div class="expl"><b>해설</b> ${q.explanation}</div>
+    </div>`;
+  }).join('');
+
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+document.getElementById('submitBtn2').addEventListener('click', submitExam);
+document.getElementById('retryBtn').addEventListener('click', ()=>{
+  answers = new Array(QUESTIONS.length).fill(null); submitted=false; timeLeft=25*60;
+  document.getElementById('resultView').style.display='none';
+  document.getElementById('examView').style.display='block';
+  renderAll();
+  startTimer();
+  window.scrollTo({top:0, behavior:'smooth'});
+});
+
+renderAll();
+startTimer();
+</script>
+</body>
+</html>
