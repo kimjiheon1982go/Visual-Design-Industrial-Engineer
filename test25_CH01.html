@@ -24,19 +24,9 @@ body{background:var(--paper);color:var(--ink);font-family:'Noto Sans KR',sans-se
 .timer.warn{color:var(--yellow);}
 .timer.danger{color:#ff6b6b;}
 
-.wrap{max-width:980px;margin:0 auto;padding:22px 18px 70px;display:grid;grid-template-columns:200px 1fr;gap:20px;align-items:start;}
-@media(max-width:760px){.wrap{grid-template-columns:1fr;}}
+.wrap{max-width:720px;margin:0 auto;padding:22px 18px 70px;}
 
-.palette{background:var(--card);border:1px solid var(--paper-line);padding:14px;position:sticky;top:70px;}
-.palette .cap{font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:var(--ink-soft);letter-spacing:.08em;margin-bottom:10px;text-transform:uppercase;}
-.grid25{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;}
-.pbtn{aspect-ratio:1;border:1px solid var(--ink);background:var(--card);font-family:'IBM Plex Mono',monospace;font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
-.pbtn.answered{background:var(--ink);color:#fff;}
-.legend2{margin-top:12px;font-size:11px;color:var(--ink-soft);display:flex;flex-direction:column;gap:4px;}
-.legend2 span{display:flex;align-items:center;gap:6px;}
-.sw{width:10px;height:10px;border:1px solid var(--ink);display:inline-block;}
-.sw.f{background:var(--ink);}
-.submitBtn{width:100%;margin-top:14px;padding:11px;background:var(--magenta);color:#fff;border:none;font-family:'IBM Plex Mono',monospace;font-size:12.5px;letter-spacing:.05em;cursor:pointer;}
+.submitBtn{width:100%;padding:12px;background:var(--magenta);color:#fff;border:none;font-family:'IBM Plex Mono',monospace;font-size:12.5px;letter-spacing:.05em;cursor:pointer;}
 .submitBtn:hover{opacity:.9;}
 
 .qlist{display:flex;flex-direction:column;gap:16px;}
@@ -94,26 +84,14 @@ body{background:var(--paper);color:var(--ink);font-family:'Noto Sans KR',sans-se
 </div>
 
 <div id="examView" class="wrap">
-  <div class="palette">
-    <div class="cap">문제 번호</div>
-    <div class="grid25" id="paletteGrid"></div>
-    <div class="legend2">
-      <span><span class="sw f"></span>답변 완료</span>
-      <span><span class="sw"></span>미답변</span>
-    </div>
-    <button class="submitBtn" id="submitBtn">제출하고 채점하기</button>
-  </div>
-
-  <div>
-    <div class="qlist" id="qlist"></div>
-    <div class="bottomSubmit">
-      <div class="hint">모든 문항에 답했는지 확인 후 제출하세요.</div>
-      <button class="navbtn" id="submitBtn2">제출하고 채점하기</button>
-    </div>
+  <div class="qlist" id="qlist"></div>
+  <div class="bottomSubmit">
+    <div class="hint">모든 문항에 답했는지 확인 후 제출하세요.</div>
+    <button class="navbtn" id="submitBtn2">제출하고 채점하기</button>
   </div>
 </div>
 
-<div id="resultView" class="wrap" style="display:none;grid-template-columns:1fr;max-width:760px;">
+<div id="resultView" class="wrap" style="display:none;max-width:760px;">
   <div>
     <div class="result-header">
       <div class="score" id="scoreBig">0<span>&nbsp;/&nbsp;25</span></div>
@@ -159,15 +137,6 @@ let submitted = false;
 let timeLeft = 30*60;
 let timerId = null;
 
-function buildPalette(){
-  const grid = document.getElementById('paletteGrid');
-  grid.innerHTML = QUESTIONS.map((_,i)=>`<button class="pbtn" data-i="${i}">${i+1}</button>`).join('');
-  grid.querySelectorAll('.pbtn').forEach(btn=>{
-    btn.addEventListener('click', ()=>{
-      document.getElementById('q-'+btn.dataset.i).scrollIntoView({behavior:'smooth', block:'start'});
-    });
-  });
-}
 
 function renderAll(){
   const list = document.getElementById('qlist');
@@ -191,16 +160,13 @@ function renderAll(){
       const qi = parseInt(el.dataset.qi);
       answers[qi] = el.dataset.id;
       list.querySelectorAll(`.opt[data-qi="${qi}"]`).forEach(o=>o.classList.toggle('sel', o===el));
-      updatePalette();
+      updateProgress();
     });
   });
-  updatePalette();
+  updateProgress();
 }
 
-function updatePalette(){
-  document.querySelectorAll('.pbtn').forEach((btn,i)=>{
-    btn.classList.toggle('answered', !!answers[i]);
-  });
+function updateProgress(){
   const answeredN = answers.filter(a=>a).length;
   document.getElementById('progressLabel').textContent = answeredN+' / '+QUESTIONS.length+' 답변';
 }
@@ -231,7 +197,7 @@ function submitExam(){
 
   document.getElementById('examView').style.display='none';
   const rv = document.getElementById('resultView');
-  rv.style.display='grid';
+  rv.style.display='block';
 
   document.getElementById('scoreBig').innerHTML = score+'<span>&nbsp;/&nbsp;'+QUESTIONS.length+'</span>';
   const pct = Math.round(score/QUESTIONS.length*100);
@@ -258,18 +224,16 @@ function submitExam(){
   window.scrollTo({top:0, behavior:'smooth'});
 }
 
-document.getElementById('submitBtn').addEventListener('click', submitExam);
 document.getElementById('submitBtn2').addEventListener('click', submitExam);
 document.getElementById('retryBtn').addEventListener('click', ()=>{
   answers = new Array(QUESTIONS.length).fill(null); submitted=false; timeLeft=30*60;
   document.getElementById('resultView').style.display='none';
-  document.getElementById('examView').style.display='grid';
-  buildPalette(); renderAll();
+  document.getElementById('examView').style.display='block';
+  renderAll();
   startTimer();
   window.scrollTo({top:0, behavior:'smooth'});
 });
 
-buildPalette();
 renderAll();
 startTimer();
 </script>
