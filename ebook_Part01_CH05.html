@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CH05 디자인 트렌드 조사 및 분석 — 핵심 요약노트</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;700;900&family=Noto+Sans+KR:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+
+:root{
+  --paper:#F1EEE7;
+  --paper-line:#DAD5C9;
+  --ink:#191817;
+  --ink-soft:#5B584F;
+  --cyan:#00A9CE;
+  --magenta:#D6247A;
+  --yellow:#F2B705;
+  --key:#191817;
+  --card:#FBFAF7;
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{background:var(--paper);color:var(--ink);font-family:'Noto Sans KR',sans-serif;line-height:1.65;padding-bottom:70px;}
+
+.cover{max-width:760px;margin:0 auto;padding:56px 22px 30px;position:relative;}
+.crop{position:absolute;width:14px;height:14px;}
+.crop::before,.crop::after{content:'';position:absolute;background:var(--ink);}
+.crop::before{width:14px;height:1px;top:7px;} .crop::after{width:1px;height:14px;left:7px;}
+.crop.tl{top:8px;left:8px;} .crop.tr{top:8px;right:8px;}
+.eyebrow{font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.14em;color:var(--ink-soft);text-transform:uppercase;display:flex;gap:9px;align-items:center;margin-bottom:14px;}
+.eyebrow .dot{width:6px;height:6px;background:var(--magenta);border-radius:50%;display:inline-block;}
+h1.title{font-family:'Noto Serif KR',serif;font-weight:900;font-size:clamp(24px,5vw,38px);margin:0 0 8px;letter-spacing:-.01em;}
+h1.title em{font-style:normal;color:var(--magenta);}
+.subtitle{color:var(--ink-soft);font-size:14px;}
+
+.toc{max-width:760px;margin:0 auto 30px;padding:0 22px;}
+.toc-box{border:1px solid var(--ink);background:var(--card);padding:16px 20px;}
+.toc-cap{font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.1em;color:var(--ink-soft);text-transform:uppercase;margin-bottom:8px;}
+.toc-box a{display:block;font-size:13.5px;color:var(--ink);text-decoration:none;padding:3px 0;border-bottom:1px dotted var(--paper-line);}
+.toc-box a:hover{color:var(--magenta);}
+.toc-box a:last-child{border-bottom:none;}
+.toc-box a span{font-family:'IBM Plex Mono',monospace;color:var(--ink-soft);margin-right:8px;font-size:11.5px;}
+
+main{max-width:760px;margin:0 auto;padding:0 22px;}
+
+.strand{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.1em;color:var(--ink-soft);text-transform:uppercase;margin:44px 0 4px;}
+.section-head{display:flex;align-items:baseline;gap:12px;margin:0 0 18px;padding-bottom:10px;border-bottom:2px solid var(--ink);}
+.section-num{font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--magenta);font-weight:600;}
+.section-head h2{font-family:'Noto Serif KR',serif;font-weight:900;font-size:21px;margin:0;}
+
+.sub{margin:24px 0;}
+.sub h3{font-family:'Noto Serif KR',serif;font-weight:700;font-size:16px;margin:0 0 10px;display:flex;align-items:center;gap:8px;}
+.sub h3 .chip{font-family:'IBM Plex Mono',monospace;font-size:10.5px;background:var(--cyan);color:#fff;padding:2px 7px;flex-shrink:0;}
+.sub p{margin:0 0 10px;font-size:14.5px;}
+.sub ul{margin:0 0 10px;padding-left:20px;}
+.sub li{font-size:14.5px;margin-bottom:6px;}
+.term{background:rgba(214,36,122,.12);padding:0 3px;font-weight:700;}
+
+.point{border:1px solid var(--ink);background:var(--card);margin:16px 0;position:relative;padding:16px 18px 16px 20px;}
+.point::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--magenta);}
+.point .p-cap{font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.08em;color:var(--magenta);text-transform:uppercase;margin-bottom:8px;}
+.point ol{margin:0;padding-left:18px;}
+.point li{font-size:13.5px;margin-bottom:6px;}
+.point li b{color:var(--ink);}
+
+table.classify{width:100%;border-collapse:collapse;margin:14px 0;font-size:13.5px;}
+table.classify th{background:var(--key);color:#fff;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.05em;padding:8px 10px;text-align:left;}
+table.classify td{border:1px solid var(--paper-line);padding:9px 10px;vertical-align:top;background:var(--card);}
+table.classify tr td:first-child{font-weight:700;font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--magenta);white-space:nowrap;}
+
+.tip{border:1px dashed var(--ink-soft);background:transparent;padding:10px 14px;margin:14px 0;font-size:13px;color:var(--ink-soft);}
+.tip b{color:var(--ink);}
+
+.divider{height:1px;background:repeating-linear-gradient(90deg,var(--ink-soft) 0 6px,transparent 6px 10px);margin:38px 0;opacity:.5;}
+
+footer{max-width:760px;margin:50px auto 0;padding:0 22px;font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--ink-soft);}
+
+@media(max-width:520px){
+  table.classify{font-size:12px;}
+}
+</style>
+</head>
+<body>
+
+<div class="cover">
+  <div class="crop tl"></div><div class="crop tr"></div>
+  <div class="eyebrow"><span class="dot"></span>시각디자인산업기사 · 이론 요약노트</div>
+  <h1 class="title">CH05 <em>디자인 트렌드 조사 및 분석</em></h1>
+  <div class="subtitle">제1~3강 트렌드 조사·예측·전략화 — 핵심 개념만 압축 정리</div>
+</div>
+
+<div class="toc">
+  <div class="toc-box">
+    <div class="toc-cap">Contents</div>
+    <a href="#s1"><span>01</span>디자인 트렌드 (제1강)</a>
+    <a href="#s2"><span>02</span>트렌드 예측방법 (제2강)</a>
+    <a href="#s3"><span>03</span>트렌드 전략화 및 디자인 전략 (제3강)</a>
+  </div>
+</div>
+
+<main>
+
+  <div class="strand">제1강 · 트렌드 조사방법</div>
+  <section id="s1">
+    <div class="section-head"><span class="section-num">01</span><h2>디자인 트렌드</h2></div>
+
+    <div class="sub">
+      <h3><span class="chip">정의</span>트렌드(trend)의 이해</h3>
+      <ul>
+        <li>트렌드 = <b>방향, 경향, 동향, 추세, 유행</b> 등을 뜻함. 사회·특정 문화·시장이 변화하는 현상과 경향, 사상·행동·현상에서 나타나는 일정한 방향</li>
+        <li>대부분의 소비자는 트렌드 흐름에 관심을 가지며 특정 트렌드에 대한 선호도가 높음</li>
+        <li>트렌드의 <span class="term">주기는 일반적으로 5~10년</span> 정도 — 변화가 항상 같을 수 없으므로 신문·잡지·책·보고서·전시·세미나·관련 기사·트렌드 정보 발표기관 자료 등을 지속적으로 수집·조사·분석해 시기적 흐름을 파악해야 함</li>
+      </ul>
+    </div>
+
+    <div class="sub">
+      <h3><span class="chip">개념</span>트렌드 조사(research)</h3>
+      <ul>
+        <li>사회·경제·기술·문화 등 다양한 변화 요인을 소비자의 라이프스타일에 끼치는 총체적 흐름과 상세한 적용 요인으로 나누어 파악해, 소비자의 <b>미래 구매습관</b>을 연구·예측하는 과정</li>
+        <li>특정 분야에서 인기 있는 색상·패턴·소재 등을 파악해 제품 디자인 개발이나 마케팅 전략 수립에 활용</li>
+        <li>일반 대중의 소비행동 파악뿐 아니라 경쟁업체 제품과 비교해 <b>시장 선점 전략</b> 수립에도 활용</li>
+      </ul>
+      <div class="point">
+        <div class="p-cap">Point · 트렌드 vs 유행 지속기간</div>
+        <table class="classify">
+          <tr><th>구분</th><th>지속 기간</th></tr>
+          <tr><td>트렌드(trend)</td><td>5~10년</td></tr>
+          <tr><td>유행(fashion)</td><td>6개월~1년</td></tr>
+        </table>
+        <p style="font-size:13px;margin-top:6px;">트렌드는 유행보다 지속 기간이 길기 때문에 새로운 제품을 예측하고 개발하는 데 매우 중요한 조사이다.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <div class="strand">제2강 · 트렌드 예측방법</div>
+  <section id="s2">
+    <div class="section-head"><span class="section-num">02</span><h2>트렌드 예측방법</h2></div>
+
+    <div class="sub">
+      <h3><span class="chip">정의</span>트렌드 예측(trend forecasting)</h3>
+      <ul>
+        <li>소비자들의 <b>니즈(needs)와 구매습관</b>을 파악·분석해 미래의 트렌드를 예측하는 것 — 기업은 이를 통해 소비자 요구에 맞는 제품·서비스를 개발하고 경쟁우위를 확보</li>
+        <li>다양한 정보·데이터를 수집·분석하는 과정에서 <b>인과관계 파악</b>과 <b>창의적인 아이디어 도출</b>이 필요</li>
+        <li>정확한 정보와 데이터를 바탕으로 수행되어야 하며, <span class="term">빅데이터·인공지능</span> 등의 기술이 활용되기도 함</li>
+      </ul>
+    </div>
+
+    <div class="sub">
+      <h3><span class="chip">역할</span>스타일 트렌드 조사</h3>
+      <ul>
+        <li>디자인 작업에 매우 중요한 역할 — 디자이너는 소비자가 선호하는 스타일·트렌드를 파악해 디자인에 반영, 제품 경쟁력을 높여야 함</li>
+        <li>적극적으로 수행되어야 하며, <span class="term">색상·질감·분위기</span> 등 다양한 디자인적 요소를 반영할 수 있도록 자료를 수집·분석해야 함</li>
+      </ul>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <div class="strand">제3강 · 디자인 트렌드 조사 결과물 디자인 포지셔닝 설정</div>
+  <section id="s3">
+    <div class="section-head"><span class="section-num">03</span><h2>트렌드 전략화 및 디자인 전략의 구체화</h2></div>
+
+    <div class="sub">
+      <h3><span class="chip">과정</span>트렌드 전략화</h3>
+      <p>트렌드를 전략적으로 활용해 디자인 개발에 반영함으로써 경쟁력을 유지·강화할 수 있다. 이를 위해서는 <b>경쟁사·경쟁 제품에 대한 분석과 평가 능력</b>이 필요하다.</p>
+      <div class="point">
+        <div class="p-cap">Point · 트렌드 전략화 6단계</div>
+        <ol>
+          <li><b>시장 환경에 대한 트렌드 분석</b> — 경쟁사의 서비스·제품을 분석해 장단점 파악</li>
+          <li><b>경쟁사 및 경쟁 제품 분석</b> — 경쟁사의 서비스·제품을 분석하고 장단점 파악</li>
+          <li><b>스타일 및 경쟁 제품 분석</b> — 디자인에 영향을 미치는 스타일 트렌드(색상·소재·형태 등) 파악</li>
+          <li><b>전략 방법 수립</b> — 시장 환경·경쟁사 및 제품 분석·스타일 트렌드 분석 결과를 종합해 디자인 개발 전략 방향 수립</li>
+          <li><b>디자인 개발 및 테스트</b> — 전략방법을 기반으로 디자인 개발, 테스트 후 필요 시 수정</li>
+          <li><b>마케팅 및 출시</b> — 디자인을 마케팅하고 제품을 출시, 소비자 반응 모니터링 후 필요 시 수정</li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="sub">
+      <h3><span class="chip">개념</span>디자인 전략의 구체화</h3>
+      <p><b>디자인 전략</b>이란 기업이나 조직이 디자인을 활용하여 비즈니스 목표를 달성하기 위한 구체적인 계획과 실행 방안을 수립하는 것이다.</p>
+      <div class="point">
+        <div class="p-cap">Point · 디자인 전략 구체화 5단계</div>
+        <ol>
+          <li><b>비즈니스 목표 설정</b> — 디자인 전략의 근거가 되는 비즈니스 목표를 설정, 디자인이 비즈니스 성과에 어떻게 기여할 수 있는지 파악</li>
+          <li><b>시장분석</b> — 시장 동향·경쟁사 분석·고객 요구사항 등을 분석해 디자인 전략의 기반 구축</li>
+          <li><b>디자인 혁신 테마 설정</b> — 시장분석 결과를 바탕으로, 특정 분야·주제에 대한 디자인적 창의성과 혁신성을 반영한 테마 설정</li>
+          <li><b>디자인 전략 수립</b> — 혁신 테마를 바탕으로 비즈니스 목표 달성 방법과 활용할 디자인 요소 등을 포함한 전략 수립</li>
+          <li><b>실행과 평가</b> — 전략을 실행하고 결과를 평가해, 개선이 필요한 부분을 파악하고 전략을 보완</li>
+        </ol>
+      </div>
+      <div class="tip"><b>암기 TIP</b> · 트렌드 전략화(6단계)는 시장→경쟁사→스타일→전략→개발/테스트→출시 순, 디자인 전략 구체화(5단계)는 목표→시장분석→혁신테마→전략수립→실행/평가 순으로 구분해서 외우면 헷갈리지 않습니다.</div>
+    </div>
+  </section>
+
+</main>
+
+<footer>시각디자인산업기사 · CH05 디자인 트렌드 조사 및 분석 요약노트 · 원본 PDF 기준 핵심 정리</footer>
+
+</body>
+</html>
