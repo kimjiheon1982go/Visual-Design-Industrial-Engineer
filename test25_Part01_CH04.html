@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CH04 시장 환경 조사 및 분석 — CBT 모의시험</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@700;900&family=Noto+Sans+KR:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+
+:root{
+  --paper:#F1EEE7; --paper-line:#DAD5C9; --ink:#191817; --ink-soft:#5B584F;
+  --cyan:#00A9CE; --magenta:#D6247A; --yellow:#F2B705; --card:#FBFAF7;
+  --ok:#2E7D4F; --bad:#C23B3B;
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{background:var(--paper);color:var(--ink);font-family:'Noto Sans KR',sans-serif;}
+
+.topbar{background:var(--ink);color:#fff;padding:12px 20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;position:sticky;top:0;z-index:10;}
+.topbar .title{font-family:'Noto Serif KR',serif;font-weight:900;font-size:15px;}
+.topbar .title span{color:var(--yellow);}
+.topbar .meta{display:flex;gap:16px;align-items:center;font-family:'IBM Plex Mono',monospace;font-size:13px;}
+.timer{background:#2B2A28;padding:5px 10px;border:1px solid #444;min-width:64px;text-align:center;}
+.timer.warn{color:var(--yellow);}
+.timer.danger{color:#ff6b6b;}
+
+.wrap{max-width:720px;margin:0 auto;padding:22px 18px 70px;}
+
+.qlist{display:flex;flex-direction:column;gap:16px;}
+.qcard{background:var(--card);border:1px solid var(--paper-line);padding:22px 24px;scroll-margin-top:80px;}
+.qhead{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
+.qnum{font-family:'IBM Plex Mono',monospace;font-size:12px;border:1px solid var(--ink);padding:3px 9px;}
+.qtext{font-family:'Noto Serif KR',serif;font-weight:700;font-size:16.5px;line-height:1.6;margin-bottom:18px;}
+.opt{display:flex;align-items:flex-start;gap:12px;padding:11px 14px;border:1px solid var(--paper-line);margin-bottom:9px;cursor:pointer;background:#fff;}
+.opt:hover{border-color:var(--ink);}
+.opt.sel{border-color:var(--magenta);background:rgba(214,36,122,.06);}
+.opt .oid{font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:13px;border:1.5px solid var(--ink);width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.opt.sel .oid{background:var(--magenta);border-color:var(--magenta);color:#fff;}
+.opt .otxt{font-size:14.5px;padding-top:1px;}
+
+.bottomSubmit{margin-top:6px;padding:16px;background:var(--card);border:1.5px solid var(--ink);text-align:center;}
+.bottomSubmit .navbtn{font-family:'IBM Plex Mono',monospace;font-size:13px;border:1px solid var(--ink);background:var(--ink);color:#fff;padding:11px 24px;cursor:pointer;}
+.bottomSubmit .navbtn:hover{opacity:.9;}
+.bottomSubmit .hint{font-size:12px;color:var(--ink-soft);margin-bottom:10px;}
+
+.result-header{background:var(--card);border:1px solid var(--ink);padding:26px 28px;margin-bottom:18px;text-align:center;}
+.result-header .score{font-family:'Noto Serif KR',serif;font-weight:900;font-size:44px;}
+.result-header .score span{font-size:20px;color:var(--ink-soft);}
+.result-header .verdict{font-family:'IBM Plex Mono',monospace;font-size:13px;letter-spacing:.08em;margin-top:6px;text-transform:uppercase;}
+.verdict.pass{color:var(--ok);}
+.verdict.fail{color:var(--bad);}
+.result-header .cutline{font-size:12px;color:var(--ink-soft);margin-top:4px;}
+
+.rev{border:1px solid var(--paper-line);background:var(--card);margin-bottom:12px;padding:18px 20px;}
+.rev.correct{border-left:4px solid var(--ok);}
+.rev.wrong{border-left:4px solid var(--bad);}
+.rev .rnum{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--ink-soft);margin-bottom:6px;display:flex;align-items:center;gap:8px;}
+.badge{font-family:'IBM Plex Mono',monospace;font-size:10px;padding:2px 7px;color:#fff;}
+.badge.ok{background:var(--ok);}
+.badge.bad{background:var(--bad);}
+.rev .rq{font-family:'Noto Serif KR',serif;font-weight:700;font-size:15px;margin-bottom:10px;}
+.rev .ra{font-size:13.5px;margin:4px 0;}
+.rev .ra b{font-family:'IBM Plex Mono',monospace;font-size:11px;margin-right:6px;}
+.rev .ra.user-wrong{color:var(--bad);}
+.rev .ra.correct-ans{color:var(--ok);}
+.rev .expl{margin-top:10px;padding-top:10px;border-top:1px dashed var(--paper-line);font-size:13px;color:var(--ink-soft);}
+.rev .expl b{color:var(--ink);}
+
+.retryBtn{display:block;margin:24px auto 0;font-family:'IBM Plex Mono',monospace;font-size:13px;border:1px solid var(--ink);background:var(--ink);color:#fff;padding:11px 22px;cursor:pointer;}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="title">시각디자인산업기사 <span>CBT 모의시험</span> · CH04 시장 환경 조사 및 분석</div>
+  <div class="meta">
+    <span id="progressLabel">0 / 25 답변</span>
+    <div class="timer" id="timer">25:00</div>
+  </div>
+</div>
+
+<div id="examView" class="wrap">
+  <div class="qlist" id="qlist"></div>
+  <div class="bottomSubmit">
+    <div class="hint">모든 문항에 답했는지 확인 후 제출하세요.</div>
+    <button class="navbtn" id="submitBtn2">제출하고 채점하기</button>
+  </div>
+</div>
+
+<div id="resultView" class="wrap" style="display:none;max-width:760px;">
+  <div>
+    <div class="result-header">
+      <div class="score" id="scoreBig">0<span>&nbsp;/&nbsp;25</span></div>
+      <div class="verdict" id="verdictText"></div>
+      <div class="cutline">합격 기준 60점(15/25) 가정 기준</div>
+    </div>
+    <div id="reviewList"></div>
+    <button class="retryBtn" id="retryBtn">다시 풀기</button>
+  </div>
+</div>
+
+<script>
+const QUESTIONS = [
+{"prompt":"시장조사방법의 3단계를 순서대로 바르게 나열한 것은?","options":[["a","시장분석 → 시장실사 → 시장실험"],["b","시장실사 → 시장실험 → 시장분석"],["c","시장실험 → 시장분석 → 시장실사"],["d","시장실사 → 시장분석 → 시장실험"]],"answer":"a","explanation":"시장조사방법은 시장분석(market analysis) → 시장실사(marketing survey) → 시장실험(test marketing)의 3단계로 이루어집니다."},
+{"prompt":"기존의 2차 자료로부터 얻을 수 없어 직접 조사하여 수집한 자료를 무엇이라 하는가?","options":[["a","1차 자료"],["b","2차 자료"],["c","외생 자료"],["d","통제 자료"]],"answer":"a","explanation":"1차 자료는 기존의 2차 자료로부터 얻을 수 없어 직접 조사하여 수집한 자료를 말합니다."},
+{"prompt":"과거의 다른 연구목적으로 조사되어 수집되었으나 현재 연구에 활용 가능한 자료를 무엇이라 하는가?","options":[["a","1차 자료"],["b","2차 자료"],["c","실험 자료"],["d","표본 자료"]],"answer":"b","explanation":"2차 자료는 과거의 다른 연구목적으로 조사되어 수집된 자료로, 현재 연구에 활용 가능한 자료를 말합니다."},
+{"prompt":"응답자의 답변을 요하는 일련의 질문들로 구성된 설문지를 이용해 조사하는, 가장 대표적인 1차 자료 수집방법은?","options":[["a","면접법"],["b","관찰법"],["c","설문지법"],["d","서베이법"]],"answer":"c","explanation":"설문지법은 가장 대표적인 1차 자료 수집방법으로, 응답자의 답변을 요하는 일련의 질문들로 구성된 설문지를 이용합니다."},
+{"prompt":"서베이법(SURVEY METHOD)에 포함되는 조사 유형이 아닌 것은?","options":[["a","개별면접(대인조사)"],["b","전화조사"],["c","우편조사"],["d","관찰조사"]],"answer":"d","explanation":"서베이법에는 개별면접(대인조사), 전화조사, 우편조사, 인터넷조사가 포함되며, 관찰조사는 별도의 관찰법(observation method)에 해당합니다."},
+{"prompt":"기업의 환경분석을 통해 내부요인인 강점·약점과 외부요인인 기회·위협을 규정하고 전략을 수립하는 분석기법은?","options":[["a","SD법"],["b","SWOT 분석"],["c","회귀분석"],["d","요인분석"]],"answer":"b","explanation":"SWOT 분석은 내부적 요인인 강점(S)·약점(W)과 외부적 요인인 기회(O)·위협(T)을 규정해 전략을 수립하는 분석기법이며, 외부환경을 강조할 때는 TOWS라고도 부릅니다."},
+{"prompt":"조사의 신뢰도를 높이기 위해 소비자의 행동을 직접적으로 관찰하며, 유동인구 분석이나 시청률 조사에 적합한 방법은?","options":[["a","설문지법"],["b","면접법"],["c","관찰법"],["d","서베이법"]],"answer":"c","explanation":"관찰법은 소비자의 행동을 직접적으로 관찰하는 방법으로, 특정지역의 유동인구 분석이나 시청률·시간 집중도 조사에 적합합니다."},
+{"prompt":"연구자의 직관적 통찰과 공감적 이해가 많이 활용되며, 인간의 내면적 특성과 복잡한 사회·문화현상을 심도 있게 파악하는 데 유용한 연구방법은?","options":[["a","양적 연구방법"],["b","질적 연구방법"],["c","표본조사"],["d","전수조사"]],"answer":"b","explanation":"질적 연구방법은 연구자의 직관적 통찰과 공감적 이해가 많이 활용되며, 인간의 내면적 특성과 복잡한 사회·문화현상을 파악하는 데 유용하지만 객관적 파악에는 한계가 있습니다."},
+{"prompt":"SD법(Semantic Differential Method)을 1959년에 고안한 심리학자는?","options":[["a","섀넌(Shannon)"],["b","오스굿(C.E. Osgoods)"],["c","파파넥(Papanek)"],["d","위버(Weaver)"]],"answer":"b","explanation":"SD법은 1959년 미국의 심리학자 오스굿(C.E. Osgoods)이 고안한 조사 방법입니다."},
+{"prompt":"SD법의 특징으로 옳은 것은?","options":[["a","조사 대상자의 주관적 의미를 객관적으로 평가해 정성적 이미지를 정량적으로 측정"],["b","모집단 전체를 대상으로 하는 전수조사 방법"],["c","독립변수와 종속변수의 인과관계만을 분석하는 방법"],["d","경쟁사의 재무제표를 분석하는 방법"]],"answer":"a","explanation":"SD법은 조사 대상자의 주관적인 의미를 객관적으로 평가하여 정성적 이미지를 정량적이며 객관적으로 측정하는 방법입니다."},
+{"prompt":"SD법에서 세밀한 차이를 필요로 할 경우 몇 단계로 척도화하여 조사하는가?","options":[["a","3단계"],["b","5단계"],["c","7단계"],["d","10단계"]],"answer":"c","explanation":"SD법은 보통 5단계 척도를 사용하지만, 세밀한 차이를 필요로 할 경우 7단계로 척도화하여 조사합니다."},
+{"prompt":"SD법의 형용사 평가차원 중 '큰-작은, 강한-약한, 깊은-얕은'에 해당하는 차원은?","options":[["a","평가차원(evaluative dimension)"],["b","능력차원(potency dimension)"],["c","활동차원(activity dimension)"],["d","정서차원"]],"answer":"b","explanation":"능력차원(potency dimension)은 큰-작은, 강한-약한, 깊은-얕은, 두꺼운-얇은과 같은 형용사쌍으로 구성됩니다."},
+{"prompt":"모집단 구성원 전체에 대해 조사하는 방법을 무엇이라 하는가?","options":[["a","표본조사"],["b","전수조사"],["c","서베이조사"],["d","관찰조사"]],"answer":"b","explanation":"전수조사는 모집단 구성원 전체에 대해 조사하는 방법을 말합니다."},
+{"prompt":"모집단을 대표할 수 있는 일부 대상을 표본으로 선정하여 조사하는, 수집방법 중 가장 많이 쓰이는 방법은?","options":[["a","전수조사"],["b","표본조사"],["c","문헌조사"],["d","패널조사"]],"answer":"b","explanation":"표본조사는 수집방법 중에서 가장 많이 쓰이는 방법으로, 모집단을 대표할 수 있는 일부 대상을 표본으로 선정하여 조사하는 방법입니다."},
+{"prompt":"각 표본에 일련번호를 부여하고 무작위로 추출하는 표본추출방법은?","options":[["a","단순무작위추출법"],["b","군집추출법"],["c","판단추출법"],["d","할당추출법"]],"answer":"a","explanation":"단순무작위추출법은 각 표본에 일련번호를 부여하고 무작위로 추출하는 방법입니다."},
+{"prompt":"SWOT 분석에서 '시장의 기회를 활용하기 위해 강점을 사용하는 전략'에 해당하는 것은?","options":[["a","SO 전략"],["b","ST 전략"],["c","WO 전략"],["d","WT 전략"]],"answer":"a","explanation":"SO 전략(강점-기회전략)은 시장의 기회를 활용하기 위해 강점을 사용하는 전략입니다."},
+{"prompt":"인류학의 개념을 기반으로 하며, 연구자가 조사 대상의 생활이나 문화에 직접 참여해 가치관·믿음·관습·행동양식을 이해하는 조사방법론은?","options":[["a","시장조사"],["b","문화기술적 조사(Ethnography)"],["c","전형적인 디자인 조사"],["d","혼합 리서치"]],"answer":"b","explanation":"문화기술적인 조사(Ethnography)는 인류학의 개념을 기반으로 한 조사방법론으로, 연구자가 조사 대상의 생활·문화에 직접 참여해 가치관·믿음·관습·행동양식 등을 이해합니다."},
+{"prompt":"디자인과 제품·서비스 개발과정에서 최종 사용자를 대상으로 니즈와 행동을 직접 조사하며, '사용성 테스트'라고도 불리는 조사방법론은?","options":[["a","시장조사"],["b","문화기술적 조사"],["c","사용자 경험 조사"],["d","전형적인 디자인 조사"]],"answer":"c","explanation":"사용자 경험 조사(UX research)는 '실험(Testing)' 또는 '사용성 테스트'라고도 하며, 최종 사용자를 대상으로 니즈와 행동을 직접 조사하는 방식입니다."},
+{"prompt":"소비자의 마음속에 자사 제품이나 기업이 표적시장·경쟁·기업 능력과 관련하여 가장 유리한 위치에 있도록 노력하는 과정을 무엇이라 하는가?","options":[["a","세분화(segmentation)"],["b","포지셔닝(positioning)"],["c","브랜딩(branding)"],["d","표본추출(sampling)"]],"answer":"b","explanation":"포지셔닝은 소비자의 마음속에 자사제품이나 기업이 표적시장·경쟁·기업 능력과 관련하여 가장 유리한 포지션에 있도록 노력하는 과정입니다."},
+{"prompt":"포지셔닝 차별화의 종류에 해당하지 않는 것은?","options":[["a","제품 차별화"],["b","서비스 차별화"],["c","가격 차별화"],["d","이미지 차별화"]],"answer":"c","explanation":"포지셔닝 차별화의 종류로는 제품 차별화, 서비스 차별화, 판매원 차별화, 이미지 차별화가 있으며, 가격 차별화는 해당하지 않습니다."},
+{"prompt":"포지셔닝 전략의 수립과정에서 가장 먼저 이루어지는 단계는?","options":[["a","적절한 경쟁우위의 선택"],["b","선택한 포지션의 전달"],["c","경쟁적 강점 파악"],["d","지각도 작성"]],"answer":"c","explanation":"포지셔닝 전략의 수립과정은 경쟁적 강점 파악 → 적절한 경쟁우위의 선택 → 선택한 포지션의 전달 순으로 진행됩니다."},
+{"prompt":"제품이나 브랜드의 포지셔닝을 시각적으로 보여주는 도구로, 소비자의 평가 차원(예: 가격·품질)을 축으로 나타낸 그래프 형태의 도표는?","options":[["a","지각도(perceptual map)"],["b","이미지 프로필"],["c","의미공간"],["d","포지셔닝 매트릭스"]],"answer":"a","explanation":"지각도는 제품이나 브랜드의 포지셔닝을 시각적으로 보여주는 도구로, 소비자들이 중요하게 생각하는 평가 차원을 축으로 나타낸 그래프 형태의 도표입니다."},
+{"prompt":"성별, 혈액형, 인종, 스포츠 선수 등 번호와 같이 단순한 분류를 목적으로 숫자를 사용하는 척도는?","options":[["a","명목척도"],["b","서열척도"],["c","등간척도"],["d","비율척도"]],"answer":"a","explanation":"명목척도(명의척도)는 사람들이나 물체들을 단순한 분류를 목적으로 숫자를 사용하는 척도로, 성별·혈액형·인종·스포츠 선수 번호 등이 해당합니다."},
+{"prompt":"측정된 변수들 간의 가감연산(더하고 빼기)이 가능하며, 리커트 5척도나 SD법에서 사용되는 척도는?","options":[["a","명목척도"],["b","서열척도"],["c","등간척도"],["d","비율척도"]],"answer":"c","explanation":"등간척도는 속성 크기의 순서뿐 아니라 상대적인 차이도 고려해 측정하는 척도로, 측정된 변수들 간의 가감연산이 가능합니다. 리커트 5척도나 의미분별법(SD법)에서 사용되는 척도가 예입니다."}
+];
+
+let answers = new Array(QUESTIONS.length).fill(null);
+let submitted = false;
+let timeLeft = 25*60;
+let timerId = null;
+
+function renderAll(){
+  const list = document.getElementById('qlist');
+  list.innerHTML = QUESTIONS.map((q,i)=>{
+    const optsHtml = q.options.map(([id,txt])=>{
+      const sel = answers[i]===id;
+      return `<div class="opt ${sel?'sel':''}" data-qi="${i}" data-id="${id}">
+        <div class="oid">${id.toUpperCase()}</div>
+        <div class="otxt">${txt}</div>
+      </div>`;
+    }).join('');
+    return `<div class="qcard" id="q-${i}">
+      <div class="qhead"><span class="qnum">Q${i+1}</span></div>
+      <div class="qtext">${q.prompt}</div>
+      ${optsHtml}
+    </div>`;
+  }).join('');
+
+  list.querySelectorAll('.opt').forEach(el=>{
+    el.addEventListener('click', ()=>{
+      const qi = parseInt(el.dataset.qi);
+      answers[qi] = el.dataset.id;
+      list.querySelectorAll(`.opt[data-qi="${qi}"]`).forEach(o=>o.classList.toggle('sel', o===el));
+      updateProgress();
+    });
+  });
+  updateProgress();
+}
+
+function updateProgress(){
+  const answeredN = answers.filter(a=>a).length;
+  document.getElementById('progressLabel').textContent = answeredN+' / '+QUESTIONS.length+' 답변';
+}
+
+function startTimer(){
+  const el = document.getElementById('timer');
+  timerId = setInterval(()=>{
+    timeLeft--;
+    if(timeLeft<=0){ clearInterval(timerId); timeLeft=0; submitExam(); }
+    const m = Math.floor(timeLeft/60), s = timeLeft%60;
+    el.textContent = String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
+    el.classList.toggle('warn', timeLeft<=300 && timeLeft>60);
+    el.classList.toggle('danger', timeLeft<=60);
+  },1000);
+}
+
+function submitExam(){
+  if(submitted) return;
+  const unanswered = answers.filter(a=>!a).length;
+  if(unanswered>0 && timeLeft>0){
+    if(!confirm(unanswered+'문항이 미답변 상태입니다. 그래도 제출하시겠습니까?')) return;
+  }
+  submitted = true;
+  clearInterval(timerId);
+
+  let score=0;
+  QUESTIONS.forEach((q,i)=>{ if(answers[i]===q.answer) score++; });
+
+  document.getElementById('examView').style.display='none';
+  const rv = document.getElementById('resultView');
+  rv.style.display='block';
+
+  document.getElementById('scoreBig').innerHTML = score+'<span>&nbsp;/&nbsp;'+QUESTIONS.length+'</span>';
+  const pct = Math.round(score/QUESTIONS.length*100);
+  const pass = pct>=60;
+  const verdictEl = document.getElementById('verdictText');
+  verdictEl.textContent = pass ? 'PASS · 정답률 '+pct+'%' : 'RETRY · 정답률 '+pct+'%';
+  verdictEl.className = 'verdict '+(pass?'pass':'fail');
+
+  const listEl = document.getElementById('reviewList');
+  listEl.innerHTML = QUESTIONS.map((q,i)=>{
+    const userAns = answers[i];
+    const isCorrect = userAns === q.answer;
+    const userTxt = userAns ? q.options.find(o=>o[0]===userAns)[1] : '(미답변)';
+    const correctTxt = q.options.find(o=>o[0]===q.answer)[1];
+    return `<div class="rev ${isCorrect?'correct':'wrong'}">
+      <div class="rnum">Q${i+1} <span class="badge ${isCorrect?'ok':'bad'}">${isCorrect?'정답':'오답'}</span></div>
+      <div class="rq">${q.prompt}</div>
+      ${isCorrect ? `<div class="ra correct-ans"><b>내 답안</b>${userTxt}</div>`
+        : `<div class="ra user-wrong"><b>내 답안</b>${userTxt}</div><div class="ra correct-ans"><b>정답</b>${correctTxt}</div>`}
+      <div class="expl"><b>해설</b> ${q.explanation}</div>
+    </div>`;
+  }).join('');
+
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+document.getElementById('submitBtn2').addEventListener('click', submitExam);
+document.getElementById('retryBtn').addEventListener('click', ()=>{
+  answers = new Array(QUESTIONS.length).fill(null); submitted=false; timeLeft=25*60;
+  document.getElementById('resultView').style.display='none';
+  document.getElementById('examView').style.display='block';
+  renderAll();
+  startTimer();
+  window.scrollTo({top:0, behavior:'smooth'});
+});
+
+renderAll();
+startTimer();
+</script>
+</body>
+</html>
