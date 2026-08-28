@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CH04 시장 환경 조사 및 분석 — 핵심 요약노트</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;700;900&family=Noto+Sans+KR:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+
+:root{
+  --paper:#F1EEE7;
+  --paper-line:#DAD5C9;
+  --ink:#191817;
+  --ink-soft:#5B584F;
+  --cyan:#00A9CE;
+  --magenta:#D6247A;
+  --yellow:#F2B705;
+  --key:#191817;
+  --card:#FBFAF7;
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{background:var(--paper);color:var(--ink);font-family:'Noto Sans KR',sans-serif;line-height:1.65;padding-bottom:70px;}
+
+.cover{max-width:760px;margin:0 auto;padding:56px 22px 30px;position:relative;}
+.crop{position:absolute;width:14px;height:14px;}
+.crop::before,.crop::after{content:'';position:absolute;background:var(--ink);}
+.crop::before{width:14px;height:1px;top:7px;} .crop::after{width:1px;height:14px;left:7px;}
+.crop.tl{top:8px;left:8px;} .crop.tr{top:8px;right:8px;}
+.eyebrow{font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.14em;color:var(--ink-soft);text-transform:uppercase;display:flex;gap:9px;align-items:center;margin-bottom:14px;}
+.eyebrow .dot{width:6px;height:6px;background:var(--magenta);border-radius:50%;display:inline-block;}
+h1.title{font-family:'Noto Serif KR',serif;font-weight:900;font-size:clamp(24px,5vw,38px);margin:0 0 8px;letter-spacing:-.01em;}
+h1.title em{font-style:normal;color:var(--magenta);}
+.subtitle{color:var(--ink-soft);font-size:14px;}
+
+.toc{max-width:760px;margin:0 auto 30px;padding:0 22px;}
+.toc-box{border:1px solid var(--ink);background:var(--card);padding:16px 20px;}
+.toc-cap{font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.1em;color:var(--ink-soft);text-transform:uppercase;margin-bottom:8px;}
+.toc-box a{display:block;font-size:13.5px;color:var(--ink);text-decoration:none;padding:3px 0;border-bottom:1px dotted var(--paper-line);}
+.toc-box a:hover{color:var(--magenta);}
+.toc-box a:last-child{border-bottom:none;}
+.toc-box a span{font-family:'IBM Plex Mono',monospace;color:var(--ink-soft);margin-right:8px;font-size:11.5px;}
+
+main{max-width:760px;margin:0 auto;padding:0 22px;}
+
+.strand{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.1em;color:var(--ink-soft);text-transform:uppercase;margin:44px 0 4px;}
+.section-head{display:flex;align-items:baseline;gap:12px;margin:0 0 18px;padding-bottom:10px;border-bottom:2px solid var(--ink);}
+.section-num{font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--magenta);font-weight:600;}
+.section-head h2{font-family:'Noto Serif KR',serif;font-weight:900;font-size:21px;margin:0;}
+
+.sub{margin:24px 0;}
+.sub h3{font-family:'Noto Serif KR',serif;font-weight:700;font-size:16px;margin:0 0 10px;display:flex;align-items:center;gap:8px;}
+.sub h3 .chip{font-family:'IBM Plex Mono',monospace;font-size:10.5px;background:var(--cyan);color:#fff;padding:2px 7px;flex-shrink:0;}
+.sub p{margin:0 0 10px;font-size:14.5px;}
+.sub ul{margin:0 0 10px;padding-left:20px;}
+.sub li{font-size:14.5px;margin-bottom:6px;}
+.term{background:rgba(214,36,122,.12);padding:0 3px;font-weight:700;}
+
+.point{border:1px solid var(--ink);background:var(--card);margin:16px 0;position:relative;padding:16px 18px 16px 20px;}
+.point::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--magenta);}
+.point .p-cap{font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.08em;color:var(--magenta);text-transform:uppercase;margin-bottom:8px;}
+.point ul{margin:0;padding-left:18px;}
+.point li{font-size:13.5px;margin-bottom:5px;}
+.point li b{color:var(--ink);}
+
+.flow{display:flex;align-items:center;flex-wrap:wrap;gap:6px;margin:14px 0;font-family:'IBM Plex Mono',monospace;font-size:12px;}
+.flow .node{border:1px solid var(--ink);background:var(--card);padding:6px 10px;}
+.flow .arrow{color:var(--magenta);font-weight:700;}
+
+table.classify{width:100%;border-collapse:collapse;margin:14px 0;font-size:13px;}
+table.classify th{background:var(--key);color:#fff;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.05em;padding:8px 10px;text-align:left;}
+table.classify td{border:1px solid var(--paper-line);padding:8px 10px;vertical-align:top;background:var(--card);}
+table.classify tr td:first-child{font-weight:700;font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:var(--magenta);white-space:nowrap;}
+
+.swot{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--ink);border:1px solid var(--ink);margin:14px 0;font-size:12.5px;}
+.swot div{background:var(--card);padding:10px 12px;}
+.swot b{display:block;font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--magenta);margin-bottom:3px;}
+
+.tip{border:1px dashed var(--ink-soft);background:transparent;padding:10px 14px;margin:14px 0;font-size:13px;color:var(--ink-soft);}
+.tip b{color:var(--ink);}
+
+.divider{height:1px;background:repeating-linear-gradient(90deg,var(--ink-soft) 0 6px,transparent 6px 10px);margin:38px 0;opacity:.5;}
+
+footer{max-width:760px;margin:50px auto 0;padding:0 22px;font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--ink-soft);}
+
+@media(max-width:520px){
+  table.classify{font-size:11.5px;}
+  .flow{font-size:10.5px;}
+  .swot{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<div class="cover">
+  <div class="crop tl"></div><div class="crop tr"></div>
+  <div class="eyebrow"><span class="dot"></span>시각디자인산업기사 · 이론 요약노트</div>
+  <h1 class="title">CH04 <em>시장 환경 조사 및 분석</em></h1>
+  <div class="subtitle">제1~3강 시장조사·역량·포지셔닝 및 자료분석 — 핵심 개념만 압축 정리</div>
+</div>
+
+<div class="toc">
+  <div class="toc-box">
+    <div class="toc-cap">Contents</div>
+    <a href="#s1"><span>01</span>시장조사(marketing research)</a>
+    <a href="#s2"><span>02</span>자료조사와 자료수집방법</a>
+    <a href="#s3"><span>03</span>SD법(의미분화법)</a>
+    <a href="#s4"><span>04</span>표본조사</a>
+    <a href="#s5"><span>05</span>디자인 조사방법론</a>
+    <a href="#s6"><span>06</span>시장 환경 조사 역량 (제2강)</a>
+    <a href="#s7"><span>07</span>포지셔닝 분석 (제3강)</a>
+    <a href="#s8"><span>08</span>척도·변수·SWOT·통계분석</a>
+  </div>
+</div>
+
+<main>
+
+  <div class="strand">제1강 · 시장조사방법과 자료수집기법</div>
+  <section id="s1">
+    <div class="section-head"><span class="section-num">01</span><h2>시장조사(marketing research)</h2></div>
+    <div class="sub">
+      <ul>
+        <li>생산자로부터 소비자에게 이전되는 재화·서비스 판매에 따라 일어나는 마케팅 전반에 관한 사실을 <b>수집·기록·분석</b>하는 과정</li>
+        <li>상품·마케팅 관련 문제에 대해 과학적으로 자료를 <b>계획·수집·분석·보고</b>하는 활동</li>
+      </ul>
+      <div class="point">
+        <div class="p-cap">Point · 시장조사방법 3단계</div>
+        <div class="flow">
+          <span class="node">시장분석(market analysis)</span><span class="arrow">→</span>
+          <span class="node">시장실사(marketing survey)</span><span class="arrow">→</span>
+          <span class="node">시장실험(test marketing)</span>
+        </div>
+        <p style="font-size:13px;margin-top:8px;">시장분석은 시장 크기·경쟁사 동향·소비자 니즈를 조사하는 과정, 시장실험은 실제 시장에 제품을 출시해 성과를 측정하고 이후 보완·개선을 진행하는 과정이다.</p>
+      </div>
+      <p>시장조사 내용에는 <span class="term">상품조사·판매조사·소비자조사·광고조사·잠재수요자조사·판로조사</span> 등이 있으며, 소비자 니즈·경쟁업체 파악, 판매촉진 효과 증대, 의사결정 오류 감소, 유통비용 절감, 시장규모 파악·마케팅 전략수립에 활용된다.</p>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <section id="s2">
+    <div class="section-head"><span class="section-num">02</span><h2>자료조사(research)와 자료수집방법</h2></div>
+    <div class="sub">
+      <h3><span class="chip">자료</span>1차 자료 vs 2차 자료</h3>
+      <table class="classify">
+        <tr><th>구분</th><th>내용</th></tr>
+        <tr><td>1차 자료<br>(primary data)</td><td>기존 2차 자료로부터 얻을 수 없어 직접 조사해 수집한 자료. 현재 연구와 직결되어 분석결과를 바로 활용 가능하나 시간·노력·비용이 많이 듦</td></tr>
+        <tr><td>2차 자료<br>(secondary data)</td><td>과거 다른 연구목적으로 조사·수집되어 현재 연구에 활용 가능한 자료. 시간·비용이 적게 들지만 시간 경과에 따라 정확성이 떨어짐</td></tr>
+      </table>
+      <div class="tip"><b>암기 TIP</b> · 2차 자료를 먼저 활용할 수 있는지 확인한 뒤, 부족한 부분만 1차 자료로 보완하는 것이 유리합니다.</div>
+    </div>
+    <div class="sub">
+      <h3><span class="chip">방법</span>자료수집방법</h3>
+      <ul>
+        <li><span class="term">설문지법</span> — 가장 대표적인 1차 자료 수집방법. 응답자의 답변을 요하는 질문들로 구성된 설문지 이용</li>
+        <li><span class="term">면접법</span> — 조사 목적을 공개하고, 응답자의 자유로운 의사표현을 조사자가 기록하는 방식</li>
+        <li><span class="term">서베이법</span> — 개별면접(대인조사)·전화조사·우편조사·인터넷조사 등으로 자료를 체계적으로 수집·분석하는 조사설계방법</li>
+        <li><span class="term">관찰법</span> — 소비자 행동을 직접 관찰. 유동인구 분석, 시청률·시간 집중도 조사에 적합</li>
+      </ul>
+      <table class="classify">
+        <tr><th>서베이 유형</th><th>특징</th></tr>
+        <tr><td>개별면접(대인조사)</td><td>관계형성이 쉬워 심층적·복잡한 정보 수집에 용이</td></tr>
+        <tr><td>전화조사</td><td>즉각적 반응, 조사자의 영향을 줄일 수 있음</td></tr>
+        <tr><td>우편조사</td><td>비용이 적고 최소 인원으로 가능하나 <b>응답률이 낮음</b></td></tr>
+        <tr><td>인터넷조사</td><td>시공간 제약 없는 높은 효율성, 저렴한 비용, 익명성 보장, 다양한 조사형태 가능</td></tr>
+      </table>
+    </div>
+    <div class="sub">
+      <h3><span class="chip">방법</span>양적 연구방법 vs 질적 연구방법</h3>
+      <table class="classify">
+        <tr><th>구분</th><th>특징</th></tr>
+        <tr><td>양적 연구방법</td><td>척도화·계량화된 자료로 분석, 논리적 증거 제시. 예: 개별면접조사법, 전화조사법, 우편조사법</td></tr>
+        <tr><td>질적 연구방법</td><td>연구자의 직관적 통찰·공감적 이해 활용. 인간 내면·복잡한 사회문화현상 파악에 유용하나 객관적 파악에는 한계. 예: 심층면접방법, 포커스그룹조사법</td></tr>
+      </table>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <section id="s3">
+    <div class="section-head"><span class="section-num">03</span><h2>SD법 (Semantic Differential Method)</h2></div>
+    <div class="sub">
+      <ul>
+        <li>언어척도법·의미분화법·의미미분법이라고도 함</li>
+        <li><b>1959년 미국의 심리학자 오스굿(C.E. Osgoods)</b>이 경관·제품·색·음향·감촉·유행색 경향 및 선호도 비교분석과 대상의 인상 파악을 위해 고안</li>
+        <li>조사 대상자의 주관적 의미를 객관적으로 평가 — <b>정성적 이미지를 정량적으로</b> 측정</li>
+        <li>상반되는 형용사군 10~50개를 이용해 이미지 맵·이미지 프로필 등 좌표계로 결과 확인, 정서를 언어스케일로 표현</li>
+        <li>보통 <b>5단계 척도</b> 사용, 세밀한 차이가 필요하면 <b>7단계</b>로 척도화</li>
+      </ul>
+      <div class="point">
+        <div class="p-cap">Point · SD법 형용사 평가차원 3가지</div>
+        <ul>
+          <li><b>평가차원(evaluative dimension)</b> — 좋은-나쁜, 깨끗한-더러운, 아름다운-추한, 가치있는-가치없는</li>
+          <li><b>능력차원(potency dimension)</b> — 큰-작은, 강한-약한, 깊은-얕은, 두꺼운-얇은</li>
+          <li><b>활동차원(activity dimension)</b> — 빠른-느린, 날카로운-둔한, 능동적인-수동적인</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <section id="s4">
+    <div class="section-head"><span class="section-num">04</span><h2>표본조사(sampling survey)</h2></div>
+    <div class="sub">
+      <ul>
+        <li><span class="term">표본선정</span> — 조사 대상을 선정하는 것. 모집단에 대한 정확한 이해가 선행되어야 하며 편차를 최대한 줄여야 함</li>
+        <li><span class="term">전수조사</span> — 모집단 구성원 <b>전체</b>를 조사하는 방법</li>
+        <li><span class="term">표본조사</span> — 수집방법 중 가장 많이 쓰이는 방법. 모집단을 대표할 수 있는 <b>일부 대상</b>을 표본으로 선정해 조사</li>
+      </ul>
+      <div class="point">
+        <div class="p-cap">Point · 표본추출방법</div>
+        <ul>
+          <li><b>단순무작위추출법</b> — 각 표본에 일련번호를 부여하고 무작위로 추출</li>
+          <li><b>군집추출법</b> — 유사한 특성을 가진 모집단을 묶어 군집으로 분류한 후 무작위로 추출</li>
+          <li><b>계통추출법</b> — 모집단을 여러 하위집단으로 계통적으로 분류한 후 비례적으로 추출</li>
+          <li><b>다단추출법</b> — 1차로 표본을 추출하고 다시 그중에서 표본을 추출</li>
+          <li><b>층화추출법</b> — 모집단을 소그룹으로 분할 후 그룹별 비율을 정해 조사(계통추출법과 달리 개체 특성별 대표성 있는 표본 추출)</li>
+          <li><b>판단추출법</b> — 전문지식을 가진 전문가가 표본을 임의로 추출</li>
+          <li><b>할당추출법</b> — 모집단 특성에 따라 공평하게 표본을 추출</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <section id="s5">
+    <div class="section-head"><span class="section-num">05</span><h2>디자인 조사방법과 종류</h2></div>
+    <div class="sub">
+      <p>디자인 조사는 시각적 부분만이 아니라 역사·문화·철학·공학·과학·마케팅·경제학·심리학 등을 통합적으로 이해하는 <b>문제인식능력</b>이 필요하다.</p>
+      <table class="classify">
+        <tr><th>조사방법론</th><th>내용</th></tr>
+        <tr><td>시장조사<br>(market research)</td><td>고객 정보를 모으는 조직적 활동. 시장상황·경쟁자·소비자 니즈를 파악해 제품·마케팅 전략 수립</td></tr>
+        <tr><td>문화기술적 조사<br>(Ethnography)</td><td>인류학 기반 조사방법론. 조사 대상의 생활·문화에 직접 참여해 가치관·믿음·관습·행동양식을 이해</td></tr>
+        <tr><td>사용자 경험 조사<br>(UX research)</td><td>'실험(testing)' 또는 '사용성 테스트'라고도 함. 최종 사용자를 대상으로 니즈와 행동을 직접 조사</td></tr>
+        <tr><td>전형적인 디자인 조사</td><td>디자이너·전문가의 시각적 판단과 주관적 분석 기반. 프로토타입·시안을 통해 시각적 요소를 검토·분석</td></tr>
+        <tr><td>혼합 리서치<br>(mixed research)</td><td>주관적·객관적, 정성적·정량적, 현장·실험실 방식을 복합적으로 사용해 정확하고 유용한 결과 도출</td></tr>
+      </table>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <div class="strand">제2강 · 시장 환경 분석 조사를 위한 역량</div>
+  <section id="s6">
+    <div class="section-head"><span class="section-num">06</span><h2>시장 환경 조사 역량</h2></div>
+    <div class="sub">
+      <ul>
+        <li><span class="term">인터넷 검색</span> — 검색엔진으로 키워드를 입력해 정보를 찾음. 정크 인포메이션도 있어 양질의 정보를 필터링하는 능력 필요</li>
+        <li><span class="term">도서관 소장 문헌 검색</span> — 도서관 검색시스템으로 학술자료·도서 검색. 도서명·저자·출판사·발행년도, 대출 가능여부 등 확인 가능</li>
+        <li><span class="term">조사 정리 역량</span> — 수집 자료를 체계적으로 분류·문서화하고 분석기법을 이해·적용하는 능력</li>
+        <li><span class="term">정성적·정량적 접근을 통한 시장 수요 조사</span> — 정성적: 전문가 의견·설문조사·비교유추법으로 소비자 관점 이해 / 정량적: 과거자료 분석으로 패턴 파악, 대표 기법은 <b>시계열 분석(time series model)</b>과 <b>확산 모형</b></li>
+      </ul>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <div class="strand">제3강 · 경쟁사·경쟁 디자인 포지셔닝 분석</div>
+  <section id="s7">
+    <div class="section-head"><span class="section-num">07</span><h2>포지셔닝(positioning) 분석</h2></div>
+    <div class="sub">
+      <h3><span class="chip">정의</span>포지셔닝의 의미</h3>
+      <p>소비자의 마음속에 자사 제품·기업이 표적시장·경쟁·기업 능력과 관련해 가장 유리한 위치에 있도록 노력하는 과정 — 제품을 고객의 머리에 확실하게 기억시키는 과정. 브랜드 이미지와 연결되어 소비자의 구매결정에 영향을 미친다.</p>
+      <div class="point">
+        <div class="p-cap">Point · 포지셔닝 차별화의 종류</div>
+        <ul>
+          <li><b>제품 차별화</b> — 제품의 특징·성능·디자인 등 경쟁업체와의 차이점 강조</li>
+          <li><b>서비스 차별화</b> — 배송·설치·유지보수 등 서비스 수준을 경쟁우위로 활용</li>
+          <li><b>판매원 차별화</b> — 판매 인력의 상담능력·전문성·친절함을 경쟁우위로 활용</li>
+          <li><b>이미지 차별화</b> — 기업 철학·문화·역사 등으로 브랜드 이미지를 차별화</li>
+        </ul>
+      </div>
+      <table class="classify">
+        <tr><th>구분</th><th>내용</th></tr>
+        <tr><td>제품 포지셔닝</td><td>동종 시장 내 타 제품과의 상대적 위치 파악 → 자사 위치 파악, 신제품 기회 포착</td></tr>
+        <tr><td>시장 포지셔닝</td><td>자사와 경쟁사 제품·서비스 간 차이를 파악, 소비자 니즈를 고려해 더 우수한 위치를 차지하도록 전략 수립</td></tr>
+      </table>
+    </div>
+    <div class="sub">
+      <h3><span class="chip">종류</span>포지셔닝의 종류</h3>
+      <ul>
+        <li>제품·서비스의 <b>속성</b>을 바탕으로 한 포지셔닝</li>
+        <li>소비자의 <b>사용 상황</b>에 의한 포지셔닝</li>
+        <li>제품 <b>사용자</b>에 의한 포지셔닝</li>
+        <li><b>경쟁자</b>에 의한 포지셔닝</li>
+        <li><b>이미지</b>에 의한 포지셔닝</li>
+      </ul>
+    </div>
+    <div class="sub">
+      <h3><span class="chip">과정</span>포지셔닝 전략의 수립과정</h3>
+      <div class="flow">
+        <span class="node">① 경쟁적 강점 파악</span><span class="arrow">→</span>
+        <span class="node">② 적절한 경쟁우위의 선택</span><span class="arrow">→</span>
+        <span class="node">③ 선택한 포지션의 전달</span>
+      </div>
+      <div class="point">
+        <div class="p-cap">Point · 지각도(perceptual map)</div>
+        <p>제품·브랜드의 포지셔닝을 시각적으로 보여주는 도구로, 소비자가 중요하게 여기는 평가 차원(예: 가격·품질)을 축으로 나타낸 그래프 형태의 도표. 제품 개발·마케팅 전략 수립, 심리적 포지셔닝 개발에 활용된다.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <section id="s8">
+    <div class="section-head"><span class="section-num">08</span><h2>척도·변수·SWOT·통계분석</h2></div>
+
+    <div class="sub">
+      <h3><span class="chip">척도</span>척도(scale)의 종류</h3>
+      <p>척도란 측정하고자 하는 관측 대상의 결과를 수치로 표시하는 것 — 질적 자료를 양적 자료로 만들어 사용하는 도구.</p>
+      <table class="classify">
+        <tr><th>척도</th><th>내용</th></tr>
+        <tr><td>명목척도<br>(nominal)</td><td>단순 분류 목적으로 숫자 사용. 성별, 혈액형, 인종, 스포츠 선수 번호 등. 수치의 크기·순서는 무의미</td></tr>
+        <tr><td>서열척도<br>(ordinal)</td><td>속성 크기에 따라 순위를 나타내는 수치 부여. 상대적 순위만 구분, 서열 간 차이는 무의미. 예: 올림픽 등수, 합격순위</td></tr>
+        <tr><td>등간척도<br>(interval)</td><td>순서와 상대적 차이를 함께 고려. 가감연산 가능. 예: 리커트 5척도, 의미분별법(SD법)</td></tr>
+        <tr><td>비율척도<br>(ratio)</td><td>0이 절대적 기준. 가감연산 + 곱셈·나눗셈까지 가능. 예: 키, 몸무게 등 물리적 측정치</td></tr>
+      </table>
+    </div>
+
+    <div class="sub">
+      <h3><span class="chip">변수</span>변수(variable)의 종류</h3>
+      <ul>
+        <li><span class="term">실험변수</span>(독립변수) — 결과변수에 영향을 미치는 원인 제공. 원인변수·설명변수·예측변수라고도 함</li>
+        <li><span class="term">결과변수</span>(종속변수) — 실험변수의 영향을 받는 변수. 목적변수·타깃변수라고도 함</li>
+        <li><span class="term">외생변수</span>(통제변수) — 실험변수는 아니지만 결과변수에 영향을 주는 독립변수. 종속변수에 미치는 영향을 제거·통제해야 함</li>
+      </ul>
+    </div>
+
+    <div class="sub">
+      <h3><span class="chip">기법</span>SWOT 분석</h3>
+      <p>기업의 환경분석을 통해 내부요인인 <b>강점(S)·약점(W)</b>과 외부요인인 <b>기회(O)·위협(T)</b>을 규정하고, 이를 토대로 전략을 수립하는 분석기법. 외부환경을 강조할 때는 <b>TOWS</b>라고도 부른다.</p>
+      <div class="swot">
+        <div><b>SO 전략</b>강점-기회전략 — 기회를 활용하기 위해 강점을 사용</div>
+        <div><b>ST 전략</b>강점-위협전략 — 위협을 회피하기 위해 강점을 사용</div>
+        <div><b>WO 전략</b>약점-기회전략 — 약점을 극복해 기회를 활용</div>
+        <div><b>WT 전략</b>약점-위협전략 — 위협을 회피하고 약점을 최소화</div>
+      </div>
+    </div>
+
+    <div class="sub">
+      <h3><span class="chip">기법</span>통계 분석방법</h3>
+      <table class="classify">
+        <tr><th>분석법</th><th>내용</th></tr>
+        <tr><td>요인분석</td><td>변수들 간 상관관계를 분석해 내재된 공통 요인을 추출, 변수 수를 줄이는 방법</td></tr>
+        <tr><td>군집분석</td><td>유사한 속성의 대상을 몇 개 집단으로 그룹화해 데이터 구조를 이해하는 탐색적 분석</td></tr>
+        <tr><td>회귀분석</td><td>독립변수가 종속변수에 미치는 영향력을 파악, 종속변수 값을 예측하는 선형모형 산출</td></tr>
+        <tr><td>상관분석</td><td>변수 간 선형관계의 정도를 수치로 나타내는 분석기법</td></tr>
+        <tr><td>판별분석</td><td>독립변수와 종속변수 간 관계를 파악해 개체가 어떤 그룹에 속하는지 판별</td></tr>
+      </table>
+    </div>
+  </section>
+
+</main>
+
+<footer>시각디자인산업기사 · CH04 시장 환경 조사 및 분석 요약노트 · 원본 PDF 기준 핵심 정리</footer>
+
+</body>
+</html>
