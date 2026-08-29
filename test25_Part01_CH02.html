@@ -70,12 +70,20 @@ body{background:var(--paper);color:var(--ink);font-family:'Noto Sans KR',sans-se
 .rev .expl b{color:var(--ink);}
 
 .retryBtn{display:block;margin:24px auto 0;font-family:'IBM Plex Mono',monospace;font-size:13px;border:1px solid var(--ink);background:var(--ink);color:#fff;padding:11px 22px;cursor:pointer;}
+
+.back-link{display:inline-flex;align-items:center;gap:6px;font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#fff;text-decoration:none;border:1px solid rgba(255,255,255,.35);padding:5px 10px;flex-shrink:0;}
+.back-link:hover{border-color:#fff;background:rgba(255,255,255,.08);}
+.back-link svg{width:11px;height:11px;}
+.topbar .titlewrap{display:flex;align-items:center;gap:12px;min-width:0;}
 </style>
 </head>
 <body>
 
 <div class="topbar">
-  <div class="title">시각디자인산업기사 <span>CBT 모의시험</span> · CH02 시각커뮤니케이션의 이해</div>
+  <div class="titlewrap">
+    <a class="back-link" href="https://kimjiheon1982go.github.io/Visual-Design-Industrial-Engineer/study_calendar.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>플랜</a>
+    <div class="title">시각디자인산업기사 <span>CBT 모의시험</span> · CH02 시각커뮤니케이션의 이해</div>
+  </div>
   <div class="meta">
     <span id="progressLabel">0 / 25 답변</span>
     <div class="timer" id="timer">25:00</div>
