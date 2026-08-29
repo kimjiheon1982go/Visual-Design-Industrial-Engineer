@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CH06 사용자 조사 및 분석 — 핵심 요약노트</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;700;900&family=Noto+Sans+KR:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+
+:root{
+  --paper:#F1EEE7;
+  --paper-line:#DAD5C9;
+  --ink:#191817;
+  --ink-soft:#5B584F;
+  --cyan:#00A9CE;
+  --magenta:#D6247A;
+  --yellow:#F2B705;
+  --key:#191817;
+  --card:#FBFAF7;
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{background:var(--paper);color:var(--ink);font-family:'Noto Sans KR',sans-serif;line-height:1.65;padding-bottom:70px;}
+
+.cover{max-width:760px;margin:0 auto;padding:56px 22px 30px;position:relative;}
+.crop{position:absolute;width:14px;height:14px;}
+.crop::before,.crop::after{content:'';position:absolute;background:var(--ink);}
+.crop::before{width:14px;height:1px;top:7px;} .crop::after{width:1px;height:14px;left:7px;}
+.crop.tl{top:8px;left:8px;} .crop.tr{top:8px;right:8px;}
+.eyebrow{font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.14em;color:var(--ink-soft);text-transform:uppercase;display:flex;gap:9px;align-items:center;margin-bottom:14px;}
+.eyebrow .dot{width:6px;height:6px;background:var(--magenta);border-radius:50%;display:inline-block;}
+h1.title{font-family:'Noto Serif KR',serif;font-weight:900;font-size:clamp(24px,5vw,38px);margin:0 0 8px;letter-spacing:-.01em;}
+h1.title em{font-style:normal;color:var(--magenta);}
+.subtitle{color:var(--ink-soft);font-size:14px;}
+
+.toc{max-width:760px;margin:0 auto 30px;padding:0 22px;}
+.toc-box{border:1px solid var(--ink);background:var(--card);padding:16px 20px;}
+.toc-cap{font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.1em;color:var(--ink-soft);text-transform:uppercase;margin-bottom:8px;}
+.toc-box a{display:block;font-size:13.5px;color:var(--ink);text-decoration:none;padding:3px 0;border-bottom:1px dotted var(--paper-line);}
+.toc-box a:hover{color:var(--magenta);}
+.toc-box a:last-child{border-bottom:none;}
+.toc-box a span{font-family:'IBM Plex Mono',monospace;color:var(--ink-soft);margin-right:8px;font-size:11.5px;}
+
+main{max-width:760px;margin:0 auto;padding:0 22px;}
+
+.strand{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.1em;color:var(--ink-soft);text-transform:uppercase;margin:44px 0 4px;}
+.section-head{display:flex;align-items:baseline;gap:12px;margin:0 0 18px;padding-bottom:10px;border-bottom:2px solid var(--ink);}
+.section-num{font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--magenta);font-weight:600;}
+.section-head h2{font-family:'Noto Serif KR',serif;font-weight:900;font-size:21px;margin:0;}
+
+.sub{margin:24px 0;}
+.sub h3{font-family:'Noto Serif KR',serif;font-weight:700;font-size:16px;margin:0 0 10px;display:flex;align-items:center;gap:8px;}
+.sub h3 .chip{font-family:'IBM Plex Mono',monospace;font-size:10.5px;background:var(--cyan);color:#fff;padding:2px 7px;flex-shrink:0;}
+.sub p{margin:0 0 10px;font-size:14.5px;}
+.sub ul{margin:0 0 10px;padding-left:20px;}
+.sub li{font-size:14.5px;margin-bottom:6px;}
+.term{background:rgba(214,36,122,.12);padding:0 3px;font-weight:700;}
+
+.point{border:1px solid var(--ink);background:var(--card);margin:16px 0;position:relative;padding:16px 18px 16px 20px;}
+.point::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--magenta);}
+.point .p-cap{font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.08em;color:var(--magenta);text-transform:uppercase;margin-bottom:8px;}
+.point ul{margin:0;padding-left:18px;}
+.point li{font-size:13.5px;margin-bottom:5px;}
+.point li b{color:var(--ink);}
+
+table.classify{width:100%;border-collapse:collapse;margin:14px 0;font-size:13px;}
+table.classify th{background:var(--key);color:#fff;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.05em;padding:8px 10px;text-align:left;}
+table.classify td{border:1px solid var(--paper-line);padding:8px 10px;vertical-align:top;background:var(--card);}
+table.classify tr td:first-child{font-weight:700;font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:var(--magenta);white-space:nowrap;}
+
+.kano{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;background:var(--ink);border:1px solid var(--ink);margin:14px 0;font-size:11.5px;}
+.kano div{background:var(--card);padding:9px 8px;}
+.kano b{display:block;font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--magenta);margin-bottom:3px;}
+
+.tip{border:1px dashed var(--ink-soft);background:transparent;padding:10px 14px;margin:14px 0;font-size:13px;color:var(--ink-soft);}
+.tip b{color:var(--ink);}
+
+.divider{height:1px;background:repeating-linear-gradient(90deg,var(--ink-soft) 0 6px,transparent 6px 10px);margin:38px 0;opacity:.5;}
+
+footer{max-width:760px;margin:50px auto 0;padding:0 22px;font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--ink-soft);}
+
+@media(max-width:520px){
+  table.classify{font-size:11.5px;}
+  .kano{grid-template-columns:1fr 1fr;}
+}
+</style>
+</head>
+<body>
+
+<div class="cover">
+  <div class="crop tl"></div><div class="crop tr"></div>
+  <div class="eyebrow"><span class="dot"></span>시각디자인산업기사 · 이론 요약노트</div>
+  <h1 class="title">CH06 <em>사용자 조사 및 분석</em></h1>
+  <div class="subtitle">제1~3강 세분화·행동패턴·인터뷰 조사 — 핵심 개념만 압축 정리</div>
+</div>
+
+<div class="toc">
+  <div class="toc-box">
+    <div class="toc-cap">Contents</div>
+    <a href="#s1"><span>01</span>시장 세분화 (제1강)</a>
+    <a href="#s2"><span>02</span>표적시장과 STP 전략</a>
+    <a href="#s3"><span>03</span>사용자 행동패턴 조사기법 (제2강)</a>
+    <a href="#s4"><span>04</span>인터뷰·관찰 조사 방법 (제3강)</a>
+    <a href="#s5"><span>05</span>Kano모델</a>
+  </div>
+</div>
+
+<main>
+
+  <div class="strand">제1강 · 사용자 세분화 방법</div>
+  <section id="s1">
+    <div class="section-head"><span class="section-num">01</span><h2>시장 세분화(market segmentation)</h2></div>
+
+    <div class="sub">
+      <h3><span class="chip">정의</span>시장 세분화의 의미</h3>
+      <ul>
+        <li>효율적인 마케팅을 위해 상이한 제품을 필요로 하는 독특한 구매집단으로 시장을 분할·세분화하는 것</li>
+        <li>유사한 욕구를 갖는 고객을 일정 기준에 따라 그룹으로 나누어 마케팅 전략을 수립하는 방법</li>
+        <li>모든 고객을 만족시킬 수 없으므로 세분화하여 포지셔닝해야 하며, 여러 세분화된 시장 중 하나 이상을 선정하는 과정</li>
+      </ul>
+      <div class="point">
+        <div class="p-cap">Point · 시장 세분화 조건 8가지</div>
+        <ul>
+          <li><b>실행가능성(feasibility)</b> — 세분화된 전략을 실제로 실행할 수 있는가</li>
+          <li><b>측정가능성(measurability)</b> — 세분화된 시장의 정보·결과를 측정할 수 있는가</li>
+          <li><b>접근가능성(accessibility)</b> — 세분화된 시장에 정보와 마케팅 전략을 전달할 수 있는가</li>
+          <li><b>실질성(substantiality)</b> — 세분화된 시장이 충분히 크고 수익성이 있는가</li>
+          <li><b>유효정당성(validity)</b> — 세분화된 시장이 진짜 존재하며 구매자 요구를 반영하는가</li>
+          <li><b>경쟁성(competitiveness)</b> — 세분화된 시장의 경쟁이 심화되어 있는가</li>
+          <li><b>신뢰성(reliability)</b> — 세분화된 시장의 정보·결과를 신뢰할 수 있는가</li>
+          <li><b>안정성(stability)</b> — 세분화된 시장이 지속적으로 존재할 가능성이 있는가</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="sub">
+      <h3><span class="chip">종류</span>시장 세분화의 종류</h3>
+      <table class="classify">
+        <tr><th>세분화 유형</th><th>내용</th></tr>
+        <tr><td>행동 특성별<br>(behavioral)</td><td>구매행동·소비패턴 기준. 사용빈도, 상표 충성도, 가격 민감도, 구매결정 과정 등</td></tr>
+        <tr><td>지리적 특성별<br>(geographic)</td><td>지역, 도시, 국가, 지리적 특성, 인구 밀도, 기후 등</td></tr>
+        <tr><td>인구학적 특성별<br>(demographic)</td><td>연령, 성별, 결혼 여부, 수입, 직업, 거주지역, 학력, 소득 등</td></tr>
+        <tr><td>심리 분석적<br>(psychographic)</td><td>인격·가치관·취향·생활방식 등 심리적 특성. 여피족, 오렌지족, 386세대 등 예시</td></tr>
+        <tr><td>상황적<br>(occasion)</td><td>소비자의 상황·시기·목적. 기념일, 계절, 휴가, 이벤트 등</td></tr>
+      </table>
+      <div class="point">
+        <div class="p-cap">Point · 시장 세분화로 인한 기업의 이점</div>
+        <ul>
+          <li>소비자의 욕구·구매동기 파악</li>
+          <li>기업의 강점·약점 평가로 유리한 시장 선택</li>
+          <li>마케팅 자원의 효율적 배분</li>
+          <li>기업 수익 증대</li>
+          <li>제품 라인업 다변화</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <section id="s2">
+    <div class="section-head"><span class="section-num">02</span><h2>표적시장(target market)과 STP 전략</h2></div>
+
+    <div class="sub">
+      <ul>
+        <li><span class="term">표적시장</span> — 기업이 제품·서비스를 마케팅하기 위해 선택한 특정 시장. 브랜드가 가장 잘 팔릴 수 있는, 기업이 구체적인 마케팅을 하는 세분시장</li>
+        <li><span class="term">STP 전략</span> — <b>S</b>egmentation(시장 세분화) · <b>T</b>argeting(표적시장) · <b>P</b>ositioning(포지셔닝)을 통해 총체적인 디자인 마케팅을 수립하는 전략. 세분화 가능성을 살피고 목표 소비자를 결정한 후 포지셔닝해 나가는 시장전략</li>
+      </ul>
+      <div class="point">
+        <div class="p-cap">Point · 표적시장 선택의 시장공략 3가지</div>
+        <ul>
+          <li><b>무차별적 마케팅</b> — 세분시장 간 차이를 무시하고 제품 하나로 전체 시장을 대상으로 판매. 대량생산·낮은 경쟁력 확보 목적</li>
+          <li><b>차별적 마케팅</b> — 표적시장을 선정해 그 시장 고객의 욕구에 맞는 제품·전략을 구체적으로 수립해 판매</li>
+          <li><b>집중 마케팅</b> — 소수의 세분시장에 전략적으로 집중, 특화된 제품·전략으로 강한 고객 충성도와 이익 확보</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <div class="strand">제2강 · 사용자 행동패턴 조사기법</div>
+  <section id="s3">
+    <div class="section-head"><span class="section-num">03</span><h2>사용자 행동패턴 조사기법</h2></div>
+    <div class="sub">
+      <p>인터뷰·설문조사·관찰조사 등을 통해 사용자의 행동·반응·의견·니즈 등을 파악하는 조사로, 사용자의 환경과 감정에 따라 결과가 달라지므로 조사현장 환경, 사용자의 정서적 배려 등 세심한 준비가 필요하다.</p>
+      <table class="classify">
+        <tr><th>기법</th><th>내용</th></tr>
+        <tr><td>설문조사</td><td>설문지를 통해 대규모 사용자 의견 수집. 정형화된 질문으로 정량적 데이터 수집</td></tr>
+        <tr><td>포커스 그룹 인터뷰</td><td>작은 그룹의 사용자를 대상으로 자유로운 토론을 통해 의견·경험 수집</td></tr>
+        <tr><td>섀도잉(shadowing)</td><td>조사 대상자를 따라다니며 행동·경험을 관찰·기록</td></tr>
+        <tr><td>디자인 민족지학<br>(Ethnography)</td><td>관찰과 인터뷰를 조화시킨 문화인류학적 리서치 방법</td></tr>
+        <tr><td>멘탈 모델<br>(mental model)</td><td>사용자가 제품·서비스 사용 시의 생각·이해 방식을 파악. UI 디자인에 반영</td></tr>
+      </table>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <div class="strand">제3강 · 설문 및 인터뷰 조사 방법 및 설계</div>
+  <section id="s4">
+    <div class="section-head"><span class="section-num">04</span><h2>인터뷰·관찰 조사 방법 적용</h2></div>
+
+    <div class="sub">
+      <h3><span class="chip">방법</span>개별 면접 조사(face-to-face interview)</h3>
+      <ul>
+        <li>조사자가 면접 대상자를 인터뷰. 집중적인 질문과 구체적인 결과를 얻을 수 있는 장점</li>
+        <li>단순하고 쉬운 질문부터 시작해 점진적으로 심층적인 질문으로 진행 — 초반에는 예/아니요 형식이나 숫자로 답하는 질문 주로 사용</li>
+        <li>사용자 수·질문이 많으면 인력·시간이 많이 소요되므로 충분한 기간 확보 후 진행</li>
+      </ul>
+    </div>
+
+    <div class="sub">
+      <h3><span class="chip">방법</span>심층 인터뷰(in-depth interview)</h3>
+      <ul>
+        <li>서로 관련 있는 대상자들에게 질의응답, 과업수행(task test), 보여주고 말하기(show & tell) 방법으로 진행. 사진·비디오·녹음으로 기록해 심층적 분석</li>
+        <li>대상자가 자유롭게 의견을 표현할 수 있도록 분위기를 조성하며, 진정성 있는 답변을 위해 충분한 사전교감 시간이 필요</li>
+        <li>보통 <b>한 시간 정도</b> 진행하며, 개인의 의견·취향 등 부가 정보를 얻는 데 장점이 있음</li>
+      </ul>
+    </div>
+
+    <div class="sub">
+      <h3><span class="chip">방법</span>디자인 민족지학(Ethnography interview)</h3>
+      <ul>
+        <li>사회학에서 유래한 문화인류학적 관찰방법론 — 밀착 관찰과 직접 인터뷰를 조화시켜 이해·분석하는 리서치 방법</li>
+        <li>사용자가 제품·서비스를 어떻게 사용하는지, 경험·관점·문제점 등을 이해해 디자인 개발에 반영</li>
+        <li><span class="term">휴 바이어(Hugh Beyer)와 캐런 홀츠블랫(Karen Holtzblatt)</span>이 에스노그래피 방법론을 처음 개발해 <b>정황조사(Contextual Inquiry)</b>로 소개 — 정성적 사용자 조사의 기초적 발판을 마련</li>
+      </ul>
+    </div>
+
+    <div class="sub">
+      <h3><span class="chip">방법</span>섀도잉(Shadowing) 기법</h3>
+      <ul>
+        <li>"그림자 따라다니기"라는 뜻 — 조사 대상자를 일정 기간 따라다니며 행동·경험을 관찰·기록. 주로 매장 내 소비자 행동 조사에 사용</li>
+        <li>대상자의 일상생활에 거슬리지 않도록 배려해야 하며, <b>대면조사가 아닌 비대면적 조사</b>로 이루어져야 함</li>
+        <li>자료 취합·정리 과정이 복잡해 대상자의 동선·행동 유형을 미리 파악해야 함</li>
+        <li>행동의 이유·근거는 직접 이해할 수 없으므로 특이 행동에 대한 인터뷰 병행이 신뢰성을 높임</li>
+        <li>공통적인 특징을 찾아 행동을 구분·일반화·유형화하는 것이 중요</li>
+      </ul>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <section id="s5">
+    <div class="section-head"><span class="section-num">05</span><h2>Kano모델</h2></div>
+    <div class="sub">
+      <p>제품·서비스의 기능 요소를 분석해 사용자 만족도를 파악하는 방법론으로, 5가지 기능 요소로 분류한다. 사용자 요구에 적합한 기능을 제공해 기대 이상의 만족도를 느끼게 할 수 있다.</p>
+      <div class="kano">
+        <div><b>기본 요소</b>반드시 충족되어야 하는 요소 (부재 시 불만족)</div>
+        <div><b>선호 요소</b>성능·기능에 비례해 만족도가 커지는 요소</div>
+        <div><b>기대 요소</b>새로운 기술 등으로 사용자가 놀라게 되는 요소</div>
+        <div><b>반전 요소</b>부재할 경우 불만족을 초래하는 요소</div>
+        <div><b>무관 요소</b>사용자에게 영향을 미치지 않는 요소</div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>시각디자인산업기사 · CH06 사용자 조사 및 분석 요약노트 · 원본 PDF 기준 핵심 정리</footer>
+
+</body>
+</html>
