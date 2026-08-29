@@ -97,19 +97,38 @@ main{max-width:820px;margin:0 auto;padding:0 22px;}
 .month[open] .chev{transform:rotate(45deg);}
 
 .day-list{border-top:1px solid var(--paper-line);}
-.day-row{display:grid;grid-template-columns:52px 10px 1fr;gap:10px;align-items:start;padding:9px 18px;border-bottom:1px solid var(--paper-line);}
+.day-row{display:grid;grid-template-columns:48px 1fr;gap:12px;align-items:start;padding:14px 18px;border-bottom:1px solid var(--paper-line);}
 .day-row:last-child{border-bottom:none;}
 .day-row.today{background:rgba(214,36,122,.06);}
 .day-row.sun{background:rgba(0,0,0,.02);}
-.d-date{font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:var(--ink-soft);padding-top:2px;}
-.d-date b{display:block;font-family:'Noto Serif KR',serif;font-size:15px;color:var(--ink);font-weight:700;}
-.d-dot{width:8px;height:8px;margin-top:6px;flex-shrink:0;}
+.d-date{font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:var(--ink-soft);padding-top:2px;text-align:center;}
+.d-date b{display:block;font-family:'Noto Serif KR',serif;font-size:17px;color:var(--ink);font-weight:700;}
+.d-main{min-width:0;}
+.d-topline{display:flex;align-items:center;gap:7px;margin-bottom:6px;}
+.d-dot{width:8px;height:8px;flex-shrink:0;}
 .dot-이론{background:var(--cyan);} .dot-모의고사{background:var(--magenta);}
 .dot-기출문제{background:var(--yellow);} .dot-총복습{background:var(--key);}
 .dot-복습일{background:var(--rest);}
-.d-content{min-width:0;}
-.d-tag{font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.05em;margin-bottom:2px;}
-.d-rest{font-size:13px;color:var(--ink-soft);font-style:italic;padding-top:1px;}
+.d-tag{font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.05em;}
+.d-rest{font-size:13px;color:var(--ink-soft);font-style:italic;}
+
+/* 링크 버튼 (요약정리/문제) */
+.d-actions{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;}
+.d-linkbtn{
+  flex:1;min-width:150px;display:flex;align-items:center;gap:10px;
+  border:1.5px solid var(--paper-line);background:#fff;padding:9px 12px;
+  text-decoration:none;color:var(--ink);transition:border-color .15s;
+}
+.d-linkbtn:hover{border-color:currentColor;}
+.d-linkbtn .icon{width:26px;height:26px;flex-shrink:0;display:flex;align-items:center;justify-content:center;border:1.5px solid currentColor;}
+.d-linkbtn .icon svg{width:15px;height:15px;}
+.d-linkbtn .txt2{min-width:0;}
+.d-linkbtn .t1{font-family:'Noto Sans KR',sans-serif;font-weight:700;font-size:13px;line-height:1.3;}
+.d-linkbtn .t2{font-size:11px;color:var(--ink-soft);margin-top:1px;}
+.d-linkbtn.summary{color:var(--cyan);}
+.d-linkbtn.quiz{color:var(--magenta);}
+.d-linkbtn.review{color:var(--ink-soft);border-style:dashed;flex:1 1 100%;cursor:pointer;}
+.d-linkbtn.review:hover{border-color:var(--ink);color:var(--ink);}
 
 footer{max-width:820px;margin:36px auto 0;padding:0 22px;font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--ink-soft);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;}
 .reset-btn{background:none;border:1px solid var(--ink-soft);color:var(--ink-soft);font-family:'IBM Plex Mono',monospace;font-size:11px;padding:6px 10px;cursor:pointer;}
@@ -117,7 +136,8 @@ footer{max-width:820px;margin:36px auto 0;padding:0 22px;font-family:'IBM Plex M
 
 @media(max-width:520px){
   .stat-row{grid-template-columns:1fr;}
-  .day-row{grid-template-columns:44px 8px 1fr;padding:9px 14px;}
+  .day-row{grid-template-columns:40px 1fr;padding:12px 14px;}
+  .d-linkbtn{min-width:0;}
 }
 </style>
 </head>
@@ -166,7 +186,7 @@ footer{max-width:820px;margin:36px auto 0;padding:0 22px;font-family:'IBM Plex M
 <main id="months"></main>
 
 <footer>
-  <span>체크 기록은 이 브라우저 계정에 자동 저장됩니다.</span>
+  <span>체크 기록은 이 브라우저에 자동 저장됩니다.</span>
   <button class="reset-btn" id="resetBtn">전체 초기화</button>
 </footer>
 
@@ -174,6 +194,22 @@ footer{max-width:820px;margin:36px auto 0;padding:0 22px;font-family:'IBM Plex M
 const START = new Date(2026,7,24);   // 2026-08-24
 const TARGET = new Date(2027,1,1);   // 2027-02-01
 const todayObj = new Date(); todayObj.setHours(0,0,0,0);
+
+// ---- 아이콘 (SVG) ----
+const ICON_DOC = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 2h9l5 5v15H6z"/><path d="M14 2v6h6"/><path d="M9 13h6M9 17h6"/></svg>';
+const ICON_PENCIL = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 20l1-5L16 4l4 4L9 19l-5 1z"/><path d="M13 6l4 4"/></svg>';
+const ICON_REFRESH = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 12a8 8 0 0 1 14-5.3M20 12a8 8 0 0 1-14 5.3"/><path d="M18 3v5h-5M6 21v-5h5"/></svg>';
+
+// ---- 챕터별 학습 페이지 링크 (CH01~06만 존재) ----
+const BASE_URL = 'https://kimjiheon1982go.github.io/Visual-Design-Industrial-Engineer/';
+const CHAPTER_LINKS = [
+  {ebook: BASE_URL+'ebook_Part01_CH01.html', test: BASE_URL+'test25_Part01_CH01.html'},
+  {ebook: BASE_URL+'ebook_Part01_CH02.html', test: BASE_URL+'test25_Part01_CH02.html'},
+  {ebook: BASE_URL+'ebook_Part01_CH03.html', test: BASE_URL+'test25_Part01_CH03.html'},
+  {ebook: BASE_URL+'ebook_Part01_CH04.html', test: BASE_URL+'test25_Part01_CH04.html'},
+  {ebook: BASE_URL+'ebook_Part01_CH05.html', test: BASE_URL+'test25_Part01_CH05.html'},
+  {ebook: BASE_URL+'ebook_Part01_CH06.html', test: BASE_URL+'test25_Part01_CH06.html'},
+];
 
 // ---- 커리큘럼 원본 (순서대로 소진) ----
 const CURRICULUM = [
@@ -219,6 +255,7 @@ for(let d=new Date(START); d<=TARGET; d=addDays(d,1)){
   } else if(cIdx < CURRICULUM.length){
     entry.phase = CURRICULUM[cIdx][0];
     entry.text = CURRICULUM[cIdx][1];
+    entry.curriculumIndex = cIdx;
     cIdx++;
   } else {
     entry.rest = true;
@@ -228,21 +265,41 @@ for(let d=new Date(START); d<=TARGET; d=addDays(d,1)){
 }
 const TOTAL_ITEMS = CURRICULUM.length;
 
+// ---- 저장소: localStorage (정적 페이지 배포용) ----
+const STORAGE_KEY = 'vd-planner-state-v1';
 let state = {topics:{}, routine:{}};
-async function loadState(){
-  try{ const r = await window.storage.get('planner-state-daily'); if(r&&r.value) state=JSON.parse(r.value);}catch(e){}
+function loadState(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if(raw) state = JSON.parse(raw);
+  }catch(e){ console.error('불러오기 실패', e); }
 }
 let saveTimer=null;
 function saveState(){
   clearTimeout(saveTimer);
-  saveTimer=setTimeout(async ()=>{
-    try{ await window.storage.set('planner-state-daily', JSON.stringify(state)); }catch(e){ console.error(e); }
-  },250);
+  saveTimer=setTimeout(()=>{
+    try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
+    catch(e){ console.error('저장 실패', e); }
+  },200);
 }
 
 const dayNamesKo=['일','월','화','수','목','금','토'];
-function fmtDate(d){ return (d.getMonth()+1)+'/'+d.getDate()+'('+dayNamesKo[d.getDay()]+')'; }
 function fmtDateBig(d){ return d.getFullYear()+'.'+String(d.getMonth()+1).padStart(2,'0')+'.'+String(d.getDate()).padStart(2,'0')+' ('+dayNamesKo[d.getDay()]+')'; }
+
+function linkButtonsHtml(curriculumIndex){
+  if(curriculumIndex===undefined || curriculumIndex>=CHAPTER_LINKS.length) return '';
+  const links = CHAPTER_LINKS[curriculumIndex];
+  return `<div class="d-actions">
+    <a class="d-linkbtn summary" href="${links.ebook}" target="_blank" rel="noopener">
+      <span class="icon">${ICON_DOC}</span>
+      <span class="txt2"><span class="t1">요약정리</span><span class="t2">핵심 내용을 정리해보세요</span></span>
+    </a>
+    <a class="d-linkbtn quiz" href="${links.test}" target="_blank" rel="noopener">
+      <span class="icon">${ICON_PENCIL}</span>
+      <span class="txt2"><span class="t1">문제 (25문항)</span><span class="t2">실력을 테스트해보세요</span></span>
+    </a>
+  </div>`;
+}
 
 function renderRoutine(){
   const key = iso(todayObj);
@@ -271,7 +328,8 @@ function renderToday(){
     const id = iso(todayEntry.date);
     const checked = !!state.topics[id];
     body.innerHTML = `<div class="today-item"><span class="lbl">${todayEntry.phase}</span>
-      <label class="chk"><input type="checkbox" id="todayChk" ${checked?'checked':''}><span class="txt">${todayEntry.text}</span></label></div>`;
+      <label class="chk"><input type="checkbox" id="todayChk" ${checked?'checked':''}><span class="txt">${todayEntry.text}</span></label></div>
+      ${linkButtonsHtml(todayEntry.curriculumIndex)}`;
     document.getElementById('todayChk').addEventListener('change', e=>{
       state.topics[id]=e.target.checked; saveState(); renderMonths();
     });
@@ -311,18 +369,26 @@ function renderMonths(){
       if(e.rest){
         return `<div class="day-row ${isToday?'today':''} ${e.dow===0?'sun':''}">
           <div class="d-date"><b>${e.date.getDate()}</b>${dayNamesKo[e.dow]}</div>
-          <div class="d-dot dot-복습일"></div>
-          <div class="d-content"><div class="d-tag">복습·휴식</div><div class="d-rest">지난 진도 복습 / 데일리 루틴</div></div>
+          <div class="d-main">
+            <div class="d-topline"><span class="d-dot dot-복습일"></span><span class="d-tag">복습·휴식</span></div>
+            <div class="d-rest">지난 진도 복습 / 데일리 루틴</div>
+            <div class="d-actions">
+              <span class="d-linkbtn review" data-scroll="routine">
+                <span class="icon">${ICON_REFRESH}</span>
+                <span class="txt2"><span class="t1">복습 / 데일리 루틴</span><span class="t2">지난 진도를 복습하고 데일리 루틴을 완료하세요</span></span>
+              </span>
+            </div>
+          </div>
         </div>`;
       }
       const id = iso(e.date);
       const checked = !!state.topics[id];
       return `<div class="day-row ${isToday?'today':''}">
         <div class="d-date"><b>${e.date.getDate()}</b>${dayNamesKo[e.dow]}</div>
-        <div class="d-dot dot-${e.phase}"></div>
-        <div class="d-content">
-          <div class="d-tag">${e.phase}</div>
+        <div class="d-main">
+          <div class="d-topline"><span class="d-dot dot-${e.phase}"></span><span class="d-tag">${e.phase}</span></div>
           <label class="chk"><input type="checkbox" data-id="${id}" ${checked?'checked':''}><span class="txt">${e.text}</span></label>
+          ${linkButtonsHtml(e.curriculumIndex)}
         </div>
       </div>`;
     }).join('');
@@ -342,12 +408,16 @@ function renderMonths(){
         det.querySelector('.m-pct').textContent = Math.round(doneN2/itemDays2.length*100)+'%';
       });
     });
+    det.querySelectorAll('.d-linkbtn.review').forEach(el=>{
+      el.addEventListener('click', ()=>{
+        document.querySelector('.routine-panel').scrollIntoView({behavior:'smooth', block:'start'});
+      });
+    });
   });
 }
 
 function updateHeader(){
   let done=0;
-  CURRICULUM.forEach((_,i)=>{});
   days.forEach(e=>{ if(!e.rest && state.topics[iso(e.date)]) done++; });
   const pct = Math.round(done/TOTAL_ITEMS*100);
   document.getElementById('pctval').innerHTML = pct+'<span>%</span>';
@@ -370,20 +440,18 @@ document.getElementById('jumpBtn').addEventListener('click', ()=>{
   if(el){ el.open = true; el.scrollIntoView({behavior:'smooth', block:'start'}); }
 });
 
-document.getElementById('resetBtn').addEventListener('click', async ()=>{
+document.getElementById('resetBtn').addEventListener('click', ()=>{
   if(!confirm('모든 체크 기록을 초기화할까요? 되돌릴 수 없습니다.')) return;
   state = {topics:{}, routine:{}};
-  try{ await window.storage.set('planner-state-daily', JSON.stringify(state)); }catch(e){}
+  try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }catch(e){}
   renderToday(); renderRoutine(); renderMonths(); updateHeader();
 });
 
-(async ()=>{
-  await loadState();
-  renderToday();
-  renderRoutine();
-  renderMonths();
-  updateHeader();
-})();
+loadState();
+renderToday();
+renderRoutine();
+renderMonths();
+updateHeader();
 </script>
 </body>
 </html>
