@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CH06 사용자 조사 및 분석 — CBT 모의시험</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@700;900&family=Noto+Sans+KR:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+
+:root{
+  --paper:#F1EEE7; --paper-line:#DAD5C9; --ink:#191817; --ink-soft:#5B584F;
+  --cyan:#00A9CE; --magenta:#D6247A; --yellow:#F2B705; --card:#FBFAF7;
+  --ok:#2E7D4F; --bad:#C23B3B;
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{background:var(--paper);color:var(--ink);font-family:'Noto Sans KR',sans-serif;}
+
+.topbar{background:var(--ink);color:#fff;padding:12px 20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;position:sticky;top:0;z-index:10;}
+.topbar .title{font-family:'Noto Serif KR',serif;font-weight:900;font-size:15px;}
+.topbar .title span{color:var(--yellow);}
+.topbar .meta{display:flex;gap:16px;align-items:center;font-family:'IBM Plex Mono',monospace;font-size:13px;}
+.timer{background:#2B2A28;padding:5px 10px;border:1px solid #444;min-width:64px;text-align:center;}
+.timer.warn{color:var(--yellow);}
+.timer.danger{color:#ff6b6b;}
+
+.wrap{max-width:720px;margin:0 auto;padding:22px 18px 70px;}
+
+.qlist{display:flex;flex-direction:column;gap:16px;}
+.qcard{background:var(--card);border:1px solid var(--paper-line);padding:22px 24px;scroll-margin-top:80px;}
+.qhead{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
+.qnum{font-family:'IBM Plex Mono',monospace;font-size:12px;border:1px solid var(--ink);padding:3px 9px;}
+.qtext{font-family:'Noto Serif KR',serif;font-weight:700;font-size:16.5px;line-height:1.6;margin-bottom:18px;}
+.opt{display:flex;align-items:flex-start;gap:12px;padding:11px 14px;border:1px solid var(--paper-line);margin-bottom:9px;cursor:pointer;background:#fff;}
+.opt:hover{border-color:var(--ink);}
+.opt.sel{border-color:var(--magenta);background:rgba(214,36,122,.06);}
+.opt .oid{font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:13px;border:1.5px solid var(--ink);width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.opt.sel .oid{background:var(--magenta);border-color:var(--magenta);color:#fff;}
+.opt .otxt{font-size:14.5px;padding-top:1px;}
+
+.bottomSubmit{margin-top:6px;padding:16px;background:var(--card);border:1.5px solid var(--ink);text-align:center;}
+.bottomSubmit .navbtn{font-family:'IBM Plex Mono',monospace;font-size:13px;border:1px solid var(--ink);background:var(--ink);color:#fff;padding:11px 24px;cursor:pointer;}
+.bottomSubmit .navbtn:hover{opacity:.9;}
+.bottomSubmit .hint{font-size:12px;color:var(--ink-soft);margin-bottom:10px;}
+
+.result-header{background:var(--card);border:1px solid var(--ink);padding:26px 28px;margin-bottom:18px;text-align:center;}
+.result-header .score{font-family:'Noto Serif KR',serif;font-weight:900;font-size:44px;}
+.result-header .score span{font-size:20px;color:var(--ink-soft);}
+.result-header .verdict{font-family:'IBM Plex Mono',monospace;font-size:13px;letter-spacing:.08em;margin-top:6px;text-transform:uppercase;}
+.verdict.pass{color:var(--ok);}
+.verdict.fail{color:var(--bad);}
+.result-header .cutline{font-size:12px;color:var(--ink-soft);margin-top:4px;}
+
+.rev{border:1px solid var(--paper-line);background:var(--card);margin-bottom:12px;padding:18px 20px;}
+.rev.correct{border-left:4px solid var(--ok);}
+.rev.wrong{border-left:4px solid var(--bad);}
+.rev .rnum{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--ink-soft);margin-bottom:6px;display:flex;align-items:center;gap:8px;}
+.badge{font-family:'IBM Plex Mono',monospace;font-size:10px;padding:2px 7px;color:#fff;}
+.badge.ok{background:var(--ok);}
+.badge.bad{background:var(--bad);}
+.rev .rq{font-family:'Noto Serif KR',serif;font-weight:700;font-size:15px;margin-bottom:10px;}
+.rev .ra{font-size:13.5px;margin:4px 0;}
+.rev .ra b{font-family:'IBM Plex Mono',monospace;font-size:11px;margin-right:6px;}
+.rev .ra.user-wrong{color:var(--bad);}
+.rev .ra.correct-ans{color:var(--ok);}
+.rev .expl{margin-top:10px;padding-top:10px;border-top:1px dashed var(--paper-line);font-size:13px;color:var(--ink-soft);}
+.rev .expl b{color:var(--ink);}
+
+.retryBtn{display:block;margin:24px auto 0;font-family:'IBM Plex Mono',monospace;font-size:13px;border:1px solid var(--ink);background:var(--ink);color:#fff;padding:11px 22px;cursor:pointer;}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="title">시각디자인산업기사 <span>CBT 모의시험</span> · CH06 사용자 조사 및 분석</div>
+  <div class="meta">
+    <span id="progressLabel">0 / 25 답변</span>
+    <div class="timer" id="timer">25:00</div>
+  </div>
+</div>
+
+<div id="examView" class="wrap">
+  <div class="qlist" id="qlist"></div>
+  <div class="bottomSubmit">
+    <div class="hint">모든 문항에 답했는지 확인 후 제출하세요.</div>
+    <button class="navbtn" id="submitBtn2">제출하고 채점하기</button>
+  </div>
+</div>
+
+<div id="resultView" class="wrap" style="display:none;max-width:760px;">
+  <div>
+    <div class="result-header">
+      <div class="score" id="scoreBig">0<span>&nbsp;/&nbsp;25</span></div>
+      <div class="verdict" id="verdictText"></div>
+      <div class="cutline">합격 기준 60점(15/25) 가정 기준</div>
+    </div>
+    <div id="reviewList"></div>
+    <button class="retryBtn" id="retryBtn">다시 풀기</button>
+  </div>
+</div>
+
+<script>
+const QUESTIONS = [
+{"prompt":"시장 세분화(market segmentation)의 정의로 가장 적절한 것은?","options":[["a","모든 고객에게 동일한 제품을 판매하는 전략"],["b","상이한 제품을 필요로 하는 독특한 구매집단으로 시장을 분할·세분화하는 것"],["c","경쟁사의 재무제표를 분석하는 것"],["d","제품의 생산 공정을 표준화하는 것"]],"answer":"b","explanation":"시장 세분화란 효율적인 마케팅을 위해 상이한 제품을 필요로 하는 독특한 구매집단으로 시장을 분할·세분화하는 것입니다."},
+{"prompt":"시장 세분화 조건 중 '세분화된 시장에 대한 세분화된 전략을 실제로 실행할 수 있는가'를 의미하는 것은?","options":[["a","실행가능성(feasibility)"],["b","측정가능성(measurability)"],["c","접근가능성(accessibility)"],["d","신뢰성(reliability)"]],"answer":"a","explanation":"실행가능성(feasibility)은 세분화된 시장에 대한 전략을 실제로 실행할 수 있는가를 의미합니다."},
+{"prompt":"시장 세분화 조건 중 '세분화된 시장에 대한 정보 및 결과를 측정할 수 있는가'를 의미하는 것은?","options":[["a","실질성(substantiality)"],["b","측정가능성(measurability)"],["c","경쟁성(competitiveness)"],["d","안정성(stability)"]],"answer":"b","explanation":"측정가능성(measurability)은 세분화된 시장에 대한 정보 및 결과를 측정할 수 있는가를 의미합니다."},
+{"prompt":"시장 세분화 조건 중 '세분화된 시장이 진짜 존재하는가, 진짜 구매자들의 요구를 반영하고 있는가'를 의미하는 것은?","options":[["a","유효정당성(validity)"],["b","실질성(substantiality)"],["c","접근가능성(accessibility)"],["d","경쟁성(competitiveness)"]],"answer":"a","explanation":"유효정당성(validity)은 세분화된 시장이 진짜 존재하는가, 진짜 구매자들의 요구를 반영하고 있는가를 의미합니다."},
+{"prompt":"소비자의 구매행동이나 소비패턴, 사용빈도, 상표 충성도, 가격 민감도 등에 따라 시장을 세분화하는 것은?","options":[["a","지리적 특성별 세분화"],["b","인구학적 특성별 세분화"],["c","행동 특성별 세분화"],["d","상황적 세분화"]],"answer":"c","explanation":"행동 특성별 세분화(behavioral segmentation)는 소비자의 구매행동이나 소비패턴에 따라 사용빈도, 상표 충성도, 가격의 민감도, 구매결정 과정 등으로 시장을 세분화합니다."},
+{"prompt":"지역, 도시, 국가, 인구 밀도, 기후 등 지리적 요소를 기준으로 시장을 세분화하는 것은?","options":[["a","행동 특성별 세분화"],["b","지리적 특성별 세분화"],["c","심리 분석적 세분화"],["d","상황적 세분화"]],"answer":"b","explanation":"지리적 특성별 세분화(geographic segmentation)는 지역, 도시, 국가, 지리적 특성, 인구 밀도, 기후 등을 고려하여 시장을 분할합니다."},
+{"prompt":"연령, 성별, 결혼 여부, 수입, 직업, 학력, 소득 등 인구통계학적 요소를 기준으로 시장을 세분화하는 것은?","options":[["a","인구학적 특성별 세분화"],["b","심리 분석적 세분화"],["c","행동 특성별 세분화"],["d","상황적 세분화"]],"answer":"a","explanation":"인구학적 특성별 세분화(demographic segmentation)는 연령, 성별, 결혼 여부, 수입, 직업, 거주지역, 학력, 소득 등 인구통계학적 요소를 기준으로 시장을 세분화합니다."},
+{"prompt":"소비자의 인격, 가치관, 취향, 생활방식 등 심리적 특성에 따라 시장을 세분화하며, 여피족·오렌지족·386세대 등이 예로 언급되는 세분화 방식은?","options":[["a","행동 특성별 세분화"],["b","지리적 특성별 세분화"],["c","심리 분석적 세분화"],["d","인구학적 특성별 세분화"]],"answer":"c","explanation":"심리 분석적 세분화(psychographic segmentation)는 소비자의 인격, 가치관, 취향, 생활방식 등의 심리적 특성에 따라 시장을 세분화하며 여피족, 오렌지족, 386세대 등을 예로 들 수 있습니다."},
+{"prompt":"기념일, 계절, 휴가, 이벤트 등 소비자의 상황·시기·목적에 따라 시장을 세분화하는 것은?","options":[["a","상황적 세분화"],["b","행동 특성별 세분화"],["c","지리적 특성별 세분화"],["d","심리 분석적 세분화"]],"answer":"a","explanation":"상황적 세분화(occasion segmentation)는 소비자의 상황, 시기, 목적 등에 따라 기념일, 계절, 휴가, 이벤트 등을 고려해 시장을 분할합니다."},
+{"prompt":"시장 세분화로 인한 기업의 이점으로 언급되지 않은 것은?","options":[["a","소비자의 욕구, 구매동기 파악"],["b","마케팅 자원의 효율적 배분"],["c","기업의 수익 증대"],["d","경쟁사의 인수합병"]],"answer":"d","explanation":"시장 세분화로 인한 기업의 이점으로는 소비자 욕구·구매동기 파악, 강점·약점 평가, 마케팅 자원의 효율적 배분, 수익 증대, 제품 라인업 다변화가 언급되며, 경쟁사 인수합병은 해당하지 않습니다."},
+{"prompt":"기업이 제품이나 서비스를 마케팅하기 위해 선택한 특정 시장으로, 브랜드가 가장 잘 팔릴 수 있는 세분시장을 무엇이라 하는가?","options":[["a","표적시장(target market)"],["b","잠재시장"],["c","포화시장"],["d","독점시장"]],"answer":"a","explanation":"표적시장(target market)은 기업이 제품이나 서비스를 마케팅하기 위해 선택한 특정 시장으로, 브랜드가 가장 잘 팔릴 수 있는 세분시장을 말합니다."},
+{"prompt":"STP 전략을 구성하는 세 가지 요소로 옳은 것은?","options":[["a","Segmentation, Targeting, Positioning"],["b","Strategy, Target, Product"],["c","Segment, Test, Price"],["d","Sales, Trend, Promotion"]],"answer":"a","explanation":"STP는 시장 세분화(Segmentation), 표적시장(Targeting), 포지셔닝(Positioning)을 통해 총체적인 디자인 마케팅을 수립하는 전략입니다."},
+{"prompt":"세분시장 간 차이를 무시하고 제품 하나로 전체 시장을 대상으로 판매하며, 대량생산과 낮은 경쟁력 확보를 목적으로 하는 시장공략 전략은?","options":[["a","무차별적 마케팅"],["b","차별적 마케팅"],["c","집중 마케팅"],["d","혼합 마케팅"]],"answer":"a","explanation":"무차별적 마케팅은 세분시장 간 차이를 무시하고 제품 하나로 시장을 대상으로 판매하는 전략으로, 대량생산과 낮은 경쟁력을 확보하고자 하는 경우에 주로 사용됩니다."},
+{"prompt":"표적시장을 선정하고 그 시장 고객의 욕구와 요구사항에 부합하는 제품과 마케팅 전략을 구체적으로 수립하여 판매하는 전략은?","options":[["a","무차별적 마케팅"],["b","차별적 마케팅"],["c","집중 마케팅"],["d","대량 마케팅"]],"answer":"b","explanation":"차별적 마케팅은 표적시장을 선정하고, 그 시장에서 고객의 욕구와 요구사항에 부합하는 제품과 마케팅 전략을 구체적으로 수립하여 판매하는 전략입니다."},
+{"prompt":"소수의 세분시장에서 시장 점유율을 높이기 위해 전략적으로 집중하며, 강한 고객 충성도와 이익을 보장받을 수 있는 시장공략 전략은?","options":[["a","무차별적 마케팅"],["b","차별적 마케팅"],["c","집중 마케팅"],["d","분산 마케팅"]],"answer":"c","explanation":"집중 마케팅은 소수의 세분시장에서 시장 점유율을 높이기 위해 전략적으로 집중하는 전략으로, 매우 특화된 제품과 마케팅 전략이 필요하며 고객의 강한 충성도와 이익을 보장받을 수 있습니다."},
+{"prompt":"사용자 행동패턴 조사기법에 해당하지 않는 것은?","options":[["a","포커스 그룹 인터뷰"],["b","섀도잉(shadowing)"],["c","멘탈 모델(mental model)"],["d","재무제표 분석"]],"answer":"d","explanation":"사용자 행동패턴 조사기법에는 설문조사, 포커스 그룹 인터뷰, 섀도잉, 디자인 민족지학, 멘탈 모델 등이 있으며, 재무제표 분석은 해당하지 않습니다."},
+{"prompt":"개별 면접 조사(face-to-face interview)에서 인터뷰 초반에 주로 사용하는 질문 형식으로 옳은 것은?","options":[["a","심층적이고 복잡한 서술형 질문"],["b","예/아니요 형식이나 숫자로 답하는 질문"],["c","통계적 추론이 필요한 질문"],["d","법률적 판단을 요구하는 질문"]],"answer":"b","explanation":"개별 면접 조사는 단순하고 쉬운 질문부터 시작하여 심층적인 질문으로 점진적으로 진행하며, 초반에는 예/아니요 형식의 질문이나 숫자로 답하는 질문을 주로 사용합니다."},
+{"prompt":"심층 인터뷰(in-depth interview)는 보통 얼마 정도 진행하는가?","options":[["a","10분 정도"],["b","30분 정도"],["c","한 시간 정도"],["d","하루 종일"]],"answer":"c","explanation":"심층인터뷰는 한 시간 정도 진행하고 녹음이나 비디오 등으로 기록하여 내용을 면밀하게 분석할 수 있습니다."},
+{"prompt":"사회학에서 유래한 문화인류학적 관찰방법론으로, 밀착 관찰과 직접 인터뷰를 조화시켜 사용자의 경험과 문제점을 이해하는 리서치 방법은?","options":[["a","심층 인터뷰"],["b","디자인 민족지학(Ethnography)"],["c","포커스 그룹 인터뷰"],["d","설문조사"]],"answer":"b","explanation":"디자인 민족지학(Ethnography interview)은 사회학에서 유래한 문화인류학적 관찰방법론으로, 밀착 관찰과 직접적인 인터뷰를 조화시킨 리서치 방법입니다."},
+{"prompt":"에스노그래피 방법론을 처음 개발하여 '정황조사(Contextual Inquiry)'로 소개한 인물은?","options":[["a","오스굿(C.E. Osgoods)"],["b","섀넌과 위버"],["c","휴 바이어(Hugh Beyer)와 캐런 홀츠블랫(Karen Holtzblatt)"],["d","빅터 파파넥"]],"answer":"c","explanation":"휴 바이어(Hugh Beyer)와 캐런 홀츠블랫(Karen Holtzblatt)이 에스노그래피 방법론을 처음 개발하여 정황조사(Contextual Inquiry)라고 소개하였습니다."},
+{"prompt":"'그림자 따라다니기'라는 뜻을 가지며, 조사 대상자를 일정 기간 따라다니면서 행동과 경험을 관찰·기록하는 조사방법은?","options":[["a","섀도잉(Shadowing)"],["b","심층 인터뷰"],["c","설문조사"],["d","포커스 그룹 인터뷰"]],"answer":"a","explanation":"섀도잉은 '그림자 따라다니기'라는 뜻을 가지고 있으며, 조사 대상자를 일정 기간 동안 따라다니면서 그들의 행동과 경험을 관찰하고 기록하는 관찰방법입니다."},
+{"prompt":"섀도잉(Shadowing) 기법의 특징으로 옳은 것은?","options":[["a","대면조사로 진행되어야 한다"],["b","비대면적으로 조사가 이루어져야 한다"],["c","설문지를 통한 정량적 조사만 가능하다"],["d","조사 대상자와 사전 인터뷰가 불가능하다"]],"answer":"b","explanation":"섀도잉 기법은 대상자가 일상생활에 거슬리지 않도록 배려해야 하므로, 대면조사가 아니라 리서치 대상자의 행동을 관찰하고 분석하는 비대면적 조사로 이루어져야 합니다."},
+{"prompt":"제품·서비스의 기능 요소를 분석하여 사용자 만족도를 파악하며, 5가지 기능 요소로 분류하는 방법론은?","options":[["a","SWOT 분석"],["b","Kano모델"],["c","SD법"],["d","STP 전략"]],"answer":"b","explanation":"Kano모델은 제품·서비스의 기능 요소를 분석하여 사용자 만족도를 파악하는 방법론으로, 5가지 기능 요소로 분류합니다."},
+{"prompt":"Kano모델의 5가지 요소 중 '반드시 충족되어야 하는 요소'는?","options":[["a","기본 요소"],["b","기대 요소"],["c","반전 요소"],["d","무관 요소"]],"answer":"a","explanation":"기본 요소는 반드시 충족되어야 하는 요소이며, 부재 시 불만족을 초래합니다."},
+{"prompt":"Kano모델의 5가지 요소 중 '새로운 기술 등으로 인해 사용자가 놀라게 되는 요소'는?","options":[["a","기본 요소"],["b","선호 요소"],["c","기대 요소"],["d","무관 요소"]],"answer":"c","explanation":"기대 요소는 새로운 기술 등으로 인해 사용자가 놀라게 되는 요소입니다."}
+];
+
+let answers = new Array(QUESTIONS.length).fill(null);
+let submitted = false;
+let timeLeft = 25*60;
+let timerId = null;
+
+function renderAll(){
+  const list = document.getElementById('qlist');
+  list.innerHTML = QUESTIONS.map((q,i)=>{
+    const optsHtml = q.options.map(([id,txt])=>{
+      const sel = answers[i]===id;
+      return `<div class="opt ${sel?'sel':''}" data-qi="${i}" data-id="${id}">
+        <div class="oid">${id.toUpperCase()}</div>
+        <div class="otxt">${txt}</div>
+      </div>`;
+    }).join('');
+    return `<div class="qcard" id="q-${i}">
+      <div class="qhead"><span class="qnum">Q${i+1}</span></div>
+      <div class="qtext">${q.prompt}</div>
+      ${optsHtml}
+    </div>`;
+  }).join('');
+
+  list.querySelectorAll('.opt').forEach(el=>{
+    el.addEventListener('click', ()=>{
+      const qi = parseInt(el.dataset.qi);
+      answers[qi] = el.dataset.id;
+      list.querySelectorAll(`.opt[data-qi="${qi}"]`).forEach(o=>o.classList.toggle('sel', o===el));
+      updateProgress();
+    });
+  });
+  updateProgress();
+}
+
+function updateProgress(){
+  const answeredN = answers.filter(a=>a).length;
+  document.getElementById('progressLabel').textContent = answeredN+' / '+QUESTIONS.length+' 답변';
+}
+
+function startTimer(){
+  const el = document.getElementById('timer');
+  timerId = setInterval(()=>{
+    timeLeft--;
+    if(timeLeft<=0){ clearInterval(timerId); timeLeft=0; submitExam(); }
+    const m = Math.floor(timeLeft/60), s = timeLeft%60;
+    el.textContent = String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
+    el.classList.toggle('warn', timeLeft<=300 && timeLeft>60);
+    el.classList.toggle('danger', timeLeft<=60);
+  },1000);
+}
+
+function submitExam(){
+  if(submitted) return;
+  const unanswered = answers.filter(a=>!a).length;
+  if(unanswered>0 && timeLeft>0){
+    if(!confirm(unanswered+'문항이 미답변 상태입니다. 그래도 제출하시겠습니까?')) return;
+  }
+  submitted = true;
+  clearInterval(timerId);
+
+  let score=0;
+  QUESTIONS.forEach((q,i)=>{ if(answers[i]===q.answer) score++; });
+
+  document.getElementById('examView').style.display='none';
+  const rv = document.getElementById('resultView');
+  rv.style.display='block';
+
+  document.getElementById('scoreBig').innerHTML = score+'<span>&nbsp;/&nbsp;'+QUESTIONS.length+'</span>';
+  const pct = Math.round(score/QUESTIONS.length*100);
+  const pass = pct>=60;
+  const verdictEl = document.getElementById('verdictText');
+  verdictEl.textContent = pass ? 'PASS · 정답률 '+pct+'%' : 'RETRY · 정답률 '+pct+'%';
+  verdictEl.className = 'verdict '+(pass?'pass':'fail');
+
+  const listEl = document.getElementById('reviewList');
+  listEl.innerHTML = QUESTIONS.map((q,i)=>{
+    const userAns = answers[i];
+    const isCorrect = userAns === q.answer;
+    const userTxt = userAns ? q.options.find(o=>o[0]===userAns)[1] : '(미답변)';
+    const correctTxt = q.options.find(o=>o[0]===q.answer)[1];
+    return `<div class="rev ${isCorrect?'correct':'wrong'}">
+      <div class="rnum">Q${i+1} <span class="badge ${isCorrect?'ok':'bad'}">${isCorrect?'정답':'오답'}</span></div>
+      <div class="rq">${q.prompt}</div>
+      ${isCorrect ? `<div class="ra correct-ans"><b>내 답안</b>${userTxt}</div>`
+        : `<div class="ra user-wrong"><b>내 답안</b>${userTxt}</div><div class="ra correct-ans"><b>정답</b>${correctTxt}</div>`}
+      <div class="expl"><b>해설</b> ${q.explanation}</div>
+    </div>`;
+  }).join('');
+
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+document.getElementById('submitBtn2').addEventListener('click', submitExam);
+document.getElementById('retryBtn').addEventListener('click', ()=>{
+  answers = new Array(QUESTIONS.length).fill(null); submitted=false; timeLeft=25*60;
+  document.getElementById('resultView').style.display='none';
+  document.getElementById('examView').style.display='block';
+  renderAll();
+  startTimer();
+  window.scrollTo({top:0, behavior:'smooth'});
+});
+
+renderAll();
+startTimer();
+</script>
+</body>
+</html>
