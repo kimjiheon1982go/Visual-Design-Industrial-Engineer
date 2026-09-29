@@ -144,7 +144,7 @@ footer{max-width:820px;margin:36px auto 0;padding:0 22px;font-family:'IBM Plex M
 <body>
 
 <header>
-  <div class="eyebrow"><span class="dot"></span>SEOUL · VISUAL DESIGN INDUSTRIAL ENGINEER · 2026.08 – 2027.02</div>
+  <div class="eyebrow"><span class="dot"></span>SEOUL · VISUAL DESIGN INDUSTRIAL ENGINEER · 2026.09 – 2027.02</div>
   <h1>시각디자인<em>산업기사</em> 하루 학습 체크</h1>
   <div class="subtitle">하루에 하나씩 진도를 체크하고, 매일 반복해야 할 항목은 따로 관리합니다.</div>
 
@@ -191,7 +191,7 @@ footer{max-width:820px;margin:36px auto 0;padding:0 22px;font-family:'IBM Plex M
 </footer>
 
 <script>
-const START = new Date(2026,7,24);   // 2026-08-24
+const START = new Date(2026,8,29);   // 2026-09-29
 const TARGET = new Date(2027,1,1);   // 2027-02-01
 const todayObj = new Date(); todayObj.setHours(0,0,0,0);
 
@@ -267,7 +267,8 @@ for(let d=new Date(START); d<=TARGET; d=addDays(d,1)){
 const TOTAL_ITEMS = CURRICULUM.length;
 
 // ---- 저장소: localStorage (정적 페이지 배포용) ----
-const STORAGE_KEY = 'vd-planner-state-v1';
+// 기간이 바뀌어 날짜-진도 매칭이 달라졌으므로 새 키(v2)를 사용
+const STORAGE_KEY = 'vd-planner-state-v2';
 let state = {topics:{}, routine:{}};
 function loadState(){
   try{
@@ -320,7 +321,7 @@ function renderToday(){
   document.getElementById('todayDate').textContent = fmtDateBig(todayObj);
   const body = document.getElementById('todayBody');
   if(!todayEntry){
-    body.innerHTML = '<div class="d-rest">플래너 기간(2026.08.24–2027.02.01) 밖입니다.</div>';
+    body.innerHTML = '<div class="d-rest">플래너 기간('+iso(START).replace(/-/g,'.')+'–'+iso(TARGET).replace(/-/g,'.')+') 밖입니다.</div>';
     return;
   }
   if(todayEntry.rest){
@@ -332,7 +333,7 @@ function renderToday(){
       <label class="chk"><input type="checkbox" id="todayChk" ${checked?'checked':''}><span class="txt">${todayEntry.text}</span></label></div>
       ${linkButtonsHtml(todayEntry.curriculumIndex)}`;
     document.getElementById('todayChk').addEventListener('change', e=>{
-      state.topics[id]=e.target.checked; saveState(); renderMonths();
+      state.topics[id]=e.target.checked; saveState(); renderMonths(); updateHeader();
     });
   }
 }
@@ -406,7 +407,7 @@ function renderMonths(){
         renderToday();
         const itemDays2 = list.filter(e=>!e.rest);
         const doneN2 = itemDays2.filter(e=>state.topics[iso(e.date)]).length;
-        det.querySelector('.m-pct').textContent = Math.round(doneN2/itemDays2.length*100)+'%';
+        det.querySelector('.m-pct').textContent = (itemDays2.length?Math.round(doneN2/itemDays2.length*100):100)+'%';
       });
     });
     det.querySelectorAll('.d-linkbtn.review').forEach(el=>{
