@@ -88,6 +88,26 @@ footer{max-width:760px;margin:50px auto 0;padding:0 22px;font-family:'IBM Plex M
 .back-link{display:inline-flex;align-items:center;gap:6px;font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:var(--ink-soft);text-decoration:none;border:1px solid var(--paper-line);padding:6px 11px;background:var(--card);}
 .back-link:hover{border-color:var(--ink);color:var(--ink);}
 .back-link svg{width:11px;height:11px;}
+
+/* ===== 음성 듣기 ===== */
+.listen-start{margin-top:16px;display:inline-flex;align-items:center;gap:8px;border:1.5px solid var(--ink);background:var(--card);color:var(--ink);font-family:'Noto Sans KR',sans-serif;font-weight:700;font-size:13px;padding:8px 14px;cursor:pointer;}
+.listen-start:hover{background:var(--ink);color:#fff;}
+.listen-start svg{width:16px;height:16px;}
+.listen-hint{font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:var(--ink-soft);margin-top:6px;}
+.tts-reading{background:rgba(0,169,206,.14) !important;outline:2px solid rgba(0,169,206,.35);outline-offset:2px;transition:background .2s;}
+.tts-clickable main h2,.tts-clickable main h3,.tts-clickable main p,.tts-clickable main li,.tts-clickable main tr,.tts-clickable main .p-cap,.tts-clickable main .tip,.tts-clickable main .tag-row{cursor:pointer;}
+.tts-bar{position:fixed;left:0;right:0;bottom:0;z-index:50;background:var(--ink);color:#fff;transform:translateY(100%);transition:transform .25s ease;}
+.tts-bar.show{transform:translateY(0);}
+.tts-inner{max-width:760px;margin:0 auto;padding:10px 22px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.tts-info{flex:1;min-width:160px;}
+.tts-status{font-size:12.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.tts-count{font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#BDB8AC;}
+.tts-prog{height:3px;background:#3a3835;margin-top:6px;}
+.tts-prog i{display:block;height:100%;width:0;background:var(--cyan);transition:width .3s;}
+.tts-btn{background:none;border:1px solid #5B584F;color:#fff;font-family:'IBM Plex Mono',monospace;font-size:12px;padding:6px 10px;cursor:pointer;min-width:38px;}
+.tts-btn:hover{border-color:#fff;}
+.tts-rate{background:var(--ink);color:#fff;border:1px solid #5B584F;font-family:'IBM Plex Mono',monospace;font-size:12px;padding:5px 6px;}
+body.tts-on{padding-bottom:130px;}
 </style>
 </head>
 <body>
@@ -101,6 +121,11 @@ footer{max-width:760px;margin:50px auto 0;padding:0 22px;font-family:'IBM Plex M
   <div class="eyebrow"><span class="dot"></span>시각디자인산업기사 · 이론 요약노트</div>
   <h1 class="title">CH06 <em>사용자 조사 및 분석</em></h1>
   <div class="subtitle">제1~3강 세분화·행동패턴·인터뷰 조사 — 핵심 개념만 압축 정리</div>
+  <button type="button" class="listen-start" id="listenStart">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 9h4l5-4v14l-5-4H4z"/><path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"/></svg>
+    <span id="listenLabel">요약 전체 듣기</span>
+  </button>
+  <div class="listen-hint">재생 중 본문 항목을 누르면 그 부분부터 읽습니다.</div>
 </div>
 
 <div class="toc">
@@ -222,7 +247,7 @@ footer{max-width:760px;margin:50px auto 0;padding:0 22px;font-family:'IBM Plex M
     <div class="sub">
       <h3><span class="chip">방법</span>심층 인터뷰(in-depth interview)</h3>
       <ul>
-        <li>서로 관련 있는 대상자들에게 질의응답, 과업수행(task test), 보여주고 말하기(show & tell) 방법으로 진행. 사진·비디오·녹음으로 기록해 심층적 분석</li>
+        <li>서로 관련 있는 대상자들에게 질의응답, 과업수행(task test), 보여주고 말하기(show &amp; tell) 방법으로 진행. 사진·비디오·녹음으로 기록해 심층적 분석</li>
         <li>대상자가 자유롭게 의견을 표현할 수 있도록 분위기를 조성하며, 진정성 있는 답변을 위해 충분한 사전교감 시간이 필요</li>
         <li>보통 <b>한 시간 정도</b> 진행하며, 개인의 의견·취향 등 부가 정보를 얻는 데 장점이 있음</li>
       </ul>
@@ -268,6 +293,201 @@ footer{max-width:760px;margin:50px auto 0;padding:0 22px;font-family:'IBM Plex M
 </main>
 
 <footer>시각디자인산업기사 · CH06 사용자 조사 및 분석 요약노트 · 원본 PDF 기준 핵심 정리</footer>
+
+<!-- ===== 음성 플레이어 ===== -->
+<div class="tts-bar" id="ttsBar" aria-live="polite">
+  <div class="tts-inner">
+    <div class="tts-info">
+      <div class="tts-status" id="ttsStatus">–</div>
+      <div class="tts-count" id="ttsCount"></div>
+      <div class="tts-prog"><i id="ttsProg"></i></div>
+    </div>
+    <button class="tts-btn" id="ttsPrev" title="이전">◀◀</button>
+    <button class="tts-btn" id="ttsPlay" title="재생/일시정지">❚❚</button>
+    <button class="tts-btn" id="ttsNext" title="다음">▶▶</button>
+    <select class="tts-rate" id="ttsRate" title="속도">
+      <option value="0.8">0.8x</option><option value="1" selected>1.0x</option>
+      <option value="1.2">1.2x</option><option value="1.5">1.5x</option>
+    </select>
+    <button class="tts-btn" id="ttsStop" title="닫기">✕</button>
+  </div>
+</div>
+
+<script>
+(function(){
+  const synth = window.speechSynthesis;
+  const $ = id => document.getElementById(id);
+  const S = {items:[], idx:0, playing:false, token:0, voice:null, rate:1, curEl:null};
+
+  // 한국어 음성 선택 (자연스러운 온라인 음성 우선)
+  function pickVoice(){
+    if(!synth) return;
+    const vs = synth.getVoices().filter(v=>/^ko/i.test(v.lang));
+    S.voice = vs.find(v=>/natural|online|google/i.test(v.name)) || vs.find(v=>/yuna|heami|sunhi/i.test(v.name)) || vs[0] || null;
+  }
+  if(synth){ pickVoice(); synth.onvoiceschanged = pickVoice; }
+
+  // 기호를 읽기 좋은 말로
+  function speechText(t){
+    return t.replace(/\s+/g,' ')
+      .replace(/\s*→\s*/g, ', ')
+      .replace(/([가-힣])\/([가-힣])/g, '$1, $2')
+      .replace(/([가-힣])-([가-힣])/g, '$1 대 $2')
+      .replace(/([\d가-힣])\s*~\s*(\d)/g, '$1에서 $2')
+      .replace(/\s*[—–]\s*/g, ', ')
+      .replace(/\s*·\s*/g, ', ')
+      .replace(/\s+\/\s+/g, '. ')
+      .replace(/\s*=\s*/g, ', 즉 ')
+      .replace(/\s*\+\s*/g, ' 그리고 ')
+      .replace(/\s*\bvs\b\s*/gi, ' 대 ')
+      .replace(/\([\u4E00-\u9FFF]+\)/g, '')
+      .replace(/[“”"‘’「」]/g, '')
+      .replace(/,\s*,/g, ',')
+      .replace(/:\s*,/g, ':')
+      .trim();
+  }
+  // 요소의 텍스트 (칩·섹션번호 제외)
+  function textOf(el){
+    const c = el.cloneNode(true);
+    c.querySelectorAll('.chip,.section-num').forEach(n=>n.remove());
+    return c.textContent;
+  }
+  // 문장 단위로 나누기 (긴 문장은 쉼표 기준으로 분할)
+  function splitSentences(t){
+    const out = [];
+    t.split(/(?<=[가-힣a-z]{2}[.!?])\s+/).forEach(s=>{
+      while(s.length>180){
+        let cut = s.lastIndexOf(',',180); if(cut<60) cut = s.lastIndexOf(' ',180); if(cut<60) cut = 180;
+        out.push(s.slice(0,cut+1).trim()); s = s.slice(cut+1);
+      }
+      if(s.trim()) out.push(s.trim());
+    });
+    return out;
+  }
+
+  // 읽을 항목 목록 만들기: [{el, text}]
+  function build(){
+    const blocks = [];
+    const title = document.querySelector('h1.title');
+    if(title) blocks.push({el:title, text:textOf(title)});
+    const SEL = '.strand, h2, h3, p, li, .p-cap, tr, .tag-row, .tip, .flow, .swot > div, .kano > div';
+    document.querySelectorAll('main').forEach(main=>{
+      main.querySelectorAll(SEL).forEach(el=>{
+        if(el.parentElement && el.parentElement.closest('.tip, .tag-row, .flow, li, tr')) return;
+        let t;
+        if(el.matches('tr')){
+          const tds = [...el.querySelectorAll('td')].map(td=>td.textContent.trim());
+          if(!tds.length) return;                           // 표 머리(th) 행 제외
+          t = tds.join(': ');
+        } else if(el.matches('.swot > div, .kano > div')){
+          const b = el.querySelector('b'); const head = b ? b.textContent.trim() : '';
+          t = (head ? head + ': ' : '') + el.textContent.replace(head,'').trim();
+        } else if(el.matches('.strand')){
+          t = el.textContent + '.';
+        } else if(el.matches('.flow')){
+          const nodes = [...el.querySelectorAll('.node')].map(x=>x.textContent.trim());
+          if(!nodes.length) return;
+          t = '순서: ' + nodes.join(', 다음 ');
+        } else if(el.matches('.tag-row')){
+          t = '관련 키워드: ' + [...el.querySelectorAll('.tag')].map(x=>x.textContent.trim()).join(', ');
+        } else if(el.matches('.tip')){
+          if(/원문|원본/.test(el.textContent) && !el.querySelector('b')) return; // 편집 메모 제외
+          t = el.textContent.replace(/암기\s*TIP\s*·?/i,'암기 팁:');
+        } else if(el.matches('.p-cap')){
+          t = el.textContent.replace(/^\s*Point\s*·?\s*/i,'포인트: ');
+        } else if(el.matches('h2')){
+          t = textOf(el) + '.';
+        } else if(el.matches('ol > li')){
+          t = ([...el.parentElement.children].indexOf(el)+1) + '. ' + textOf(el);   // 번호 목록은 번호도 읽기
+        } else {
+          t = textOf(el);
+        }
+        t = speechText(t);
+        if(t.length<2) return;
+        el.dataset.ttsStart = blocks.length;               // 클릭 시 시작 위치
+        splitSentences(t).forEach(s=>blocks.push({el, text:s}));
+      });
+    });
+    return blocks;
+  }
+
+  function highlight(el){
+    if(S.curEl === el) return;
+    if(S.curEl) S.curEl.classList.remove('tts-reading');
+    S.curEl = el;
+    if(el){
+      el.classList.add('tts-reading');
+      const r = el.getBoundingClientRect();
+      if(r.top<60 || r.bottom>window.innerHeight-140) el.scrollIntoView({behavior:'smooth', block:'center'});
+    }
+  }
+
+  function ui(){
+    const n = S.items.length, i = Math.min(S.idx, n-1);
+    $('ttsPlay').textContent = S.playing ? '❚❚' : '▶';
+    $('ttsStatus').textContent = n ? S.items[i].text : '';
+    $('ttsCount').textContent = n ? `${i+1} / ${n}` : '';
+    $('ttsProg').style.width = n ? ((i+1)/n*100)+'%' : '0';
+    $('listenLabel').textContent = S.playing ? '일시정지' : (S.items.length && S.idx>0 && S.idx<n ? '이어 듣기' : '요약 전체 듣기');
+  }
+
+  function speakFrom(idx){
+    synth.cancel();
+    if(idx>=S.items.length){
+      S.playing=false; S.idx=0; highlight(null); ui();
+      $('ttsStatus').textContent='끝까지 들었습니다.'; $('listenLabel').textContent='요약 전체 듣기';
+      return;
+    }
+    S.idx = idx;
+    const my = ++S.token;
+    const u = new SpeechSynthesisUtterance(S.items[idx].text);
+    u.lang='ko-KR'; u.rate=S.rate; if(S.voice) u.voice=S.voice;
+    u.onend = ()=>{ if(my===S.token && S.playing) speakFrom(S.idx+1); };
+    u.onerror = e=>{ if(my===S.token && S.playing && e.error!=='interrupted' && e.error!=='canceled') speakFrom(S.idx+1); };
+    S.playing = true;
+    highlight(S.items[idx].el); ui();
+    synth.speak(u);
+  }
+
+  function open(){
+    $('ttsBar').classList.add('show');
+    document.body.classList.add('tts-on','tts-clickable');
+  }
+  function pause(){ S.playing=false; S.token++; synth.cancel(); ui(); }
+  function toggle(){
+    if(!synth){ alert('이 브라우저는 음성 읽기를 지원하지 않습니다. 크롬·엣지·사파리에서 열어주세요.'); return; }
+    if(!S.items.length) S.items = build();
+    open();
+    if(S.playing) pause(); else speakFrom(S.idx);
+  }
+  function stop(){
+    S.playing=false; S.token++; if(synth) synth.cancel();
+    S.idx=0; highlight(null);
+    $('ttsBar').classList.remove('show');
+    document.body.classList.remove('tts-on','tts-clickable');
+    ui();
+  }
+
+  $('listenStart').onclick = toggle;
+  $('ttsPlay').onclick = toggle;
+  $('ttsStop').onclick = stop;
+  $('ttsPrev').onclick = ()=>{ if(S.items.length) speakFrom(Math.max(0,S.idx-1)); };
+  $('ttsNext').onclick = ()=>{ if(S.items.length) speakFrom(Math.min(S.items.length-1,S.idx+1)); };
+  $('ttsRate').onchange = e=>{ S.rate=Number(e.target.value); if(S.playing) speakFrom(S.idx); };
+
+  // 재생 바가 열린 상태에서 본문 항목을 누르면 그 위치부터 읽기
+  document.querySelector('main').addEventListener('click', e=>{
+    if(!document.body.classList.contains('tts-clickable')) return;
+    if(e.target.closest('a')) return;
+    const el = e.target.closest('[data-tts-start]');
+    if(el) speakFrom(Number(el.dataset.ttsStart));
+  });
+
+  // 크롬에서 장시간 재생 시 멈춤 방지
+  setInterval(()=>{ if(synth && S.playing && synth.paused) synth.resume(); }, 5000);
+  window.addEventListener('beforeunload', ()=>{ if(synth) synth.cancel(); });
+})();
+</script>
 
 </body>
 </html>
